@@ -1,0 +1,263 @@
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
+local TweenService = game:GetService("TweenService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage") -- Thêm để kiểm soát sự kiện hoặc asset nếu cần
+local Debris = game:GetService("Debris") -- Để tự động xóa GUI
+
+-- ****** THAY THẾ CÁC ID TÀI SẢN NÀY VỚI HÌNH ẢNH JUMPSCARE CỦA BẠN ******
+local JUMPSCARE_IMAGE_ID = "rbxassetid://101016395683805" -- <--- RẤT QUAN TRỌNG: Thay thế ID này
+-- ********************************************************************
+
+---====== Tải Spawner ======---
+
+local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
+
+-- Biến này sẽ giữ tham chiếu đến đối tượng Model thực tế của Singularity
+local singularityModel = nil
+
+---====== Tạo thực thể ======---
+
+local entity = spawner.Create({
+	Entity = {
+		Name = "Singurlarty", -- Tên của thực thể
+		Asset = "rbxassetid://102222671362687", -- ID tài sản của model Singularity
+		HeightOffset = 0
+	},
+	Lights = {
+		Flicker = {
+			Enabled = false,
+			Duration = 1
+		},
+		Shatter = true,
+		Repair = false
+	},
+	Earthquake = {
+		Enabled = false
+	},
+	CameraShake = {
+		Enabled = true,
+		Range = 100,
+		Values = {1.5, 20, 0.1, 1} -- Cường độ, độ gồ ghề, thời gian mờ dần vào, thời gian mờ dần ra
+	},
+	Movement = {
+		Speed = 560,
+		Delay = 4,
+		Reversed = false
+	},
+	Rebounding = {
+		Enabled = true,
+		Type = "Ambush", -- "Blitz"
+		Min = 4,
+		Max = 4,
+		Delay = 0.2
+	},
+	Damage = {
+		Enabled = true,
+		Range = 70,
+		Amount = 125
+	},
+	Crucifixion = {
+		Enabled = true,
+		Range = 70,
+		Resist = false,
+		Break = true
+	},
+	Death = {
+		Type = "Guiding", -- "Curious"
+		Hints = {"YOu die to a scary man", "remember", "you can't survive he", "HERE"},
+		Cause = ""
+	},
+	Jumpscare = {
+        Enabled = false, -- Tắt jumpscare mặc định của spawner để chúng ta làm jumpscare tùy chỉnh
+    }
+})
+
+---====== Debug thực thể (Callbacks) ======---
+
+entity:SetCallback("OnSpawned", function()
+    print("OnSpawned: Thực thể đã được sinh ra.")
+    game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
+game.Lighting.MainColorCorrection.Contrast = 0.1
+local tween = game:GetService("TweenService")
+tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
+local TweenService = game:GetService("TweenService")
+local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(30,30,30)})
+TW:Play()
+wait(0)
+end)
+
+entity:SetCallback("OnStartMoving", function()
+    print("OnStartMoving: Thực thể đã bắt đầu di chuyển")
+end)
+
+entity:SetCallback("OnEnterRoom", function(room, firstTime)
+    if firstTime == true then
+        print("OnEnterRoom: Thực thể đã vào phòng: ".. room.Name.. " lần đầu tiên")
+    else
+        print("OnEnterRoom: Thực thể đã vào phòng: ".. room.Name.. " lần nữa")
+    end
+end)
+
+entity:SetCallback("OnLookAt", function(lineOfSight)
+	if lineOfSight == true then
+		print("OnLookAt: Người chơi đang nhìn vào thực thể")
+	else
+		print("OnLookAt: Góc nhìn của người chơi bị vật cản")
+	end
+end)
+
+entity:SetCallback("OnRebounding", function(startOfRebound)
+    if startOfRebound == true then
+        print("OnRebounding: Thực thể đã bắt đầu rebounding")
+	else
+        print("OnRebounding: Thực thể đã kết thúc rebounding")
+	end
+end)
+
+entity:SetCallback("OnDespawning", function()
+    print("OnDespawning: Thực thể đang biến mất")
+wait(2)
+game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(30,30,30)
+game.Lighting.MainColorCorrection.Contrast = 0.1
+local tween = game:GetService("TweenService")
+tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
+local TweenService = game:GetService("TweenService")
+local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
+TW:Play()
+end)
+
+entity:SetCallback("OnDespawned", function()
+    print("OnDespawned: Thực thể đã biến mất")
+    singularityModel = nil
+end)
+
+entity:SetCallback("OnDamagePlayer", function(newHealth)
+	if newHealth <= 0 then -- Kiểm tra máu <= 0 để đảm bảo người chơi đã chết
+		print("OnDamagePlayer: Entity đã giết người chơi. Kích hoạt jumpscare...")
+
+-- UI Construction
+local JumpscareGui = Instance.new("ScreenGui")
+local Background = Instance.new("Frame")
+local Overlay = Instance.new("ImageLabel")
+local Face = Instance.new("ImageLabel")
+
+JumpscareGui.Name = "JumpscareGui"
+JumpscareGui.IgnoreGuiInset = true
+JumpscareGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+JumpscareGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+Background.Name = "Background"
+Background.BackgroundColor3 = Color3.fromRGB(3, 25, 99)
+Background.BorderSizePixel = 1
+Background.Size = UDim2.new(1, 0, 1, 0)
+Background.ZIndex = 999
+Background.Parent = JumpscareGui
+
+-- Full-screen overlay image
+Overlay.Name = "Overlay"
+Overlay.BackgroundTransparency = 1
+Overlay.Size = UDim2.new(1, 0, 1, 0)
+Overlay.Position = UDim2.new(0, 0, 0, 0)
+Overlay.Image = "rbxassetid://236542974" -- Thay bằng ID hình đầu tiên
+Overlay.ImageTransparency = 0
+Overlay.ZIndex = 998
+Overlay.Parent = Background
+
+-- Face image (jumpscare face)
+Face.Name = "Face"
+Face.AnchorPoint = Vector2.new(0.5, 0.5)
+Face.BackgroundTransparency = 1
+Face.Position = UDim2.new(0.5, 0, 0.5, 0)
+Face.ResampleMode = Enum.ResamplerMode.Pixelated
+Face.Size = UDim2.new(0, 150, 0, 150)
+Face.Image = "rbxassetid://0"
+Face.ZIndex = 1000
+Face.ImageTransparency = 0
+Face.Parent = Background
+
+-- Sound setup
+local scare = Instance.new("Sound")
+scare.Name = "MyEarsBurn"
+scare.SoundId = "rbxassetid://6648328129"
+scare.PlaybackSpeed = 1
+scare.Volume = 999
+scare.Parent = JumpscareGui
+
+local shift = Instance.new("PitchShiftSoundEffect")
+shift.Octave = 1
+shift.Parent = scare
+
+local distort = Instance.new("DistortionSoundEffect")
+distort.Level = 0.1
+distort.Parent = scare
+
+local distort2 = Instance.new("DistortionSoundEffect")
+distort2.Level = 0.1
+distort2.Parent = scare
+
+-- Flashing background
+task.spawn(function()
+	while JumpscareGui.Parent do
+		Background.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		task.wait(math.random(25, 100) / 1000)
+		Background.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		task.wait(math.random(25, 100) / 1000)
+	end
+end)
+
+-- Flashing overlay effect (alternate between 2 images)
+local overlayImages = {
+	"rbxassetid://184251462", -- Hình overlay 1
+	"rbxassetid://236542974"  -- Hình overlay 2
+}
+
+task.spawn(function()
+	local i = 1
+	while JumpscareGui.Parent do
+		Overlay.Image = overlayImages[i]
+		i = i % #overlayImages + 1
+		task.wait(0) -- Đổi hình mỗi 0.5 giây
+	end
+end)
+
+-- Jumpscare zoom effect
+game.TweenService:Create(Face, TweenInfo.new(1000, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+	Size = UDim2.new(2.5, 0, 2.5, 0),
+	ImageTransparency = 0
+}):Play()
+
+-- Shake effect
+task.spawn(function()
+	local originalPos = Face.Position
+	for i = 1, 15 do
+		local offsetX = math.random(-0, 0)
+		local offsetY = math.random(-0, 0)
+		Face.Position = originalPos + UDim2.new(0, offsetX, 0, offsetY)
+		task.wait(0.03)
+	end
+	Face.Position = originalPos
+end)
+
+-- Play sound and cleanup
+scare:Play()
+task.wait(1.904)
+JumpscareGui:Destroy()
+	else
+		print("OnDamagePlayer: Entity đã gây sát thương cho người chơi (chưa chết)")
+	end
+end)
+
+--[[
+
+DEVELOPER NOTE:
+By overwriting 'CrucifixionOverwrite' the default crucifixion callback will be replaced with your custom callback.
+
+entity:SetCallback("CrucifixionOverwrite", function()
+    print("Custom crucifixion callback")
+end)
+
+]]--
+
+---====== Chạy thực thể ======---
+
+entity:Run()
