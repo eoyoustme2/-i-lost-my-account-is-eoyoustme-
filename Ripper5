@@ -184,7 +184,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         end
 
         -- Tắt tất cả particle trên entity lúc jumpscare bắt đầu
-        SetAllParticlesTimeScale(entityModel, 0)
+        SetAllParticlesTimeScale(entityModel, 1)
 
         local primaryPart = entityModel:FindFirstChild("Ripe")
         if not primaryPart then
@@ -196,7 +196,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         if ripeAttachment and ripeAttachment:IsA("Attachment") then
             for _, child in ipairs(ripeAttachment:GetChildren()) do
                 if child:IsA("ParticleEmitter") then
-                    child.Texture = "rbxassetid://12737595583"
+                    child.Texture = "rbxassetid://140130921111920"
                     print("Đã đổi texture ParticleEmitter:", child.Name)
                 end
             end
@@ -216,19 +216,64 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
             end
         end)
 
-        -- Di chuyển entity tới người chơi trong 2 giây
-        local moveTweenInfo = TweenInfo.new(2, Enum.EasingStyle.Linear)
-        local moveTweenGoal = {CFrame = humanoidRootPart.CFrame}
+        -- Tính toán vị trí dừng lại 4 stud trước người chơi
+        local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * 4
+
+        -- Di chuyển entity tới vị trí đó trong 2 giây
+        local moveTweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Linear)
+        local moveTweenGoal = {CFrame = CFrame.new(targetPosition)}
         local moveTween = TweenService:Create(primaryPart, moveTweenInfo, moveTweenGoal)
         moveTween:Play()
 
-        -- Chờ đến khi tween di chuyển đến người chơi kết thúc
+        -- Khóa khả năng di chuyển của người chơi trong suốt thời gian entity di chuyển
+        if humanoid then
+            humanoid.WalkSpeed = 0
+            humanoid.JumpPower = 0
+            humanoid.AutoRotate = false
+            humanoid.PlatformStand = true
+        end
+
+        -- Chờ đến khi tween di chuyển đến vị trí 4 stud trước người chơi kết thúc
         moveTween.Completed:Wait()
 
-        -- Sau khi di chuyển xong, tiếp tục tween với thời gian rất dài
+        -- Sau khi di chuyển xong, tiếp tục tween với thời gian rất dài và thay đổi TimeScale
         local longTweenInfo = TweenInfo.new(99999999999999, Enum.EasingStyle.Linear)
         local longTween = TweenService:Create(primaryPart, longTweenInfo, {CFrame = humanoidRootPart.CFrame})
         longTween:Play()
+
+        -- Thay đổi texture của tất cả ParticleEmitter và đổi mặt entity sau khi tween dài bắt đầu
+        local function ChangeFaceAndStopParticles()
+            local faceDecal = primaryPart:FindFirstChild("FaceDecal") -- sửa theo model mày
+            if faceDecal and faceDecal:IsA("Decal") then
+                faceDecal.Texture = "rbxassetid://1234567890" -- id mặt mới của mày
+                print("Đã thay đổi mặt entity!")
+            end
+
+            -- Thay đổi texture của tất cả ParticleEmitter trong ripeAttachment
+            if ripeAttachment and ripeAttachment:IsA("Attachment") then
+                for _, child in ipairs(ripeAttachment:GetChildren()) do
+                    if child:IsA("ParticleEmitter") then
+                        child.Texture = "rbxassetid://140130921111920" -- id texture mới của bạn
+                        print("Đã đổi texture ParticleEmitter:", child.Name)
+                    end
+                end
+            end
+
+            -- Thay đổi TimeScale của tất cả ParticleEmitter thành 0
+            SetAllParticlesTimeScale(entityModel, 0)
+        end
+
+        -- Thực thi thay đổi mặt và tạm dừng ParticleEmitter sau khi tween kết thúc
+        longTween.Completed:Wait()
+        ChangeFaceAndStopParticles()
+
+        -- Mở lại khả năng di chuyển của người chơi
+        if humanoid then
+            humanoid.WalkSpeed = 16 -- mặc định walk speed (hoặc giá trị bạn muốn)
+            humanoid.JumpPower = 50 -- mặc định jump power (hoặc giá trị bạn muốn)
+            humanoid.AutoRotate = true
+            humanoid.PlatformStand = false
+        end
 
         -- Khóa người chơi
         local anchorPart = Instance.new("Part")
@@ -246,13 +291,6 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         weld.Part0 = humanoidRootPart
         weld.Part1 = anchorPart
         weld.Parent = humanoidRootPart
-
-        if humanoid then
-            humanoid.WalkSpeed = 0
-            humanoid.JumpPower = 0
-            humanoid.AutoRotate = false
-            humanoid.PlatformStand = true
-        end
 
         -- Hàm lấy âm thanh từ Github, tải nếu chưa có
         local function GetGitSound(url, soundName)
@@ -273,10 +311,6 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 
         -- Đợi 1.5s đổi mặt entity (nếu có)
         task.wait(1.5)
-        local faceDecal = primaryPart:FindFirstChild("FaceDecal") -- sửa theo model mày
-        if faceDecal and faceDecal:IsA("Decal") then
-            faceDecal.Texture = "rbxassetid://1234567890" -- id mặt mới của mày
-        end
         task.wait(0.5)
 
         -- UI Jumpscare nháy ảnh
@@ -313,8 +347,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
                 task.wait(0.05)
             end
             imageLabel.Visible = false
-        end)
-
+        end
         task.wait(flashDuration + 0.5)
 
         -- Giết người chơi ngay khi jumpscare kết thúc
@@ -335,6 +368,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         end
     end)
 end)
+
 
 --==[ CHẠY ENTITY ]==--
 entity:Run()
