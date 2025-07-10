@@ -1,0 +1,174 @@
+function GetRoom()
+    local gruh = workspace.CurrentRooms
+    return gruh:FindFirstChild(game.ReplicatedStorage.GameData.LatestRoom.Value)
+end
+
+local plr = game.Players.LocalPlayer
+local chr = plr.Character or plr.CharacterAdded:Wait()
+local tweenservice = game:GetService("TweenService")
+
+-- ⚙️ Tải model từ Asset ID hoặc GitHub
+function LoadCustomInstance(source, parent)
+    local model
+
+    local function NormalizeGitHubURL(url)
+        if url:match("^https://github.com/.+%.rbxm$") and not url:find("?raw=true") then
+            return url .. "?raw=true"
+        end
+        return url
+    end
+
+    while task.wait() and not model do
+        if tonumber(source) then
+            local success, result = pcall(function()
+                return game:GetObjects("rbxassetid://" .. tostring(source))[1]
+            end)
+            if success and result then
+                model = result
+            end
+        elseif typeof(source) == "string" and source:match("^https?://") and source:match("%.rbxm") then
+            local url = NormalizeGitHubURL(source)
+            local success, result = pcall(function()
+                local filename = "temp_" .. math.random(100000, 999999) .. ".rbxm"
+                local content = game:HttpGet(url)
+                if writefile and (getcustomasset or getsynasset) and isfile and delfile then
+                    writefile(filename, content)
+                    local assetFunc = getcustomasset or getsynasset
+                    local obj = game:GetObjects(assetFunc(filename))[1]
+                    delfile(filename)
+                    return obj
+                else
+                    warn("Executor không hỗ trợ file APIs.")
+                    return nil
+                end
+            end)
+            if success and result then
+                model = result
+            end
+        else
+            break
+        end
+
+        if model then
+            model.Parent = parent or workspace
+            for _, obj in ipairs(model:GetDescendants()) do
+                if obj:IsA("Script") or obj:IsA("LocalScript") then
+                    obj:Destroy()
+                end
+            end
+            pcall(function()
+                model:SetAttribute("LoadedByExecutor", true)
+            end)
+        end
+    end
+
+    return model
+end
+
+-- 🔽 Tải Frost entity từ GitHub
+local s = LoadCustomInstance("https://github.com/eoyoustme/rebouna/raw/refs/heads/main/Frostguy.rbxm", workspace)
+if not s then
+    warn("Không thể tải Frost entity.")
+    return
+end
+
+local entity = s:FindFirstChildWhichIsA("BasePart")
+entity.CFrame = GetRoom():WaitForChild("RoomEntrance").CFrame * CFrame.new(0, 5, -15)
+entity.Part.CFrame = entity.CFrame
+
+-- 💡 Thêm ánh sáng mạnh lúc xuất hiện
+local pointLight = Instance.new("PointLight")
+pointLight.Color = Color3.new(255, 255, 255)
+pointLight.Range = 60
+pointLight.Brightness = 99999
+pointLight.Parent = entity
+
+-- Làm giảm độ sáng dần trong 6 giây
+tweenservice:Create(pointLight, TweenInfo.new(8), {
+    Brightness = 0
+}):Play()
+
+-- 🎵 Âm thanh xuất hiện
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://137044859218769"
+sound.Looped = false
+sound.Volume = 5
+sound.Parent = s
+sound:Play()
+
+-- ❄️ Hiệu ứng lạnh
+local frost = Instance.new("ColorCorrectionEffect")
+frost.Parent = game.Lighting
+tweenservice:Create(frost, TweenInfo.new(10), {
+    TintColor = Color3.fromRGB(0, 0, 255),
+    Saturation = -0.7,
+    Contrast = 0.2
+}):Play()
+
+-- Tắt hiệu ứng ban đầu
+for _, v in ipairs({"face", "Heylois", "BlackTrai2l", "BlackTrai3l"}) do
+    if entity:FindFirstChild("Attachment") and entity.Attachment:FindFirstChild(v) then
+        entity.Attachment[v].Enabled = false
+    end
+end
+
+wait(8)
+
+-- Bật hiệu ứng trở lại
+for _, v in ipairs({"face", "Heylois", "BlackTrai2l", "BlackTrai3l"}) do
+    if entity:FindFirstChild("Attachment") and entity.Attachment:FindFirstChild(v) then
+        entity.Attachment[v].Enabled = true
+    end
+end
+
+-- Phát âm thanh
+pcall(function() entity.Ambience:Play() end)
+pcall(function() entity.AmbienceFar:Play() end)
+
+-- 🔥 Gây sát thương nếu không có bật lửa
+local dmg = true
+task.spawn(function()
+    while dmg do
+        wait(1)
+        local lighter = chr:FindFirstChild("Lighter")
+        if not lighter then
+            pcall(function()
+                chr.Humanoid.Health -= 3
+                game.ReplicatedStorage.GameStats["Player_" .. plr.Name].Total.DeathCause.Value = "Frostbite"
+            end)
+        end
+    end
+end)
+
+-- 🛑 Khi chuyển phòng
+game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
+dmg = false
+
+for _, v in ipairs({"face", "Heylois", "BlackTrai2l", "BlackTrai3l"}) do
+    if entity:FindFirstChild("Attachment") and entity.Attachment:FindFirstChild(v) then
+        entity.Attachment[v].Enabled = false
+    end
+end
+
+pcall(function() entity.Ambience:Stop() end)
+pcall(function() entity.AmbienceFar:Stop() end)
+
+-- Âm thanh biến mất
+local des = Instance.new("Sound")
+des.SoundId = "rbxassetid://111715441853991"
+des.Looped = false
+des.Volume = 2.5
+des.Parent = s
+des:Play()
+
+wait(5)
+s:Destroy()
+
+-- 🧊 Hoàn tác hiệu ứng
+tweenservice:Create(frost, TweenInfo.new(5), {
+    TintColor = Color3.fromRGB(255, 255, 255),
+    Saturation = 0,
+    Contrast = 0
+}):Play()
+wait(5)
+frost:Destroy()
