@@ -1,0 +1,42 @@
+require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("Hardcore Remake v2 has active ", true)
+wait(2)
+require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("Big credit to HUGERRRORED ( man make the mode is me ), Nhankg (thank test mode), mrsecretman (sprint script)", true)
+
+pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Sprint"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/INtro"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Deer%20chase2"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Rage%20B-60"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/guiding%20light"))()
+end)
+
+local entityList = {
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Cease6", delay = 175},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Ripper2", delay = 150},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Reband1", delay = 180},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Sinturaly", delay = 1000},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Shocker", delay = 35},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/SIlence", delay = 300},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/HC%20Ambush", delay = 360},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/UA:))2", delay = 600},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Deer%20god", delay = 320},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/owner112", delay = 886},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/HC%20Rush3", delay = 100},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Frostbite", delay = 490},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Dread%20hardcore%20remake%20v2", delay = 666},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/A-90%20hardcore%20remake", delay = 90},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Hardcore%20eye", delay = 180},
+}
+
+for _, entity in ipairs(entityList) do
+    coroutine.wrap(function()
+        while true do
+            wait(entity.delay)
+           game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
+           wait(3)
+            pcall(function()
+                loadstring(game:HttpGet(entity.url))()
+            end)
+        end
+    end)()
+end
