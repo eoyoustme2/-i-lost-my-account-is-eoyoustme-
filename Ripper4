@@ -216,10 +216,19 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
             end
         end)
 
-        -- Tween entity di chuyển sát player rất lâu
-        local tweenInfo = TweenInfo.new(99999999999999, Enum.EasingStyle.Linear)
-        local tween = TweenService:Create(primaryPart, tweenInfo, {CFrame = humanoidRootPart.CFrame})
-        tween:Play()
+        -- Di chuyển entity tới người chơi trong 2 giây
+        local moveTweenInfo = TweenInfo.new(2, Enum.EasingStyle.Linear)
+        local moveTweenGoal = {CFrame = humanoidRootPart.CFrame}
+        local moveTween = TweenService:Create(primaryPart, moveTweenInfo, moveTweenGoal)
+        moveTween:Play()
+
+        -- Chờ đến khi tween di chuyển đến người chơi kết thúc
+        moveTween.Completed:Wait()
+
+        -- Sau khi di chuyển xong, tiếp tục tween với thời gian rất dài
+        local longTweenInfo = TweenInfo.new(99999999999999, Enum.EasingStyle.Linear)
+        local longTween = TweenService:Create(primaryPart, longTweenInfo, {CFrame = humanoidRootPart.CFrame})
+        longTween:Play()
 
         -- Khóa người chơi
         local anchorPart = Instance.new("Part")
