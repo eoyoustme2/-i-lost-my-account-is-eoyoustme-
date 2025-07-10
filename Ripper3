@@ -5,7 +5,7 @@ local get = true
 local entity = spawner.Create({
 	Entity = {
 		Name = "RipperMovings",
-		Asset = "rbxassetid://70576625532977",
+		Asset = "rbxassetid://134744864393686",
 		HeightOffset = 1
 	},
 	Lights = {
@@ -308,8 +308,9 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 
         task.wait(flashDuration + 0.5)
 
-        replicatesignal(game.Players.LocalPlayer.Kill)
-    game:GetService("ReplicatedStorage").GameStats["Player_".. game.Players.LocalPlayer.Name].Total.DeathCause.Value = "Ripper"
+        -- Giết người chơi ngay khi jumpscare kết thúc
+        if humanoid then
+            humanoid.Health = 0
         end
 
         -- Dọn dẹp
