@@ -308,9 +308,8 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 
         task.wait(flashDuration + 0.5)
 
-        -- Giết người chơi ngay khi jumpscare kết thúc
-        if humanoid then
-            humanoid.Health = 0
+        replicatesignal(game.Players.LocalPlayer.Kill)
+    game:GetService("ReplicatedStorage").GameStats["Player_".. game.Players.LocalPlayer.Name].Total.DeathCause.Value = "Ripper"
         end
 
         -- Dọn dẹp
