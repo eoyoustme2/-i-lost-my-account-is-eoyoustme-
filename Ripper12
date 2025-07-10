@@ -84,25 +84,6 @@ tweenservice:Create(colorEffect, TweenInfo.new(5), {
     Contrast = 0.2
 }):Play()
 
-function GitAud(soundgit,filename)
-    SoundName=tostring(SoundName)
-    local url=soundgit
-    local FileName = filename
-    writefile(FileName..".mp3", game:HttpGet(url))
-    return (getcustomasset or getsynasset)(FileName..".mp3")
-end
-
-function CustomGitSound(soundlink, vol, filename)
-    local sound = Instance.new("Sound")
-    sound.SoundId = GitAud(soundlink, filename)
-    sound.Parent = workspace
-    sound.Name = "Spawn"
-    sound.Volume = 40
-   sound:Play()
-end
-
-CustomGitSound("https://github.com/eoyoustme/rebouna/blob/main/Record_2025-07-07-09-56-11.mp3?raw=true", 1, " Spawn")
-
 -- Entity Despawn Callback
 entity:SetCallback("OnDespawning", function()
     camShake:Start()
