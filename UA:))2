@@ -1,0 +1,285 @@
+local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
+local entity = spawner.Create({
+	Entity = {
+		Name = "A60",
+		Asset = "rbxassetid://83115631769066",
+		HeightOffset = 0
+	},
+	Lights = {
+		Flicker = {
+			Enabled = false,
+			Duration = 1
+		},
+		Shatter = true,
+		Repair = false
+	},
+	Earthquake = {
+		Enabled = false
+	},
+	CameraShake = {
+		Enabled = true,
+		Range = 100,
+		Values = {9, 20, 0.1, 1} -- Magnitude, Roughness, FadeIn, FadeOut
+	},
+	Movement = {
+		Speed = 400,
+		Delay = 6,
+		Reversed = false
+	},
+	Rebounding = {
+		Enabled = true,
+		Type = "Ambush", -- "Blitz"
+		Min = 4,
+		Max = 8,
+		Delay = 0.5
+	},
+	Damage = {
+		Enabled = true,
+		Range = 100,
+		Amount = 0.01
+	},
+	Crucifixion = {
+		Enabled = true,
+		Range = 4000000000000,
+		Resist = false,
+		Break = true
+	},
+	Death = {
+		Type = "Guiding", -- "Curious"
+		Hints = {"Death", "Hints", "Go", "Here"},
+		Cause = ""
+	}
+})
+
+game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(60, 0, 0)
+game.Lighting.MainColorCorrection.Contrast = 1
+local tween = game:GetService("TweenService")
+tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
+local TweenService = game:GetService("TweenService")
+local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(20),{TintColor = Color3.fromRGB(255, 255, 255)})
+TW:Play()
+
+local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
+local camara = game.Workspace.CurrentCamera
+local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(shakeCf)
+ camara.CFrame = camara.CFrame * shakeCf
+end)
+camShake:Start()
+camShake:ShakeOnce(50,35,0,2,1,6)
+
+local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
+local camara = game.Workspace.CurrentCamera
+
+local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(cf)
+	camara.CFrame = camara.CFrame * cf
+end)
+
+camShake:Start()
+camShake:Shake(CameraShaker.Presets.Earthquake)
+
+
+---====== Debug entity ======---
+
+entity:SetCallback("OnSpawned", function()
+-- Get a reference to the object and its Attachment in the Workspace
+local part = workspace:WaitForChild("A60")
+local object = part:WaitForChild("RushNew") -- Replace "MyObjectName" with the name of your object
+local attachment = object:WaitForChild("ImageFace")  -- Get the Attachment attached to the object
+local e = attachment:WaitForChild("Face")
+
+object.CanCollide = false
+
+ -- Get the ParticleEmitter attached to the Attachment
+while true do
+    e.Texture = "rbxassetid://12145534911"
+    wait(0)
+    e.Texture = "rbxassetid://12145554242"
+    wait(0)
+    e.Texture = "rbxassetid://12145599498"
+    wait(0)
+    e.Texture = "rbxassetid://12145599275"
+    wait(0)
+    e.Texture = "rbxassetid://12155335619"
+    wait(0)
+    e.Texture = "rbxassetid://12145598814"
+    wait(0)
+    e.Texture = "rbxassetid://12146135062"
+    wait(0)
+    e.Texture = "rbxassetid://11378285585"
+    wait(0)
+end
+
+end)
+
+entity:SetCallback("OnDespawning", function()
+wait(0.7)
+local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
+local camara = game.Workspace.CurrentCamera
+local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(shakeCf)
+ camara.CFrame = camara.CFrame * shakeCf
+end)
+camShake:Start()
+camShake:ShakeOnce(50,50,0,2,1,6)
+
+game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(60, 0, 0)
+local TweenService = game:GetService("TweenService")
+local a = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(0, 0, 0)})
+local b = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(0, 60, 0)})
+local c = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(10),{TintColor = Color3.fromRGB(100, 0, 0)})
+local d = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(10),{TintColor = Color3.fromRGB(255, 255, 255)})
+
+a:Play()
+wait(5)
+b:Play()
+wait(5)
+c:Play()
+wait(5)
+d:Play()
+
+end)
+
+entity:SetCallback("OnDamagePlayer", function(newHealth)
+	if newHealth == 0 then
+		print("Cokkkkkk")
+	else
+local to = true
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local entity = workspace:WaitForChild("A60")
+local entityPrimaryPart = entity:FindFirstChild("RushNew")
+
+local function Moving(target, dur)
+    local tween_info = TweenInfo.new(dur, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local tween = TweenService:Create(entityPrimaryPart, tween_info, {CFrame = target})
+    tween:Play()
+    tween.Completed:Wait()
+end
+
+task.spawn(function()
+while to == true do wait(0)
+Moving(humanoidRootPart.CFrame, 4)
+end
+end)
+
+wait(0.8)
+to = false
+local function GetGitSound(GithubSnd, SoundName)
+                local url = GithubSnd
+                if not isfile(SoundName .. ".mp3") then
+                    writefile(SoundName .. ".mp3", game:HttpGet(url))
+                end
+                local sound = Instance.new("Sound")
+                sound.SoundId = (getcustomasset or getsynasset)(SoundName .. ".mp3")
+                return sound
+end
+local Jumpscare = GetGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3","A60")
+Jumpscare.Parent = workspace
+Jumpscare.Volume = 3
+Jumpscare.PlaybackSpeed = 0.9
+Jumpscare:Play()
+
+local JumpscareGui = game:GetService("RunService").RenderStepped:Connect(function()
+
+if not character:GetAttribute("Hiding") then
+-- Get the player and their HumanoidRootPart
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+-- Ensure this script runs as a LocalScript
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local Background = Instance.new("Frame")
+
+-- Create the ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "RandomImageGui"
+screenGui.Parent = playerGui
+
+screenGui.IgnoreGuiInset = true
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    
+Background.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+Background.BorderSizePixel = 0
+Background.Size = UDim2.new(1, 0, 1, 0)
+Background.ZIndex = 999
+Background.BackgroundTransparency = 1
+Background.Parent = screenGui
+	
+local TweenService = game:GetService("TweenService")
+
+local imageIds = {
+    "12145534911",
+    "12145554242",
+    "12145599498",
+    "12145599275",
+    "12155335619",
+    "12145598814",
+    "12146135062",
+    "11378285585",
+    "1972219024",
+    "1822114127",
+    "3413871766",
+    "3354536350",
+    "17865063",
+    "4749623118",
+    "1857893092",
+    "4508624823",
+    "6309704436",
+    "10458678325"
+}
+
+-- Function to pick a random Image ID
+local function getRandomImageId()
+    return imageIds[math.random(1, #imageIds)]
+end
+
+-- Create the ImageLabel for displaying the image
+local imageLabel = Instance.new("ImageLabel")
+imageLabel.Size = UDim2.new(0, 0, 0, 0)
+imageLabel.AnchorPoint = Vector2.new(0.5, 0.5)-- Adjust size (30% of screen width and height)
+imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+imageLabel.BackgroundColor3 = Color3.new(1, 0, 0)
+imageLabel.BackgroundTransparency = 1 -- Make the background fully transparent
+imageLabel.Image = "rbxassetid://" .. getRandomImageId() -- Set the image using a random Image ID
+imageLabel.ImageTransparency = 1
+imageLabel.ImageColor3 = Color3.fromRGB(255, 0, 0)
+imageLabel.Parent = screenGui
+
+-- Animation script
+-- Define tween info
+local GetTimeSpeed = TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+
+-- Create the animation
+local Anim = game.TweenService:Create(imageLabel, GetTimeSpeed, {Size = UDim2.new(0, 580, 0, 580), ImageTransparency = 0})
+local rot = game.TweenService:Create(imageLabel, GetTimeSpeed, {Rotation = math.random(10,18)})
+local tran = game.TweenService:Create(imageLabel, GetTimeSpeed, {ImageTransparency = 0})
+
+-- Play the animation
+Anim:Play()
+tran:Play()
+wait(0.2)
+rot:Play()
+
+game.Players.LocalPlayer.Character.Humanoid.Health -= 100
+game.ReplicatedStorage.GameStats["Player_".. game.Players.LocalPlayer.Name].Total.DeathCause.Value = "A-60"
+
+wait(0.8)
+game.TweenService:Create(Background, TweenInfo.new(2), {BackgroundTransparency = 1}):Play()
+TweenService:Create(imageLabel, TweenInfo.new(1.5), {ImageTransparency = 1}):Play()
+task.wait(3)
+screenGui:Destroy()
+end
+end)
+
+wait(2.7)
+JumpscareGui:Disconnect()
+Jumpscare:Destroy()
+
+	end
+end)
+
+---====== Run entity ======---
+
+entity:Run()
