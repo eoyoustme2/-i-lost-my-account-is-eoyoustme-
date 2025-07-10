@@ -246,8 +246,8 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 
         -- Mở lại khả năng di chuyển của người chơi
         if humanoid then
-            humanoid.WalkSpeed = 16  -- mặc định walk speed (hoặc giá trị bạn muốn)
-            humanoid.JumpPower = 50  -- mặc định jump power (hoặc giá trị bạn muốn)
+            humanoid.WalkSpeed = 0  -- mặc định walk speed (hoặc giá trị bạn muốn)
+            humanoid.JumpPower = 0  -- mặc định jump power (hoặc giá trị bạn muốn)
             humanoid.AutoRotate = true
             humanoid.PlatformStand = false
         end
@@ -285,6 +285,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         end
 
         local crashSound = GetGitSound("https://github.com/eoyoustme/rebouna/blob/main/Kill_with_static.mp3?raw=true", "Crashund")
+       wait(1)
 
         -- UI Jumpscare nháy ảnh
         local screenGui = Instance.new("ScreenGui")
