@@ -32,8 +32,6 @@ for _, entity in ipairs(entityList) do
     coroutine.wrap(function()
         while true do
             wait(entity.delay)
-           game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
-           wait(3)
             pcall(function()
                 loadstring(game:HttpGet(entity.url))()
             end)
