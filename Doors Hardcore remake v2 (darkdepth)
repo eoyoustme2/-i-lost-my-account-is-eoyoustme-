@@ -7,12 +7,12 @@ pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/INtro"))()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Deer%20chase2"))()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Rage%20B-60"))()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/red%20light"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Guiding%20light"))()
 end)
 
 local entityList = {
-    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Wraith", delay = 205},
-    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/mansion2", delay = 150},
+    {url = "https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Wraith", delay = 205},
+    {url = "https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/mansion2", delay = 150},
     {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Whisper8", delay = 180},
     {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Sinturaly3", delay = 310},
     {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/shocker", delay = 25},
