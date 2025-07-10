@@ -1,0 +1,85 @@
+_G.DO_RED_GUY = true -- enabled for debugging purposes only.
+
+local Players = game:GetService("Players")
+local SoundService = game:GetService("SoundService")
+
+local Camera = workspace.CurrentCamera
+local DeathName = "DeathBackgroundBlue"
+
+local RedPrimary = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 255)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 255))
+})
+
+local Player = Players.LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
+local MainUI = PlayerGui:WaitForChild("MainUI")
+local Death = MainUI:WaitForChild("Death")
+local HelpfulDialogue = Death:WaitForChild("HelpfulDialogue")
+local MainGame = MainUI:WaitForChild("Initiator"):WaitForChild("Main_Game")
+local Health = MainGame:WaitForChild("Health")
+local Music = Health:WaitForChild("Music")
+
+function GitAud(soundgit, filename)
+    local FileName = filename
+    writefile(FileName..".mp3", game:HttpGet(soundgit))
+    return (getcustomasset or getsynasset)(FileName..".mp3")
+end
+
+function CustomGitSound(soundlink, vol, filename)
+    local sound = Instance.new("Sound")
+    sound.SoundId = GitAud(soundlink, filename)
+    sound.Parent = Music
+    sound.Name = "Music"
+    sound.Volume = vol or 1
+    sound:Play()
+end
+
+Camera.ChildAdded:Connect(function(Child)
+    if Child.Name ~= DeathName then return end
+    if not _G.DO_RED_GUY then return end
+
+    for _, Asset in Music:GetChildren() do
+        if Asset:IsA("Sound") then
+            Asset:Destroy()
+        end
+    end
+
+    local Lights = Child:WaitForChild("Lights")
+    local Fog = Child:WaitForChild("FogAndSmaller")
+    local Water = Child:WaitForChild("Water")
+
+    for _, Light in Lights:GetDescendants() do
+        if Light:IsA("SpotLight") then
+            Light.Color = Color3.fromRGB(255, 255, 255)
+        end
+        if Light:IsA("ParticleEmitter") then
+            Light.Color = RedPrimary
+        end
+    end
+
+    for _, FogL in Fog:GetChildren() do
+        FogL.Color = RedPrimary
+    end
+
+    for _, WaterL in Water:GetChildren() do
+        WaterL.Color = RedPrimary
+    end
+
+    local BigLight = Lights:FindFirstChild("BigLight")
+    if BigLight then
+        local Attachment = BigLight:FindFirstChild("Attachment")
+        if Attachment then
+            local Moon = Attachment:FindFirstChild("Moon")
+            if Moon then
+                Moon.Texture = "rbxassetid://73986285167458"
+            end
+        end
+    end
+
+    HelpfulDialogue.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+    -- 🔊 Phát nhạc tại đây sau khi người chơi chết
+    CustomGitSound("https://github.com/eoyoustme/rebouna/blob/main/Record_2025-07-07-10-54-27.mp3?raw=true", 1, "Music")
+
+end)
