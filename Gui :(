@@ -90,7 +90,7 @@ local function createMainGui()
             end
             CustomMusic:Play()
 
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Doors%20hardcore%20remake%20v2%20(darkdepth)"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Doors%20Hardcore%20remake%20v2%20(darkdepth)"))()
 
             cancelBtn.MouseButton1Click:Connect(function()
                 gui:Destroy()
