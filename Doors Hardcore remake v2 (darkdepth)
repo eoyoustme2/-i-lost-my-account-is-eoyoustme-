@@ -1,0 +1,37 @@
+require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("Hardcore Remake v2 (darkdepth) has active ", true)
+wait(2)
+require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("no credit this mode don't have ripper nad cease have mansion and wraith and other hardcore entity", true)
+
+pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Sprint"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/INtro"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Deer%20chase2"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Rage%20B-60"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/red%20light"))()
+end)
+
+local entityList = {
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Wraith", delay = 205},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/mansion2", delay = 150},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Whisper8", delay = 180},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Sinturaly3", delay = 310},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/shocker", delay = 25},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/SIlence", delay = 300},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/HC%20Ambush", delay = 360},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/UA:))2", delay = 600},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/owner112", delay = 886},
+    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/HC%20Rush3", delay = 100},
+}
+
+for _, entity in ipairs(entityList) do
+    coroutine.wrap(function()
+        while true do
+            wait(entity.delay)
+           game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
+           wait(3)
+            pcall(function()
+                loadstring(game:HttpGet(entity.url))()
+            end)
+        end
+    end)()
+end
