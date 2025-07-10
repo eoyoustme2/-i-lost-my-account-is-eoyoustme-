@@ -1,4 +1,4 @@
-local MainUI = game:GetObjects("rbxassetid://72621580650125")[1]
+local MainUI = game:GetObjects("rbxassetid://110660029518972")[1]
 MainUI.Parent = game.Players.LocalPlayer.PlayerGui
 
 	local plr = game.Players.LocalPlayer
@@ -81,7 +81,7 @@ MainUI.Parent = game.Players.LocalPlayer.PlayerGui
 		Jumpscare_A90.Face.Visible = false
 		Jumpscare_A90.FaceAngry.Size = UDim2.new(0.8, 0, 0.8, 0)
 		task.wait(0.75)
-		plr.Character.Humanoid.Health -= 90
+		plr.Character.Humanoid.Health -= 60
 		task.wait(0.1)
 		Jumpscare_A90.FaceAngry.Visible = false
 		Jumpscare_A90.BackgroundColor3 = Color3.new(1, 1, 1)
