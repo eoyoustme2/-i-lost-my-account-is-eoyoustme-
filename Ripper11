@@ -196,7 +196,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         if ripeAttachment and ripeAttachment:IsA("Attachment") then
             for _, child in ipairs(ripeAttachment:GetChildren()) do
                 if child:IsA("ParticleEmitter") then
-                    child.Texture = "rbxassetid://134744864393686"  -- ID texture của bạn
+                    child.Texture = "rbxassetid://88243205150594"  -- ID texture của bạn
                     print("Đã đổi texture ParticleEmitter:", child.Name)
                 end
             end
