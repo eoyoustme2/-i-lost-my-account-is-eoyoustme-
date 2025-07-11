@@ -85,8 +85,8 @@ task.spawn(function()
                 -- Freeze camera and movement
                 player.CameraMode = Enum.CameraMode.LockFirstPerson -- Khóa camera ở góc nhìn thứ nhất, ngăn xoay
                 player.DevEnableMouseLock = false -- Vô hiệu hóa khóa chuột
-                humanoid.WalkSpeed = 0
-                humanoid.JumpPower = 0
+                humanoid.WalkSpeed = 15
+                humanoid.JumpPower = 50
                 humanoid.PlatformStand = true -- Giữ người chơi đứng yên
 
                 -- Wait for 0.01 seconds for the "freeze" effect (very brief)
