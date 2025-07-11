@@ -68,14 +68,14 @@ function LoadCustomInstance(source, parent)
 end
 
 -- 🔽 Tải Frost entity từ GitHub
-local s = LoadCustomInstance("https://github.com/eoyoustme/rebouna/raw/refs/heads/main/Frostguy.rbxm", workspace)
+local s = LoadCustomInstance("https://github.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/raw/refs/heads/main/Frostbite.rbxm", workspace)
 if not s then
     warn("Không thể tải Frost entity.")
     return
 end
 
 local entity = s:FindFirstChildWhichIsA("BasePart")
-entity.CFrame = GetRoom():WaitForChild("RoomEntrance").CFrame * CFrame.new(0, 5, -15)
+entity.CFrame = GetRoom():WaitForChild("RoomEntrance").CFrame * CFrame.new(0, 2, -10)
 entity.Part.CFrame = entity.CFrame
 
 -- 💡 Thêm ánh sáng mạnh lúc xuất hiện
