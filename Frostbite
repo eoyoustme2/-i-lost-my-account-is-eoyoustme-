@@ -86,7 +86,7 @@ pointLight.Brightness = 99999
 pointLight.Parent = entity
 
 -- Làm giảm độ sáng dần trong 6 giây
-tweenservice:Create(pointLight, TweenInfo.new(8), {
+tweenservice:Create(pointLight, TweenInfo.new(3), {
     Brightness = 0
 }):Play()
 
