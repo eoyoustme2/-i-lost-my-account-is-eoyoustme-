@@ -36,7 +36,7 @@ if entityPart then
     end)
 end
 
-task.delay(math.random(20, 25), function()
+task.delay(math.random(10, 15), function()
     Move = false
     wait(0.5)
     if entityModel and entityModel.PrimaryPart then
