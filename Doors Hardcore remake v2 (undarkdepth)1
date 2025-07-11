@@ -30,7 +30,7 @@ local entityList = {
     {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Dread%20hardcore%20remake%20v2", delay = 450},
     {url = "https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/A-90%20hardcore%20remake", delay = 90},
     {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Hardcore%20eye", delay = 180},
-    {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Hardcore%20eye", delay = 180},
+    {url = "https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Monoxide3", delay = 18000},
 }
 
 for _, entity in ipairs(entityList) do
