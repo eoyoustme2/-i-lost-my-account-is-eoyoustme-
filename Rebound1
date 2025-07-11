@@ -46,7 +46,7 @@ local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(sha
  camara.CFrame = camara.CFrame * shakeCf
 end)
 camShake:Start()
-camShake:ShakeOnce(900,700,0,4,2,12)
+camShake:ShakeOnce(90,70,0,4,2,12)
 local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
 local camara = game.Workspace.CurrentCamera
 
@@ -67,7 +67,7 @@ local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyou
 
 local entity = Creator.createEntity({
     CustomName = "Rebound", -- Custom name of your entity
-    Model = "rbxassetid://94730376399633", -- Can be GitHub file or rbxassetid
+    Model = "rbxassetid://126011127183167", -- Can be GitHub file or rbxassetid
     Speed = speed, -- Percentage, 100 = default Rush speed
     DelayTime = fuck, -- Time before starting cycles (seconds)
     HeightOffset = 0.3,
@@ -144,7 +144,7 @@ local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyou
 
 local entity = Creator.createEntity({
     CustomName = "Rebound2", -- Custom name of your entity
-    Model = "rbxassetid://94730376399633", -- Can be GitHub file or rbxassetid
+    Model = "rbxassetid://126011127183167", -- Can be GitHub file or rbxassetid
     Speed = speed, -- Percentage, 100 = default Rush speed
     DelayTime = fuck, -- Time before starting cycles (seconds)
     HeightOffset = 0.3,
@@ -221,7 +221,7 @@ local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyou
 
 local entity = Creator.createEntity({
     CustomName = "Rebound3", -- Custom name of your entity
-    Model = "rbxassetid://94730376399633", -- Can be GitHub file or rbxassetid
+    Model = "rbxassetid://126011127183167", -- Can be GitHub file or rbxassetid
     Speed = speed, -- Percentage, 100 = default Rush speed
     DelayTime = fuck, -- Time before starting cycles (seconds)
     HeightOffset = 0.3,
@@ -298,7 +298,7 @@ local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyou
 
 local entity = Creator.createEntity({
     CustomName = "Rebound4", -- Custom name of your entity
-    Model = "rbxassetid://94730376399633", -- Can be GitHub file or rbxassetid
+    Model = "rbxassetid://126011127183167", -- Can be GitHub file or rbxassetid
     Speed = speed, -- Percentage, 100 = default Rush speed
     DelayTime = fuck, -- Time before starting cycles (seconds)
     HeightOffset = 0.3,
@@ -375,7 +375,7 @@ local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyou
 
 local entity = Creator.createEntity({
     CustomName = "Rebound5", -- Custom name of your entity
-    Model = "rbxassetid://94730376399633", -- Can be GitHub file or rbxassetid
+    Model = "rbxassetid://126011127183167", -- Can be GitHub file or rbxassetid
     Speed = speed, -- Percentage, 100 = default Rush speed
     DelayTime = fuck, -- Time before starting cycles (seconds)
     HeightOffset = 0.3,
