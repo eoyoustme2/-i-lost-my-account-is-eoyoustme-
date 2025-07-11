@@ -75,7 +75,7 @@ if not s then
 end
 
 local entity = s:FindFirstChildWhichIsA("BasePart")
-entity.CFrame = GetRoom():WaitForChild("RoomEntrance").CFrame * CFrame.new(0, 2, -10)
+entity.CFrame = GetRoom():WaitForChild("RoomEntrance").CFrame * CFrame.new(0, 5, -15)
 entity.Part.CFrame = entity.CFrame
 
 -- 💡 Thêm ánh sáng mạnh lúc xuất hiện
