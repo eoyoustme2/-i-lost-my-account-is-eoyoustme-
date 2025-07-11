@@ -10,7 +10,8 @@ local humanoid = char:WaitForChild("Humanoid")
 -- Thông số stamina
 local maxStamina = 100
 local stamina = maxStamina
-local sprintSpeed = 20 -- ✅ tốc độ sprint giảm xuống
+local sprintSpeed = 20
+local walkSpeed = 16  -- ✅ tốc độ sprint giảm xuống
 local drainRate = 25
 local regenRate = 15
 local isSprinting = false
