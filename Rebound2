@@ -59,7 +59,7 @@ camShake:Shake(CameraShaker.Presets.Earthquake)
 local speed = math.random(100,200)
 local delay = {"2", "2.5", "1.5", "1", "2.1"}
 local fuck = delay[math.random(0.001, #delay)]
-wait(0.01)
+wait(3.9)
 
 local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/rebound%20spawner"))()
 
