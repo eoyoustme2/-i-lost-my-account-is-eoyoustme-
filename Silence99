@@ -89,6 +89,13 @@ local Background = Instance.new("Frame")
 local Overlay = Instance.new("ImageLabel")
 local Face = Instance.new("ImageLabel")
 
+Background.Name = "Background"
+Background.BackgroundColor3 = Color3.fromRGB(3, 25, 99)
+Background.BorderSizePixel = 1
+Background.Size = UDim2.new(1, 0, 1, 0)
+Background.ZIndex = 999
+Background.Parent = JumpscareGui
+
 JumpscareGui.Name = "JumpscareGui"
 JumpscareGui.IgnoreGuiInset = true
 JumpscareGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -123,6 +130,16 @@ scare.SoundId = "rbxassetid://8028069841"
 scare.PlaybackSpeed = 1
 scare.Volume = 999
 scare.Parent = JumpscareGui
+
+-- Flashing background
+task.spawn(function()
+	while JumpscareGui.Parent do
+		Background.BackgroundColor3 = Color3.fromRGB(3, 25, 99)
+		task.wait(math.random(25, 100) / 1000)
+		Background.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		task.wait(math.random(25, 100) / 1000)
+	end
+end)
 
 -- Flashing overlay effect (alternate between 2 images)
 local overlayImages = {
