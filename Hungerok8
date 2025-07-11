@@ -94,7 +94,7 @@ task.spawn(function()
 
                local FPS = 6
               local clock = tick()
-             while clock + 0.001 / FPS > tick() do end
+             while clock + 0.4 / FPS > tick() do end
               wait()
              clock = tick()
             end
