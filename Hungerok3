@@ -41,7 +41,7 @@ task.spawn(function()
     damageSound.Parent = player.Character
 
     -- Jumpscare image properties
-    local JUMPSCARE_IMAGE_ID = "rbxassetid://11306695974" -- **THAY THẾ BẰNG ID ẢNH JUMPSCARE CỦA BẠN**
+    local JUMPSCARE_IMAGE_ID = "rbxassetid://2234" -- **THAY THẾ BẰNG ID ẢNH JUMPSCARE CỦA BẠN**
     local JUMPSCARE_DURATION = 1 -- Thời gian ảnh jumpscare hiển thị (0.1 giây)
 
     -- Create Jumpscare GUI
@@ -90,9 +90,9 @@ task.spawn(function()
                 humanoid.PlatformStand = true -- Giữ người chơi đứng yên
 
                 -- Wait for 0.01 seconds for the "freeze" effect (very brief)
-                task.wait(0.01)
+                task.wait(0.05)
 
-               local FPS = 10
+               local FPS = 5
               local clock = tick()
              while clock + 1 / FPS > tick() do end
               wait()
