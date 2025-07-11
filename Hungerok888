@@ -92,7 +92,7 @@ task.spawn(function()
                 -- Wait for 0.01 seconds for the "freeze" effect (very brief)
                 task.wait(0.0001)
 
-               local FPS = 0.3
+               local FPS = 1
               local clock = tick()
              while clock + 0.2 / FPS > tick() do end
               wait()
