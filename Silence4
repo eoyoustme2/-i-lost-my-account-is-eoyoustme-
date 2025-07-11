@@ -210,7 +210,7 @@ Overlay.BackgroundTransparency = 1
 Overlay.Size = UDim2.new(1, 0, 1, 0)
 Overlay.Position = UDim2.new(0, 0, 0, 0)
 Overlay.Image = "rbxassetid://236542974" -- Change to the first overlay image ID
-Overlay.ImageTransparency = 0.7
+Overlay.ImageTransparency = 0.8
 Overlay.ZIndex = 998
 Overlay.Parent = JumpscareGui
 
@@ -231,7 +231,7 @@ local scare = Instance.new("Sound")
 scare.Name = "MyEarsBurn"
 scare.SoundId = "rbxassetid://372770465"
 scare.PlaybackSpeed = 1
-scare.Volume = 999
+scare.Volume = 1
 scare.Parent = JumpscareGui
 
 local shift = Instance.new("PitchShiftSoundEffect")
@@ -286,7 +286,7 @@ end)
 
 -- Play sound and cleanup
 scare:Play()
-task.wait(0.03)
+task.wait(0.1)
 JumpscareGui:Destroy()
 	end
 end)
