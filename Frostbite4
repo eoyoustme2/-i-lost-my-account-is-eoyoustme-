@@ -68,7 +68,7 @@ function LoadCustomInstance(source, parent)
 end
 
 -- 🔽 Tải Frost entity từ GitHub
-local s = LoadCustomInstance("https://github.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/raw/refs/heads/main/Frostbite.rbxm", workspace)
+local s = LoadCustomInstance("https://github.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/raw/refs/heads/main/frostman.rbxm", workspace)
 if not s then
     warn("Không thể tải Frost entity.")
     return
