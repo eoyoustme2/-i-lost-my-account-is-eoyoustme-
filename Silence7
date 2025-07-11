@@ -81,103 +81,118 @@ entity:SetCallback("OnLookAt", function(lineOfSight)
     local player = game.Players.LocalPlayer
     local gui = player:WaitForChild("PlayerGui")
 
-    -- Các biến GUI và tween phải nằm ngoài function để giữ trạng thái
+    -- Biến lưu trạng thái
+    if not entity._hasBeenSeen then
+        entity._hasBeenSeen = false
+    end
+    if not entity._isJumpscareActive then
+        entity._isJumpscareActive = false
+    end
+
+    -- GUI references (tạo nếu chưa có)
     local jumpscareGui = gui:FindFirstChild("JumpscareGui")
     local overlay = jumpscareGui and jumpscareGui:FindFirstChild("Overlay")
     local face = jumpscareGui and jumpscareGui:FindFirstChild("Face")
     local sound = jumpscareGui and jumpscareGui:FindFirstChild("MyEarsBurn")
 
-    -- Biến lưu trạng thái đã từng nhìn thấy entity
-    if not entity._hasBeenSeen then
-        entity._hasBeenSeen = false
+    local function createGui()
+        if jumpscareGui then return jumpscareGui, overlay, face, sound end
+
+        jumpscareGui = Instance.new("ScreenGui")
+        jumpscareGui.Name = "JumpscareGui"
+        jumpscareGui.IgnoreGuiInset = true
+        jumpscareGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        jumpscareGui.Parent = gui
+
+        overlay = Instance.new("ImageLabel")
+        overlay.Name = "Overlay"
+        overlay.BackgroundTransparency = 1
+        overlay.Size = UDim2.new(1,0,1,0)
+        overlay.Position = UDim2.new(0,0,0,0)
+        overlay.Image = "rbxassetid://236542974"
+        overlay.ImageTransparency = 1
+        overlay.ZIndex = 998
+        overlay.Parent = jumpscareGui
+
+        face = Instance.new("ImageLabel")
+        face.Name = "Face"
+        face.AnchorPoint = Vector2.new(0.5, 0.5)
+        face.BackgroundTransparency = 1
+        face.Position = UDim2.new(0.5, 0, 0.5, 0)
+        face.Size = UDim2.new(0, 150, 0, 150)
+        face.Image = "rbxassetid://YOUR_FACE_IMAGE_ID" -- Thay ảnh ở đây
+        face.ImageTransparency = 1
+        face.ZIndex = 1000
+        face.Parent = jumpscareGui
+
+        sound = Instance.new("Sound")
+        sound.Name = "MyEarsBurn"
+        sound.SoundId = "rbxassetid://372770465"
+        sound.Volume = 1
+        sound.Parent = jumpscareGui
+
+        return jumpscareGui, overlay, face, sound
     end
 
-    if lineOfSight == true then
+    local function startJumpscare()
+        entity._isJumpscareActive = true
+
+        jumpscareGui, overlay, face, sound = createGui()
+
+        -- Tween overlay từ trong suốt đến 0 (hiện ra)
+        local fadeInTween = TweenService:Create(overlay, TweenInfo.new(5, Enum.EasingStyle.Linear), {ImageTransparency = 0})
+        fadeInTween:Play()
+
+        fadeInTween.Completed:Connect(function()
+            if entity._isJumpscareActive then
+                face.ImageTransparency = 0
+
+                TweenService:Create(face, TweenInfo.new(0.7), {
+                    Size = UDim2.new(2.5, 0, 2.5, 0)
+                }):Play()
+
+                local char = player.Character
+                if char and char:FindFirstChild("Humanoid") then
+                    -- Player chết chỉ khi overlay hiện hết
+                    char.Humanoid.Health = 0
+                end
+
+                sound:Play()
+            end
+        end)
+    end
+
+    local function stopJumpscare()
+        entity._isJumpscareActive = false
+
+        if jumpscareGui and overlay and face then
+            -- Tween overlay từ hiện đến trong suốt (ẩn)
+            local fadeOutTween = TweenService:Create(overlay, TweenInfo.new(2, Enum.EasingStyle.Linear), {ImageTransparency = 1})
+            fadeOutTween:Play()
+
+            face.ImageTransparency = 1
+            face.Size = UDim2.new(0, 150, 0, 150)
+
+            if sound and sound.IsPlaying then
+                sound:Stop()
+            end
+        end
+    end
+
+    if lineOfSight then
         print("Player is looking at entity")
 
-        entity._hasBeenSeen = true  -- Đánh dấu đã nhìn thấy
-
-        -- Nếu overlay jumpscare đang tồn tại, bật lại (nếu muốn)
-        if jumpscareGui then
-            overlay.ImageTransparency = 1
-            face.ImageTransparency = 1
-        end
+        entity._hasBeenSeen = true
+        startJumpscare()
 
     else
         print("Player view is obstructed by something")
 
-        -- Nếu đã từng nhìn thấy entity trước đó, thì fade out overlay (ẩn dần)
-        if entity._hasBeenSeen and jumpscareGui and overlay then
-            -- Tạo tween để ẩn overlay dần
-            local fadeOutTween = TweenService:Create(overlay, TweenInfo.new(2, Enum.EasingStyle.Linear), {ImageTransparency = 1})
-            fadeOutTween:Play()
-            -- Ẩn luôn face image
-            face.ImageTransparency = 1
-
-            -- Có thể dừng âm thanh nếu đang phát
-            if sound and sound.IsPlaying then
-                sound:Stop()
-            end
-
+        if entity._hasBeenSeen then
+            -- Player đã từng nhìn thấy, bây giờ quay mặt đi thì ẩn overlay
+            stopJumpscare()
         else
-            -- Chưa từng nhìn thấy, tạo jumpscare mới
-            local function createGui()
-                if jumpscareGui then return end
-                jumpscareGui = Instance.new("ScreenGui")
-                jumpscareGui.Name = "JumpscareGui"
-                jumpscareGui.IgnoreGuiInset = true
-                jumpscareGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-                jumpscareGui.Parent = gui
-
-                overlay = Instance.new("ImageLabel")
-                overlay.Name = "Overlay"
-                overlay.BackgroundTransparency = 1
-                overlay.Size = UDim2.new(1,0,1,0)
-                overlay.Position = UDim2.new(0,0,0,0)
-                overlay.Image = "rbxassetid://236542974"
-                overlay.ImageTransparency = 1
-                overlay.ZIndex = 998
-                overlay.Parent = jumpscareGui
-
-                face = Instance.new("ImageLabel")
-                face.Name = "Face"
-                face.AnchorPoint = Vector2.new(0.5, 0.5)
-                face.BackgroundTransparency = 1
-                face.Position = UDim2.new(0.5, 0, 0.5, 0)
-                face.Size = UDim2.new(0, 150, 0, 150)
-                face.Image = "rbxassetid://YOUR_FACE_IMAGE_ID"  -- Thay ID ảnh
-                face.ImageTransparency = 1
-                face.ZIndex = 1000
-                face.Parent = jumpscareGui
-
-                sound = Instance.new("Sound")
-                sound.Name = "MyEarsBurn"
-                sound.SoundId = "rbxassetid://372770465"
-                sound.Volume = 1
-                sound.Parent = jumpscareGui
-            end
-
-            local function startJumpscare()
-                createGui()
-                local fadeInTween = TweenService:Create(overlay, TweenInfo.new(5, Enum.EasingStyle.Linear), {ImageTransparency = 0})
-                fadeInTween:Play()
-
-                fadeInTween.Completed:Connect(function()
-                    face.ImageTransparency = 0
-
-                    TweenService:Create(face, TweenInfo.new(0.7), {
-                        Size = UDim2.new(2.5, 0, 2.5, 0)
-                    }):Play()
-
-                    local char = player.Character
-                    if char and char:FindFirstChild("Humanoid") then
-                        char.Humanoid.Health = 0
-                    end
-
-                    sound:Play()
-                end)
-            end
-
+            -- Chưa từng nhìn thấy, tạo jumpscare như bình thường
             startJumpscare()
         end
     end
