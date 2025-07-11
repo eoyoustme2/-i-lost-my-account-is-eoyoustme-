@@ -195,9 +195,7 @@ task.wait(0.7)
 JumpscareGui:Destroy()
 	else
 		print("Player view is obstructed by something")
--- UI Construction
 local JumpscareGui = Instance.new("ScreenGui")
-local Background = Instance.new("Frame")
 local Overlay = Instance.new("ImageLabel")
 local Face = Instance.new("ImageLabel")
 
@@ -206,22 +204,15 @@ JumpscareGui.IgnoreGuiInset = true
 JumpscareGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 JumpscareGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-Background.Name = "Background"
-Background.BackgroundColor3 = Color3.fromRGB(3, 25, 99)
-Background.BorderSizePixel = 1
-Background.Size = UDim2.new(1, 0, 1, 0)
-Background.ZIndex = 999
-Background.Parent = JumpscareGui
-
 -- Full-screen overlay image
 Overlay.Name = "Overlay"
 Overlay.BackgroundTransparency = 1
 Overlay.Size = UDim2.new(1, 0, 1, 0)
 Overlay.Position = UDim2.new(0, 0, 0, 0)
-Overlay.Image = "rbxassetid://236542974" -- Thay bằng ID hình đầu tiên
+Overlay.Image = "rbxassetid://236542974" -- Change to the first overlay image ID
 Overlay.ImageTransparency = 0.7
 Overlay.ZIndex = 998
-Overlay.Parent = Background
+Overlay.Parent = JumpscareGui
 
 -- Face image (jumpscare face)
 Face.Name = "Face"
@@ -230,10 +221,10 @@ Face.BackgroundTransparency = 1
 Face.Position = UDim2.new(0.5, 0, 0.5, 0)
 Face.ResampleMode = Enum.ResamplerMode.Pixelated
 Face.Size = UDim2.new(0, 150, 0, 150)
-Face.Image = "rbxassetid://"
+Face.Image = "rbxassetid://YourFaceImageID" -- Replace with your jumpscare face ID
 Face.ZIndex = 1000
 Face.ImageTransparency = 0
-Face.Parent = Background
+Face.Parent = JumpscareGui
 
 -- Sound setup
 local scare = Instance.new("Sound")
@@ -261,52 +252,41 @@ eq.MidGain = 10
 eq.LowGain = 3.7
 eq.Parent = scare
 
--- Flashing background
-task.spawn(function()
-	while JumpscareGui.Parent do
-		Background.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-		task.wait(math.random(25, 100) / 1000)
-		Background.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		task.wait(math.random(25, 100) / 1000)
-	end
-end)
-
 -- Flashing overlay effect (alternate between 2 images)
 local overlayImages = {
-	"rbxassetid://184251462", -- Hình overlay 1
-	"rbxassetid://236542974"  -- Hình overlay 2
+    "rbxassetid://184251462", -- Overlay image 1
+    "rbxassetid://236542974"  -- Overlay image 2
 }
-
 task.spawn(function()
-	local i = 1
-	while JumpscareGui.Parent do
-		Overlay.Image = overlayImages[i]
-		i = i % #overlayImages + 1
-		task.wait(0) -- Đổi hình mỗi 0.5 giây
-	end
+    local i = 1
+    while JumpscareGui.Parent do
+        Overlay.Image = overlayImages[i]
+        i = i % #overlayImages + 1
+        task.wait(0.5) -- Change the image every 0.5 seconds
+    end
 end)
 
 -- Jumpscare zoom effect
 game.TweenService:Create(Face, TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-	Size = UDim2.new(2.5, 0, 2.5, 0),
-	ImageTransparency = 0
+    Size = UDim2.new(2.5, 0, 2.5, 0),
+    ImageTransparency = 0
 }):Play()
 
 -- Shake effect
 task.spawn(function()
-	local originalPos = Face.Position
-	for i = 1, 15 do
-		local offsetX = math.random(-0, 0)
-		local offsetY = math.random(-0, 0)
-		Face.Position = originalPos + UDim2.new(0, offsetX, 0, offsetY)
-		task.wait(0.03)
-	end
-	Face.Position = originalPos
+    local originalPos = Face.Position
+    for i = 1, 15 do
+        local offsetX = math.random(-0, 0)
+        local offsetY = math.random(-0, 0)
+        Face.Position = originalPos + UDim2.new(0, offsetX, 0, offsetY)
+        task.wait(0.03)
+    end
+    Face.Position = originalPos
 end)
 
 -- Play sound and cleanup
 scare:Play()
-task.wait(0.7)
+task.wait(0.1)
 JumpscareGui:Destroy()
 	end
 end)
