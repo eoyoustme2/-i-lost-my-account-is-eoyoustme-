@@ -76,21 +76,41 @@ entity:SetCallback("OnEnterRoom", function(room, firstTime)
     end
 end)
 
-entity:SetCallback("OnLookAt", function(lineOfSight)
-	local player = game.Players.LocalPlayer
-	local gui = player:WaitForChild("PlayerGui")
-	local TweenService = game:GetService("TweenService")
+local TweenService = game:GetService("TweenService")
+local player = game.Players.LocalPlayer
+local gui = player:WaitForChild("PlayerGui")
 
+local jumpscareGui
+local overlay
+local face
+local sound
+local flashLoop
+local fadeTween
+
+entity:SetCallback("OnLookAt", function(lineOfSight)
 	if lineOfSight == true then
-		-- Player nhìn thẳng entity, không có jumpscare
 		print("Player is looking at entity")
 
+		-- Nếu trước đó có GUI jumpscare thì xóa và dừng tween
+		if fadeTween then
+			fadeTween:Cancel()
+			fadeTween = nil
+		end
+		if flashLoop then
+			task.cancel(flashLoop)
+			flashLoop = nil
+		end
+		if jumpscareGui then
+			jumpscareGui:Destroy()
+			jumpscareGui = nil
+			overlay = nil
+			face = nil
+			sound = nil
+		end
+
 	else
-		-- Player nhìn entity nhưng bị vật cản chắn → in và chạy jumpscare
 		print("Player view is obstructed by something")
 
-		-- Tạo GUI jumpscare
-		local jumpscareGui = gui:FindFirstChild("JumpscareGui")
 		if not jumpscareGui then
 			jumpscareGui = Instance.new("ScreenGui")
 			jumpscareGui.Name = "JumpscareGui"
@@ -99,41 +119,32 @@ entity:SetCallback("OnLookAt", function(lineOfSight)
 			jumpscareGui.Parent = gui
 		end
 
-		-- Overlay
-		local overlay = jumpscareGui:FindFirstChild("Overlay")
-		if not overlay then
-			overlay = Instance.new("ImageLabel")
-			overlay.Name = "Overlay"
-			overlay.BackgroundTransparency = 1
-			overlay.Size = UDim2.new(1, 0, 1, 0)
-			overlay.Position = UDim2.new(0, 0, 0, 0)
-			overlay.Image = "rbxassetid://236542974" -- Thay bằng ID bạn muốn
-			overlay.ImageTransparency = 1
-			overlay.ZIndex = 998
-			overlay.Parent = jumpscareGui
-		end
+		overlay = jumpscareGui:FindFirstChild("Overlay") or Instance.new("ImageLabel")
+		overlay.Name = "Overlay"
+		overlay.BackgroundTransparency = 1
+		overlay.Size = UDim2.new(1, 0, 1, 0)
+		overlay.Position = UDim2.new(0, 0, 0, 0)
+		overlay.Image = "rbxassetid://236542974"
+		overlay.ImageTransparency = 1
+		overlay.ZIndex = 998
+		overlay.Parent = jumpscareGui
 
-		-- Face
-		local face = jumpscareGui:FindFirstChild("Face")
-		if not face then
-			face = Instance.new("ImageLabel")
-			face.Name = "Face"
-			face.AnchorPoint = Vector2.new(0.5, 0.5)
-			face.BackgroundTransparency = 1
-			face.Position = UDim2.new(0.5, 0, 0.5, 0)
-			face.Size = UDim2.new(0, 150, 0, 150)
-			face.Image = "rbxassetid://YOUR_FACE_IMAGE_ID" -- Thay bằng ID ảnh mặt bạn muốn
-			face.ImageTransparency = 1
-			face.ZIndex = 1000
-			face.Parent = jumpscareGui
-		end
+		face = jumpscareGui:FindFirstChild("Face") or Instance.new("ImageLabel")
+		face.Name = "Face"
+		face.AnchorPoint = Vector2.new(0.5, 0.5)
+		face.BackgroundTransparency = 1
+		face.Position = UDim2.new(0.5, 0, 0.5, 0)
+		face.Size = UDim2.new(0, 150, 0, 150)
+		face.Image = "rbxassetid://YOUR_FACE_IMAGE_ID"
+		face.ImageTransparency = 1
+		face.ZIndex = 1000
+		face.Parent = jumpscareGui
 
-		-- Sound
-		local sound = jumpscareGui:FindFirstChild("MyEarsBurn")
+		sound = jumpscareGui:FindFirstChild("MyEarsBurn")
 		if not sound then
 			sound = Instance.new("Sound")
 			sound.Name = "MyEarsBurn"
-			sound.SoundId = "rbxassetid://372770465" -- Thay ID âm thanh
+			sound.SoundId = "rbxassetid://372770465"
 			sound.PlaybackSpeed = 1
 			sound.Volume = 1
 			sound.Parent = jumpscareGui
@@ -153,13 +164,14 @@ entity:SetCallback("OnLookAt", function(lineOfSight)
 			eq.Parent = sound
 		end
 
-		-- Flash overlay images
+		-- Flashing overlay effect
 		local overlayImages = {
 			"rbxassetid://236542974",
 			"rbxassetid://184251462"
 		}
 		local i = 1
-		local flashLoop = task.spawn(function()
+		if flashLoop then task.cancel(flashLoop) end
+		flashLoop = task.spawn(function()
 			while overlay and overlay.Parent do
 				overlay.Image = overlayImages[i]
 				i = i % #overlayImages + 1
@@ -167,11 +179,14 @@ entity:SetCallback("OnLookAt", function(lineOfSight)
 			end
 		end)
 
-		-- Tween giảm transparency overlay từ 1 xuống 0 trong 5 giây
-		local fadeIn = TweenService:Create(overlay, TweenInfo.new(5, Enum.EasingStyle.Linear), { ImageTransparency = 0 })
-		fadeIn:Play()
+		-- Tween giảm transparency
+		if fadeTween then
+			fadeTween:Cancel()
+		end
+		fadeTween = TweenService:Create(overlay, TweenInfo.new(5, Enum.EasingStyle.Linear), { ImageTransparency = 0 })
+		fadeTween:Play()
 
-		-- Khi transparency overlay giảm về 0 → hiện mặt, zoom, rung và chơi âm thanh, giết player
+		-- Khi transparency overlay về 0, thực hiện jumpscare
 		task.spawn(function()
 			while overlay and overlay.Parent and overlay.ImageTransparency > 0 do
 				task.wait(0.1)
@@ -197,7 +212,7 @@ entity:SetCallback("OnLookAt", function(lineOfSight)
 				face.Position = orig
 			end)
 
-			-- Chơi âm thanh
+			-- Phát âm thanh
 			sound:Play()
 
 			-- Giết player
@@ -208,6 +223,7 @@ entity:SetCallback("OnLookAt", function(lineOfSight)
 		end)
 	end
 end)
+
 
 entity:SetCallback("OnRebounding", function(startOfRebound)
     if startOfRebound == true then
