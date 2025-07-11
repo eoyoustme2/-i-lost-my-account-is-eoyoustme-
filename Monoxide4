@@ -27,7 +27,7 @@ local entity = spawner.Create({
 		Values = {1.5, 20, 0.1, 1} -- Magnitude, Roughness, FadeIn, FadeOut
 	},
 	Movement = {
-		Speed = 190,
+		Speed = 380,
 		Delay = 6,
 		Reversed = true
 	},
@@ -36,7 +36,7 @@ local entity = spawner.Create({
 		Type = "Ambush", -- "Blitz"
 		Min = 4,
 		Max = 4,
-		Delay = 0.01
+		Delay = 0.0001
 	},
 	Damage = {
 		Enabled = true,
@@ -69,7 +69,7 @@ local tween = game:GetService("TweenService")
 tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5), {Contrast = 0}):Play()
 tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5), {Saturation = 0}):Play()
 local TweenService = game:GetService("TweenService")
-local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(8),{TintColor = Color3.fromRGB(255, 255, 255)})
+local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(15),{TintColor = Color3.fromRGB(255, 255, 255)})
 TW:Play()
 end)
 
