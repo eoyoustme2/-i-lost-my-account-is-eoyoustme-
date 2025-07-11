@@ -10,7 +10,7 @@ local humanoid = char:WaitForChild("Humanoid")
 -- Thông số stamina
 local maxStamina = 100
 local stamina = maxStamina
-local sprintSpeed = 22 -- ✅ tốc độ sprint giảm xuống
+local sprintSpeed = 20 -- ✅ tốc độ sprint giảm xuống
 local walkSpeed = 16
 local drainRate = 25
 local regenRate = 15
@@ -122,6 +122,7 @@ RunService.RenderStepped:Connect(function(dt)
 		stamina = math.max(0, stamina - drainRate * dt)
 		if stamina == 0 then
 			isSprinting = false
+                       require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("You're tired", true)
 			moveToSide()
 		end
 	else
