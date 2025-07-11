@@ -94,7 +94,7 @@ tweenservice:Create(pointLight, TweenInfo.new(3), {
 local sound = Instance.new("Sound")
 sound.SoundId = "rbxassetid://137044859218769"
 sound.Looped = false
-sound.Volume = 5
+sound.Volume = 10
 sound.Parent = s
 sound:Play()
 
