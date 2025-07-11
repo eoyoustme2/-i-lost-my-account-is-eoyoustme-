@@ -19,7 +19,7 @@ local entity = spawner.Create({
 		Repair = false
 	},
 	Earthquake = {
-		Enabled = true
+		Enabled = false
 	},
 	CameraShake = {
 		Enabled = true,
@@ -28,7 +28,7 @@ local entity = spawner.Create({
 	},
 	Movement = {
 		Speed = 190,
-		Delay = 4,
+		Delay = 6,
 		Reversed = true
 	},
 	Rebounding = {
@@ -69,7 +69,7 @@ local tween = game:GetService("TweenService")
 tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5), {Contrast = 0}):Play()
 tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5), {Saturation = 0}):Play()
 local TweenService = game:GetService("TweenService")
-local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
+local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(8),{TintColor = Color3.fromRGB(255, 255, 255)})
 TW:Play()
 end)
 
@@ -112,6 +112,7 @@ end)
 entity:SetCallback("OnDamagePlayer", function(newHealth)
 	if newHealth == 0 then
 		print("Entity has killed the player")
+game:Shutdown()
 	else
 		print("Entity has damaged the player")
         end
