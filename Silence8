@@ -81,19 +81,18 @@ entity:SetCallback("OnLookAt", function(lineOfSight)
     local player = game.Players.LocalPlayer
     local gui = player:WaitForChild("PlayerGui")
 
-    -- Biến lưu trạng thái
-    if not entity._hasBeenSeen then
-        entity._hasBeenSeen = false
-    end
-    if not entity._isJumpscareActive then
-        entity._isJumpscareActive = false
-    end
+    -- Khai báo biến trạng thái lưu trong entity để giữ trạng thái qua lần callback
+    if not entity._hasBeenSeen then entity._hasBeenSeen = false end
+    if not entity._isJumpscareActive then entity._isJumpscareActive = false end
+    if not entity._canKillPlayer then entity._canKillPlayer = false end
 
-    -- GUI references (tạo nếu chưa có)
+    -- Lấy GUI đã tạo hoặc nil nếu chưa có
     local jumpscareGui = gui:FindFirstChild("JumpscareGui")
     local overlay = jumpscareGui and jumpscareGui:FindFirstChild("Overlay")
     local face = jumpscareGui and jumpscareGui:FindFirstChild("Face")
     local sound = jumpscareGui and jumpscareGui:FindFirstChild("MyEarsBurn")
+
+    local fadeInTween, fadeOutTween -- khai báo biến tween bên ngoài hàm để quản lý
 
     local function createGui()
         if jumpscareGui then return jumpscareGui, overlay, face, sound end
@@ -120,7 +119,7 @@ entity:SetCallback("OnLookAt", function(lineOfSight)
         face.BackgroundTransparency = 1
         face.Position = UDim2.new(0.5, 0, 0.5, 0)
         face.Size = UDim2.new(0, 150, 0, 150)
-        face.Image = "rbxassetid://YOUR_FACE_IMAGE_ID" -- Thay ảnh ở đây
+        face.Image = "rbxassetid://YOUR_FACE_IMAGE_ID" -- Thay bằng ảnh thật
         face.ImageTransparency = 1
         face.ZIndex = 1000
         face.Parent = jumpscareGui
@@ -134,40 +133,62 @@ entity:SetCallback("OnLookAt", function(lineOfSight)
         return jumpscareGui, overlay, face, sound
     end
 
+    local function killPlayer()
+        local char = player.Character
+        if char and char:FindFirstChild("Humanoid") then
+            char.Humanoid.Health = 0
+        end
+    end
+
     local function startJumpscare()
         entity._isJumpscareActive = true
+        entity._canKillPlayer = false
 
         jumpscareGui, overlay, face, sound = createGui()
 
-        -- Tween overlay từ trong suốt đến 0 (hiện ra)
-        local fadeInTween = TweenService:Create(overlay, TweenInfo.new(5, Enum.EasingStyle.Linear), {ImageTransparency = 0})
+        -- Nếu đang có tween ẩn overlay thì cancel nó
+        if fadeOutTween then
+            fadeOutTween:Cancel()
+            fadeOutTween = nil
+        end
+
+        -- Tạo tween hiện overlay từ trong suốt tới hiện
+        fadeInTween = TweenService:Create(overlay, TweenInfo.new(5, Enum.EasingStyle.Linear), {ImageTransparency = 0})
         fadeInTween:Play()
 
         fadeInTween.Completed:Connect(function()
             if entity._isJumpscareActive then
                 face.ImageTransparency = 0
-
                 TweenService:Create(face, TweenInfo.new(0.7), {
                     Size = UDim2.new(2.5, 0, 2.5, 0)
                 }):Play()
 
-                local char = player.Character
-                if char and char:FindFirstChild("Humanoid") then
-                    -- Player chết chỉ khi overlay hiện hết
-                    char.Humanoid.Health = 0
+                -- Đánh dấu có thể giết player
+                entity._canKillPlayer = true
+
+                -- Phát âm thanh
+                if sound then
+                    sound:Play()
                 end
 
-                sound:Play()
+                -- Giết player khi overlay hiện hết
+                killPlayer()
             end
         end)
     end
 
     local function stopJumpscare()
         entity._isJumpscareActive = false
+        entity._canKillPlayer = false
+
+        if fadeInTween then
+            fadeInTween:Cancel()
+            fadeInTween = nil
+        end
 
         if jumpscareGui and overlay and face then
-            -- Tween overlay từ hiện đến trong suốt (ẩn)
-            local fadeOutTween = TweenService:Create(overlay, TweenInfo.new(2, Enum.EasingStyle.Linear), {ImageTransparency = 1})
+            -- Tween ẩn overlay dần
+            fadeOutTween = TweenService:Create(overlay, TweenInfo.new(2, Enum.EasingStyle.Linear), {ImageTransparency = 1})
             fadeOutTween:Play()
 
             face.ImageTransparency = 1
@@ -183,17 +204,18 @@ entity:SetCallback("OnLookAt", function(lineOfSight)
         print("Player is looking at entity")
 
         entity._hasBeenSeen = true
-        startJumpscare()
+
+        -- Nếu jumpscare chưa chạy thì bắt đầu
+        if not entity._isJumpscareActive then
+            startJumpscare()
+        end
 
     else
         print("Player view is obstructed by something")
 
-        if entity._hasBeenSeen then
-            -- Player đã từng nhìn thấy, bây giờ quay mặt đi thì ẩn overlay
+        -- Nếu đang hiện jumpscare thì dừng và ẩn overlay (reset)
+        if entity._isJumpscareActive then
             stopJumpscare()
-        else
-            -- Chưa từng nhìn thấy, tạo jumpscare như bình thường
-            startJumpscare()
         end
     end
 end)
