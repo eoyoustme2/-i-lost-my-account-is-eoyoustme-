@@ -205,6 +205,8 @@ ItemName.PrimaryPart.Footsteps:Destroy()
 
 ItemName.PrimaryPart.Idle:Destroy()
     local spawn = Instance.new("Sound")
+wait(3.9)
+
 wait(4.3)
 spawn.Parent = entityModel.PrimaryPart
 spawn.Name = "ReboundSpawn"
