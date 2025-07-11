@@ -286,7 +286,7 @@ end)
 
 -- Play sound and cleanup
 scare:Play()
-task.wait(0.1)
+task.wait(0.03)
 JumpscareGui:Destroy()
 	end
 end)
