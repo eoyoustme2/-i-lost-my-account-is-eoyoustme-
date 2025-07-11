@@ -59,9 +59,9 @@ camShake:Shake(CameraShaker.Presets.Earthquake)
 local speed = math.random(100,200)
 local delay = {"2", "2.5", "1.5", "1", "2.1"}
 local fuck = delay[math.random(0.001, #delay)]
-wait(3.9)
+wait(0.01)
 
-local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Rebound:2"))()
+local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/rebound%20spawner"))()
 
 -- Create entity
 
@@ -138,7 +138,7 @@ entity.Debug.OnEntityStartMoving = function(entityModel)
     print("Entity has started moving:", entityModel)
     game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
     
-local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Rebound:2"))()
+local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/rebound%20spawner"))()
 
 -- Create entity
 
@@ -215,7 +215,7 @@ entity.Debug.OnEntityStartMoving = function(entityModel)
     print("Entity has started moving:", entityModel)
     game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
     
-local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Rebound:2"))()
+local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/rebound%20spawner"))()
 
 -- Create entity
 
@@ -292,7 +292,7 @@ entity.Debug.OnEntityStartMoving = function(entityModel)
     print("Entity has started moving:", entityModel)
     game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
     
-local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Rebound:2"))()
+local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/rebound%20spawner"))()
 
 -- Create entity
 
@@ -369,7 +369,7 @@ entity.Debug.OnEntityStartMoving = function(entityModel)
     print("Entity has started moving:", entityModel)
     game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
     
-local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Rebound:2"))()
+local Creator = loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/rebound%20spawner"))()
 
 -- Create entity
 
