@@ -231,7 +231,7 @@ local scare = Instance.new("Sound")
 scare.Name = "MyEarsBurn"
 scare.SoundId = "rbxassetid://372770465"
 scare.PlaybackSpeed = 1
-scare.Volume = 1
+scare.Volume = 0.1
 scare.Parent = JumpscareGui
 
 local shift = Instance.new("PitchShiftSoundEffect")
