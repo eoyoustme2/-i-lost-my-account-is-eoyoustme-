@@ -90,11 +90,11 @@ task.spawn(function()
                 humanoid.PlatformStand = true -- Giữ người chơi đứng yên
 
                 -- Wait for 0.01 seconds for the "freeze" effect (very brief)
-                task.wait(0.05)
+                task.wait(0.0001)
 
                local FPS = 2
               local clock = tick()
-             while clock + 0.05 / FPS > tick() do end
+             while clock + 0.4 / FPS > tick() do end
               wait()
              clock = tick()
             end
