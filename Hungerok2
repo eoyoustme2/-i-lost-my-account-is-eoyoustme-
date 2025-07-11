@@ -1,0 +1,156 @@
+local cue2 = Instance.new("Sound")
+cue2.Parent = game.Workspace
+cue2.Name = "Spawn"
+cue2.SoundId = "rbxassetid://933230732"
+cue2.Volume = 45
+cue2.PlaybackSpeed = 1
+cue2:Play()
+
+wait(1)
+
+-- Check current room
+local entityModel = true
+local latestRoom = game.ReplicatedStorage.GameData.LatestRoom.Value
+
+-- If in Seek, Figure, or Room 90+
+if game.Workspace:FindFirstChild("SeekMovingNewClone") or
+    latestRoom == 50 or latestRoom == 100 or
+    (latestRoom >= 90 and latestRoom <= 100) then
+    entityModel = false
+end
+
+local Kill = true
+local depthsTer = game:GetObjects("rbxassetid://122309151397392")[1] -- Load DepthsTer from the ID
+depthsTer.Parent = game.Workspace
+
+local part = depthsTer:FindFirstChildWhichIsA("BasePart") or depthsTer:FindFirstChildWhichIsA("Part")
+
+-- Set the position of DepthsTer in the room
+part.CFrame = game.Workspace.CurrentRooms:GetChildren()[#game.Workspace.CurrentRooms:GetChildren() - 1].Parts.Floor.CFrame + Vector3.new(0, 4, 0)
+
+wait(0.01)
+
+task.spawn(function()
+    local player = game.Players.LocalPlayer
+    local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+
+    -- Create the damage sound instance
+    local damageSound = Instance.new("Sound")
+    damageSound.SoundId = "rbxassetid://6664373487" -- Sound ID khi mất máu
+    damageSound.Volume = 20
+    damageSound.Parent = player.Character
+
+    -- Jumpscare image properties
+    local JUMPSCARE_IMAGE_ID = "rbxassetid://11306695974" -- **THAY THẾ BẰNG ID ẢNH JUMPSCARE CỦA BẠN**
+    local JUMPSCARE_DURATION = 1 -- Thời gian ảnh jumpscare hiển thị (0.1 giây)
+
+    -- Create Jumpscare GUI
+    local jumpscareGui = Instance.new("ScreenGui")
+    jumpscareGui.Name = "JumpscareGUI"
+    jumpscareGui.Parent = player:WaitForChild("PlayerGui") -- Đảm bảo PlayerGui tồn tại trước khi thêm
+
+    local jumpscareImage = Instance.new("ImageLabel")
+    jumpscareImage.Name = "JumpscareImage"
+    jumpscareImage.Image = JUMPSCARE_IMAGE_ID
+    jumpscareImage.BackgroundTransparency = 1
+    jumpscareImage.Size = UDim2.new(1, 0, 1, 0) -- Full màn hình
+    jumpscareImage.Position = UDim2.new(0, 0, 0, 0)
+    jumpscareImage.ZIndex = 10 -- Đảm bảo ảnh nằm trên cùng
+    jumpscareImage.Visible = false -- Bắt đầu ở trạng thái ẩn
+    jumpscareImage.Parent = jumpscareGui
+
+    while Kill == true do
+        task.wait(0.1) -- Gây sát thương mỗi 0.1 giây nếu không nhìn
+        local _, camera = game.Workspace.CurrentCamera:WorldToViewportPoint(part.Position)
+
+        -- If the player is not looking at DepthTer, they take damage and are "frozen" in camera rotation
+        if not camera then
+            if humanoid then
+                humanoid:TakeDamage(5)
+                damageSound:Play() -- Play damage sound
+
+                -- Show jumpscare image
+                jumpscareImage.Visible = true
+                task.spawn(function()
+                    task.wait(JUMPSCARE_DURATION)
+                    jumpscareImage.Visible = false
+                end)
+
+                -- Store current camera properties
+                local originalCameraMode = player.CameraMode
+                local originalDevEnableMouseLock = player.DevEnableMouseLock
+                local originalWalkSpeed = humanoid.WalkSpeed
+                local originalJumpPower = humanoid.JumpPower
+
+                -- Freeze camera and movement
+                player.CameraMode = Enum.CameraMode.LockFirstPerson -- Khóa camera ở góc nhìn thứ nhất, ngăn xoay
+                player.DevEnableMouseLock = false -- Vô hiệu hóa khóa chuột
+                humanoid.WalkSpeed = 0
+                humanoid.JumpPower = 0
+                humanoid.PlatformStand = true -- Giữ người chơi đứng yên
+
+                -- Wait for 0.01 seconds for the "freeze" effect (very brief)
+                task.wait(0.01)
+
+               local FPS = 10
+              local clock = tick()
+             while clock + 1 / FPS > tick() do end
+              wait()
+             clock = tick()
+            end
+        end
+
+        -- If the player dies, update the death cause and show the death hint
+        if humanoid and humanoid.Health <= 0 then
+            -- Show death hint
+            firesignal(game.ReplicatedStorage.RemotesFolder.DeathHint.OnClientEvent, {"You died to who you call owner...", "He spawns in center of room and he will damage you if you dont look at him", "He doesnt like to be ignoring"}, "Blue")
+            wait(0.01)
+            -- Update the death cause in the game stats
+            game:GetService("ReplicatedStorage").GameStats["Player_" .. player.Name].Total.DeathCause.Value = "HUGERRORED"
+        end
+    end
+end)
+
+-- Crash game if the player touches DepthTer
+part.Touched:Connect(function(hit)
+    local character = hit.Parent
+    local touchedPlayer = game.Players:GetPlayerFromCharacter(character)
+
+    if touchedPlayer == game.Players.LocalPlayer then
+        -- Create the crash sound instance
+        local crashSound = Instance.new("Sound")
+        crashSound.SoundId = "rbxassetid://7027640335" -- **THAY THẾ BẰNG ID ÂM THANH CRASH CỦA BẠN**
+        crashSound.Volume = 50 -- Điều chỉnh âm lượng
+        crashSound.Parent = game.Workspace -- Hoặc player.Character để nó theo người chơi
+        crashSound.Looped = true -- **LÀM CHO ÂM THANH LẶP LẠI KHÔNG NGỪNG**
+
+        print("Player touched DepthTer! Playing continuous crash sound and initiating client-side freeze...")
+        crashSound:Play() -- Bắt đầu phát âm thanh
+
+        -- This will cause the client to freeze/become unresponsive
+        while true do
+            -- Infinite loop with no wait will block the client thread
+            -- This is a common way to "crash" a Roblox client locally.
+            -- Âm thanh sẽ tiếp tục phát do Looped = true và vòng lặp này không có task.wait()
+        end
+    end
+end)
+
+
+-- Wait for the room to change
+game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
+Kill = false
+
+-- Destroy DepthTer when no longer needed
+depthsTer:Destroy()
+
+---====== Load achievement giver ======---
+local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
+
+---====== Display achievement ======---
+achievementGiver({
+    Title = "Pro gamer",
+    Desc = "Last chance to not look at me",
+    Reason = "Encounter HUGERRORED",
+    Image = "rbxassetid://"
+})
