@@ -1,4 +1,4 @@
-                                function GitAud(soundgit, filename)
+                        function GitAud(soundgit, filename)
 				local FileName = filename
 				writefile(FileName..".mp3", game:HttpGet(soundgit))
 				return (getcustomasset or getsynasset)(FileName..".mp3")
@@ -13,7 +13,7 @@
 				sound:Play()
 			end
 
-			CustomGitSound("https://github.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/blob/main/Record_2025-07-12-09-21-59.mp3?raw=true", 1, "acrysoul")
+			CustomGitSound("https://github.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/blob/main/Record_2025-07-12-10-00-16.mp3?raw=true", 1, "acrysoul")
 
 ---====== Load spawner ======---
 
