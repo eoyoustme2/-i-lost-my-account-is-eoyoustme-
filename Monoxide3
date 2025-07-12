@@ -219,10 +219,10 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 			imageLabel.Visible = true
 			imageLabel.Parent = screenGui
 
-			local jumpscareImage1 = "rbxassetid://94547864377343"
-			local jumpscareImage2 = "rbxassetid://27391633"
+			local jumpscareImage1 = "rbxassetid://0"
+			local jumpscareImage2 = "rbxassetid://0"
 
-			local flashDuration = 4.8
+			local flashDuration = 8
 			local flashStartTime = tick()
 
 			task.spawn(function()
