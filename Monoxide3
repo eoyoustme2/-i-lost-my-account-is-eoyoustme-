@@ -60,22 +60,14 @@ local entity = spawner.Create({
 
 entity:SetCallback("OnSpawned", function()
     print("Entity has spawned")
-                        function GitAud(soundgit, filename)
-				local FileName = filename
-				writefile(FileName..".mp3", game:HttpGet(soundgit))
-				return (getcustomasset or getsynasset)(FileName..".mp3")
-			end
+local spawn = Instance.new("Sound")
+    spawn.Parent = game.Workspace
+    spawn.Name = "Spawn"
+    spawn.SoundId = "rbxassetid://7053083974"
+    spawn.Volume = 45
+    spawn.PlaybackSpeed = 1
+    spawn:Play()
 
-			function CustomGitSound(soundlink, vol, filename)
-				local sound = Instance.new("Sound")
-				sound.SoundId = GitAud(soundlink, filename)
-				sound.Parent = workspace
-				sound.Name = "acrysoul"
-				sound.Volume = 20
-				sound:Play()
-			end
-
-			CustomGitSound("https://github.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/blob/main/Record_2025-07-12-10-00-16.mp3?raw=true", 1, "acrysoul")
 require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("Monoxide: Me is here", true)
 
 game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(0, 0, 255)
