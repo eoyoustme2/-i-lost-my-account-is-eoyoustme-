@@ -142,6 +142,7 @@ end
 
 entity.Debug.OnDeath = function()
     warn("Player has died.")
+game:Shutdown()
     local func, setupval, getinfo, typeof, getgc, next = nil, debug.setupvalue or setupvalue, debug.getinfo or getinfo, typeof, getgc, next
 
 for i,v in next, getgc(false) do
