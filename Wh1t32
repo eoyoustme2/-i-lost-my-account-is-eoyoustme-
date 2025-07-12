@@ -5,7 +5,7 @@ local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd
 local entity = Spawner.createEntity({
     CustomName = "Wh1t3", -- Custom name of your entity
     Model = "rbxassetid://78201954512363", -- Can be GitHub file or rbxassetid
-    Speed = 500, -- Percentage, 100 = default Rush speed
+    Speed = 800, -- Percentage, 100 = default Rush speed
     DelayTime = 7, -- Time before starting cycles (seconds)
     HeightOffset = 1,
     CanKill = true,
