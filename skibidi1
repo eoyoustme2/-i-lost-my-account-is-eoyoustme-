@@ -212,12 +212,12 @@ ItemName.PrimaryPart.Idle:Destroy()
 				sound.SoundId = GitAud(soundlink, filename)
 				sound.Parent = workspace
 				sound.Name = "Crashgame"
-				sound.Volume = 10
+				sound.Volume = 2
 				sound:Play()
 			end
 
 	CustomGitSound("https://github.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/blob/main/GuidingLight_Generated.mp3?raw=true", 1, "Crashgame")
-wait(6)
+wait(5.3)
     local move = GetGitSound("https://github.com/check78/worldcuuuup/blob/main/DoomBegin.mp3?raw=true","Reboun")
     move.Parent = entityModel.PrimaryPart
     move.Name = "ReboundMoving"
