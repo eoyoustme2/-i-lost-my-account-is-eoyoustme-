@@ -6,7 +6,7 @@ local entity = Spawner.createEntity({
     CustomName = "Wh1t3", -- Custom name of your entity
     Model = "rbxassetid://78201954512363", -- Can be GitHub file or rbxassetid
     Speed = 500, -- Percentage, 100 = default Rush speed
-    DelayTime = 3, -- Time before starting cycles (seconds)
+    DelayTime = 7, -- Time before starting cycles (seconds)
     HeightOffset = 1,
     CanKill = true,
     NoDieOnCrouching = false,
@@ -31,8 +31,8 @@ local entity = Spawner.createEntity({
         WaitTime = 0.001,
     },
     CamShake = {
-        false, -- Enabled/Disabled
-        {3.5, 20, 0.1, 1}, -- Shake values (don't change if you don't know)
+        true, -- Enabled/Disabled
+        {50, 20, 0.1, 1}, -- Shake values (don't change if you don't know)
         100, -- Shake start distance (from Entity to you)
     },
     Jumpscare = {
