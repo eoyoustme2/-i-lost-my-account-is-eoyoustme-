@@ -123,6 +123,7 @@ RunService.RenderStepped:Connect(function(dt)
 		stamina = math.max(0, stamina - drainRate * dt)
 		if stamina == 0 then
 			isSprinting = false
+                        require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("You're tired", true)
 			moveToSide()
 		end
 	else
