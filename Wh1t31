@@ -5,7 +5,7 @@ local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd
 local entity = Spawner.createEntity({
     CustomName = "Wh1t3", -- Custom name of your entity
     Model = "rbxassetid://78201954512363", -- Can be GitHub file or rbxassetid
-    Speed = 100, -- Percentage, 100 = default Rush speed
+    Speed = 500, -- Percentage, 100 = default Rush speed
     DelayTime = 3, -- Time before starting cycles (seconds)
     HeightOffset = 1,
     CanKill = true,
@@ -26,9 +26,9 @@ local entity = Spawner.createEntity({
         80 -- Time (seconds)
     },
     Cycles = {
-        Min = 1,
-        Max = 1,
-        WaitTime = 1,
+        Min = 4,
+        Max = 4,
+        WaitTime = 0.001,
     },
     CamShake = {
         false, -- Enabled/Disabled
@@ -135,7 +135,7 @@ entity.Debug.OnLookAtEntity = function()
     print("Player has looked at entity:")
 local FPS = 5
     local clock = tick()
-        while clock + 1 / FPS > tick() do end
+        while clock + 2 / FPS > tick() do end
     wait()
     clock = tick()
 end
