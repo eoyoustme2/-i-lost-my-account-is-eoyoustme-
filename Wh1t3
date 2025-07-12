@@ -3,8 +3,8 @@ local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd
 
 -- Create entity
 local entity = Spawner.createEntity({
-    CustomName = "Nightmare Rush", -- Custom name of your entity
-    Model = "rbxassetid://73813782576461", -- Can be GitHub file or rbxassetid
+    CustomName = "Wh1t3", -- Custom name of your entity
+    Model = "rbxassetid://78201954512363", -- Can be GitHub file or rbxassetid
     Speed = 100, -- Percentage, 100 = default Rush speed
     DelayTime = 3, -- Time before starting cycles (seconds)
     HeightOffset = 1,
@@ -81,6 +81,14 @@ end
        
 entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned:")
+local cue2 = Instance.new("Sound")
+    cue2.Parent = game.Workspace
+    cue2.Name = "Spawn"
+    cue2.SoundId = "rbxassetid://131489490"
+    cue2.Volume = 45
+    cue2.PlaybackSpeed = 1
+    cue2:Play()
+
 game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
 game.Lighting.MainColorCorrection.Contrast = 100
 local tween = game:GetService("TweenService")
@@ -93,15 +101,23 @@ end
 
 entity.Debug.OnEntityDespawned = function()
     print("Entity has despawned:")
+wait(3)
+game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
+game.Lighting.MainColorCorrection.Contrast = 10
+local tween = game:GetService("TweenService")
+tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
+local TweenService = game:GetService("TweenService")
+local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
+TW:Play()
 
 ---====== Load achievement giver ======---
 local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
 
 ---====== Display achievement ======---
 achievementGiver({
-    Title = "Im The OrigiNal",
+    Title = "BRO HOW???",
     Desc = "Black",
-    Reason = "Survive the Entity G-95",
+    Reason = "Survive the Entity Wh1t3",
     Image = "rbxassetid://3100736018"
 })
 Followed:Destroy()
@@ -117,6 +133,11 @@ end
 
 entity.Debug.OnLookAtEntity = function()
     print("Player has looked at entity:")
+local FPS = 5
+    local clock = tick()
+        while clock + 1 / FPS > tick() do end
+    wait()
+    clock = tick()
 end
 
 entity.Debug.OnDeath = function()
