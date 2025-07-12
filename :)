@@ -1,0 +1,25 @@
+-- Node Fix
+
+coroutine.wrap(function()
+
+game:GetService("ReplicatedStorage").GameData.LatestRoom.Changed:Connect(function(v)
+
+   L = game:GetService("Workspace").CurrentRooms[v].PathfindNodes:Clone()
+
+L.Parent = game:GetService("Workspace").CurrentRooms[v]
+
+L.Name = 'Nodes'
+
+end)
+
+end)()
+
+local currentLoadedRoom=workspace.CurrentRooms[game:GetService("ReplicatedStorage").GameData.LatestRoom.Value]
+local eyes=game:GetObjects("rbxassetid://")[1]
+
+local num=math.floor(#currentLoadedRoom.Nodes:GetChildren()/2)
+eyes.CFrame=(
+num==0 and currentLoadedRoom.Base or currentLoadedRoom.Nodes[num]
+).CFrame+Vector3.new(0,3,0)
+ 
+eyes.Parent=workspace
