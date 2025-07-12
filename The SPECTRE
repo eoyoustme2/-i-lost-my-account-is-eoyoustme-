@@ -62,8 +62,8 @@ local entity = spawner.Create({
 
 entity:SetCallback("OnSpawned", function()
     print("Entity has spawned")
-game.Lighting.MainColorCorrection.Contrast = 100
-game.Lighting.MainColorCorrection.Saturation = 100
+game.Lighting.MainColorCorrection.Contrast = 10
+game.Lighting.MainColorCorrection.Saturation = 10
 end)
 
 entity:SetCallback("OnStartMoving", function()
