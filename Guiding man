@@ -80,6 +80,6 @@ Camera.ChildAdded:Connect(function(Child)
     HelpfulDialogue.TextColor3 = Color3.fromRGB(0, 255, 255)
 
     -- 🔊 Phát nhạc tại đây sau khi người chơi chết
-    CustomGitSound("https://github.com/eoyoustme/rebouna/blob/main/Record_2025-07-07-10-54-27.mp3?raw=true", 1, "Music")
+    CustomGitSound("https://github.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/blob/main/Roblox%20Doors%20OST%20VOL.%201%20%20Guiding%20LightK.0701%20Remix%20V2.mp3?raw=true", 1, "Music")
 
 end)
