@@ -7,11 +7,11 @@ local player = Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
 local humanoid = char:WaitForChild("Humanoid")
 
--- Thông số stamina
+-- Cấu hình stamina
 local maxStamina = 100
 local stamina = maxStamina
 local sprintSpeed = 20
-local walkSpeed = 16  -- ✅ tốc độ sprint giảm xuống
+local walkSpeed = 16
 local drainRate = 25
 local regenRate = 15
 local isSprinting = false
@@ -22,7 +22,7 @@ screenGui.Name = "StaminaBarGUI"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
--- Outer Bar
+-- Outer bar
 local outer = Instance.new("Frame")
 outer.Size = UDim2.new(0, 10, 0, 100)
 outer.Position = UDim2.new(0, 20, 1, -140)
@@ -37,7 +37,7 @@ outerStroke.Thickness = 2
 outerStroke.Color = Color3.fromRGB(0, 0, 0)
 outerStroke.Parent = outer
 
--- Inner Bar
+-- Inner bar
 local inner = Instance.new("Frame")
 inner.Size = UDim2.new(1, 0, 1, 0)
 inner.BackgroundColor3 = Color3.fromRGB(255, 226, 4)
@@ -50,24 +50,22 @@ innerStroke.Thickness = 1.5
 innerStroke.Color = Color3.fromRGB(0, 0, 0)
 innerStroke.Parent = inner
 
--- Tween chuyển vị trí thanh
+-- Tween chuyển vị trí
 local function moveToCenter()
-	local tween = TweenService:Create(outer, TweenInfo.new(0.35, Enum.EasingStyle.Sine), {
+	TweenService:Create(outer, TweenInfo.new(0.35, Enum.EasingStyle.Sine), {
 		Position = UDim2.new(0.5, -150, 1, -40),
 		Size = UDim2.new(0, 300, 0, 12)
-	})
-	tween:Play()
+	}):Play()
 end
 
 local function moveToSide()
-	local tween = TweenService:Create(outer, TweenInfo.new(0.35, Enum.EasingStyle.Sine), {
+	TweenService:Create(outer, TweenInfo.new(0.35, Enum.EasingStyle.Sine), {
 		Position = UDim2.new(0, 20, 1, -140),
 		Size = UDim2.new(0, 10, 0, 100)
-	})
-	tween:Play()
+	}):Play()
 end
 
--- PC Key (Q để chạy)
+-- Bắt phím PC: Q để chạy
 UserInputService.InputBegan:Connect(function(input, processed)
 	if processed then return end
 	if input.KeyCode == Enum.KeyCode.Q and stamina > 0 then
@@ -83,10 +81,10 @@ UserInputService.InputEnded:Connect(function(input)
 	end
 end)
 
--- Mobile Button (Hình chữ nhật, bo góc, dịch sang phải)
+-- Nút chạy mobile
 local runButton = Instance.new("TextButton")
-runButton.Size = UDim2.new(0, 120, 0, 40)
-runButton.Position = UDim2.new(1, -120, 1, -160) -- ✅ Dịch sang phải
+runButton.Size = UDim2.new(0, 80, 0, 40)
+runButton.Position = UDim2.new(1, -100, 1, -160)
 runButton.AnchorPoint = Vector2.new(0, 1)
 runButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 runButton.Text = "Sprint"
@@ -96,9 +94,7 @@ runButton.Font = Enum.Font.GothamBold
 runButton.Visible = UserInputService.TouchEnabled
 runButton.Parent = screenGui
 
-local runUICorner = Instance.new("UICorner", runButton)
-runUICorner.CornerRadius = UDim.new(0, 10)
-
+Instance.new("UICorner", runButton).CornerRadius = UDim.new(0, 8)
 local runStroke = Instance.new("UIStroke", runButton)
 runStroke.Color = Color3.fromRGB(0, 0, 0)
 runStroke.Thickness = 2
@@ -115,14 +111,18 @@ runButton.MouseButton1Up:Connect(function()
 	moveToSide()
 end)
 
--- Cập nhật trạng thái chạy/stamina mượt
+-- Cập nhật stamina & xử lý mượt
 RunService.RenderStepped:Connect(function(dt)
+	-- Nếu tốc độ bị chỉnh bởi game (ví dụ Seek chase), thì không đụng vào WalkSpeed
+	if humanoid.WalkSpeed > sprintSpeed then
+		return
+	end
+
 	if isSprinting and stamina > 0 then
 		humanoid.WalkSpeed = sprintSpeed
 		stamina = math.max(0, stamina - drainRate * dt)
 		if stamina == 0 then
 			isSprinting = false
-                       require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("You're tired", true)
 			moveToSide()
 		end
 	else
@@ -131,8 +131,9 @@ RunService.RenderStepped:Connect(function(dt)
 			stamina = math.min(maxStamina, stamina + regenRate * dt)
 		end
 	end
+
 	inner.Size = UDim2.new(stamina / maxStamina, 0, 1, 0)
 end)
 
--- Hiển thị mặc định bên góc
+-- Mặc định hiển thị ở góc
 moveToSide()
