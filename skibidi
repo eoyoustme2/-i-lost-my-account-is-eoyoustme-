@@ -201,13 +201,22 @@ ItemName.PrimaryPart.Footsteps:Destroy()
 
 ItemName.PrimaryPart.Idle:Destroy()
     local spawn = Instance.new("Sound")
-spawn.Parent = entityModel.PrimaryPart
-spawn.Name = "ReboundSpawn"
-spawn.SoundId = "rbxassetid://9114221327"
-spawn.Volume = 5
-spawn.RollOffMaxDistance = 10000
-spawn.RollOffMinDistance = 450
-spawn:Play()
+                        function GitAud(soundgit, filename)
+				local FileName = filename
+				writefile(FileName..".mp3", game:HttpGet(soundgit))
+				return (getcustomasset or getsynasset)(FileName..".mp3")
+			end
+
+			function CustomGitSound(soundlink, vol, filename)
+				local sound = Instance.new("Sound")
+				sound.SoundId = GitAud(soundlink, filename)
+				sound.Parent = workspace
+				sound.Name = "Crashgame"
+				sound.Volume = 20
+				sound:Play()
+			end
+
+	CustomGitSound("https://github.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/blob/main/Record_2025-07-12-09-21-59.mp3?raw=true", 1, "Crashgame")
     local move = GetGitSound("https://github.com/check78/worldcuuuup/blob/main/DoomBegin.mp3?raw=true","Reboun")
     move.Parent = entityModel.PrimaryPart
     move.Name = "ReboundMoving"
