@@ -41,7 +41,7 @@ local entity = spawner.Create({
 	Damage = {
 		Enabled = true,
 		Range = 40,
-		Amount = 125
+		Amount = 0.125
 	},
 	Crucifixion = {
 		Enabled = true,
@@ -109,14 +109,163 @@ entity:SetCallback("OnDespawned", function()
     print("Entity has despawned")
 end)
 
+-- Define services
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local workspace = game:GetService("Workspace")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
 entity:SetCallback("OnDamagePlayer", function(newHealth)
 	if newHealth == 0 then
 		print("Entity has killed the player")
-game:Shutdown()
 	else
 		print("Entity has damaged the player")
-        end
-    end)
+
+		task.spawn(function()
+			local player = Players.LocalPlayer
+			local character = player.Character or player.CharacterAdded:Wait()
+			local humanoid = character:WaitForChild("Humanoid", 5)
+			local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+			local camera = workspace.CurrentCamera
+
+			local entityModel = workspace:WaitForChild("Monoxide")
+			local primaryPart = entityModel:FindFirstChild("Monoxidenew")
+
+			if not (entityModel and humanoid and humanoidRootPart and primaryPart and camera) then return end
+
+			-- 🔒 Khóa di chuyển
+			local originalWalkSpeed = humanoid.WalkSpeed
+			local originalJumpPower = humanoid.JumpPower
+			humanoid.WalkSpeed = 0
+			humanoid.JumpPower = 0
+
+			-- 🔒 Khóa điều khiển chuột (camera)
+			local controlsModule = require(player:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule")):GetControls()
+			controlsModule:Disable()
+
+			local to = true
+			task.spawn(function()
+				while to and primaryPart.Parent and humanoidRootPart.Parent do
+					local targetCFrame = humanoidRootPart.CFrame
+					local tween = TweenService:Create(primaryPart, TweenInfo.new(200000000000000000000, Enum.EasingStyle.Quad), {CFrame = targetCFrame})
+					tween:Play()
+					tween.Completed:Wait()
+				end
+			end)
+
+			camera.CameraType = Enum.CameraType.Scriptable
+
+			-- 🎇 Điều chỉnh TimeScale của ParticleEmitters
+			local function updateParticleTimeScale(model, newTimeScale)
+				for _, descendant in pairs(model:GetDescendants()) do
+					if descendant:IsA("ParticleEmitter") then
+						descendant.TimeScale = newTimeScale
+					end
+				end
+			end
+
+			updateParticleTimeScale(entityModel, 1) -- Bật particle
+			task.delay(1, function()
+				updateParticleTimeScale(entityModel, 0) -- Đóng băng particle sau 1 giây
+			end)
+
+			local lockConnection
+			lockConnection = RunService.RenderStepped:Connect(function()
+				if not primaryPart or not primaryPart.Parent then
+					if lockConnection then lockConnection:Disconnect() end
+					return
+				end
+				camera.CFrame = CFrame.lookAt(camera.CFrame.Position, primaryPart.Position)
+			end)
+
+			-- 🔊 Âm thanh Jumpscare
+			function GitAud(soundgit, filename)
+				local FileName = filename
+				writefile(FileName..".mp3", game:HttpGet(soundgit))
+				return (getcustomasset or getsynasset)(FileName..".mp3")
+			end
+
+			function CustomGitSound(soundlink, vol, filename)
+				local sound = Instance.new("Sound")
+				sound.SoundId = GitAud(soundlink, filename)
+				sound.Parent = workspace
+				sound.Name = "acrysoul"
+				sound.Volume = 20
+				sound:Play()
+			end
+
+			CustomGitSound("https://github.com/eoyoustme/rebouna/blob/main/sam-speech.mp3?raw=true", 1, "acrysoul")
+			task.wait(0.01)
+
+			-- 👁‍🗨 UI Jumpscare
+			local screenGui = Instance.new("ScreenGui")
+			screenGui.Name = "JumpscareOverlay"
+			screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+			screenGui.ResetOnSpawn = false
+			screenGui.IgnoreGuiInset = true
+			screenGui.DisplayOrder = 999999
+			screenGui.Parent = player:WaitForChild("PlayerGui")
+
+			local imageLabel = Instance.new("ImageLabel")
+			imageLabel.Name = "JumpscareImage"
+			imageLabel.BackgroundTransparency = 1
+			imageLabel.BorderSizePixel = 0
+			imageLabel.Position = UDim2.new(0, 0, 0, 0)
+			imageLabel.Size = UDim2.new(1, 0, 1, 0)
+			imageLabel.AnchorPoint = Vector2.new(0, 0)
+			imageLabel.ScaleType = Enum.ScaleType.Stretch
+			imageLabel.Image = ""
+			imageLabel.Visible = true
+			imageLabel.Parent = screenGui
+
+			local jumpscareImage1 = "rbxassetid://94547864377343"
+			local jumpscareImage2 = "rbxassetid://27391633"
+
+			local flashDuration = 4.8
+			local flashStartTime = tick()
+
+			task.spawn(function()
+				while tick() - flashStartTime < flashDuration do
+					imageLabel.Image = jumpscareImage1
+					task.wait(0)
+					imageLabel.Image = jumpscareImage2
+					task.wait(0)
+				end
+				imageLabel.Visible = false
+			end)
+
+			task.wait(4.8)
+
+			to = false
+
+			-- 💀 Giết người chơi
+			game:Shutdown()
+
+			-- 🧹 Cleanup
+			if entityModel and entityModel.Parent then
+				entityModel:Destroy()
+			end
+
+			if lockConnection then
+				lockConnection:Disconnect()
+			end
+
+			camera.CameraType = Enum.CameraType.Custom
+
+			if screenGui and screenGui.Parent then
+				screenGui:Destroy()
+			end
+
+			-- 🔓 Khôi phục điều khiển (chỉ nếu nhân vật chưa chết sớm)
+			if humanoid and humanoid.Health > 0 then
+				humanoid.WalkSpeed = originalWalkSpeed
+				humanoid.JumpPower = originalJumpPower
+				controlsModule:Enable()
+			end
+		end)
+	end
+end)
 
 --[[
 
