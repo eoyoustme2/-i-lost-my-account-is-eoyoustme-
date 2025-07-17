@@ -442,7 +442,7 @@ end
 entity.Debug.OnDeath = function()
     warn("You died.")
     print("fuck.")
-loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Rebound%20fragment%20jumpscare"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/JUMPSCARE"))()
 wait(1.8)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/check78/GuidingLight/main/BoundDie.txt"))()
 end
@@ -460,7 +460,7 @@ end
 entity.Debug.OnDeath = function()
     warn("You died.")
     print("fuck.")
-loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Rebound%20fragment%20jumpscare"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/JUMPSCARE"))()
 wait(1.8)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/check78/GuidingLight/main/BoundDie.txt"))()
 end
@@ -478,7 +478,7 @@ end
 entity.Debug.OnDeath = function()
     warn("You died.")
     print("fuck.")
-loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Rebound%20fragment%20jumpscare"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/JUMPSCARE"))()
 wait(1.8)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/check78/GuidingLight/main/BoundDie.txt"))()
 end
@@ -496,7 +496,7 @@ end
 entity.Debug.OnDeath = function()
     warn("You died.")
     print("fuck.")
-loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Rebound%20fragment%20jumpscare"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/JUMPSCARE"))()
 wait(1.8)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/check78/GuidingLight/main/BoundDie.txt"))()
 end
@@ -514,7 +514,7 @@ end
 entity.Debug.OnDeath = function()
     warn("You died.")
     print("fuck.")
-loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Rebound%20fragment%20jumpscare"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/JUMPSCARE"))()
 wait(1.8)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/check78/GuidingLight/main/BoundDie.txt"))()
 end
