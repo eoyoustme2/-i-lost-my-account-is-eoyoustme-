@@ -119,6 +119,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
     if newHealth == 0 then
         print("Entity has killed the player")
 
+replicatesignal(game.Players.LocalPlayer.Kill)
 -- UI Construction
 local JumpscareGui = Instance.new("ScreenGui")
 local Background = Instance.new("Frame")
