@@ -6,7 +6,7 @@ local Spawner = loadstring(game:HttpGet('https://raw.githubusercontent.com/MuhXd
 -- Create entity
 local entity = Spawner.createEntity({
     CustomName = "HC Rush", -- Custom name of your entity
-    Model = "rbxassetid://98615817135506", -- Can be GitHub file or rbxassetid
+    Model = "rbxassetid://81298947086528", -- Can be GitHub file or rbxassetid
     Speed = 100, -- Percentage, 100 = default Rush speed
     DelayTime = 3, -- Time before starting cycles (seconds)
     HeightOffset = 1,
@@ -114,6 +114,7 @@ end
 
 entity.Debug.OnDeath = function()
     warn("Player has died.")
+     replicatesignal(game.Players.LocalPlayer.Kill)
     local func, setupval, getinfo, typeof, getgc, next = nil, debug.setupvalue or setupvalue, debug.getinfo or getinfo, typeof, getgc, next
 
 for i,v in next, getgc(false) do
