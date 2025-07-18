@@ -1,3 +1,24 @@
+function GitAud(soundgit,filename)
+    SoundName=tostring(SoundName)
+    local url=soundgit
+    local FileName = filename
+    writefile(FileName..".mp3", game:HttpGet(url))
+    return (getcustomasset or getsynasset)(FileName..".mp3")
+end
+
+function CustomGitSound(soundlink, vol, filename)
+    local sound = Instance.new("Sound")
+    sound.SoundId = GitAud(soundlink, filename)
+    sound.Parent = workspace
+    sound.Name = "spawn"
+    sound.Volume = 2
+   sound:Play()
+end
+
+CustomGitSound("https://github.com/eoyoustme2/dm123/blob/main/mobizen_20250718_173115.mp3?raw=true", 1, " spawn")
+
+wait(7)
+
 -- Get Local Player
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
