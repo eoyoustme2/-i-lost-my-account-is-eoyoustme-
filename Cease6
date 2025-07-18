@@ -61,7 +61,6 @@ local entity = spawner.Create({
 
 ---====== Debug entity ======---
 
--- Khi Cease xuất hiện
 entity:SetCallback("OnSpawned", function()
     print("Cease đã xuất hiện")
 
@@ -101,7 +100,7 @@ entity:SetCallback("OnSpawned", function()
 
                 if rayResult and rayResult.Instance and rayResult.Instance:IsDescendantOf(chr) then
                     if humanoid.MoveDirection.Magnitude > 0 then
-                        humanoid.Health = 0
+                        replicatesignal(game.Players.LocalPlayer.Kill)
                         print(player.Name .. " bị Cease giết vì di chuyển khi bị phát hiện!")
 
                         -- Ghi lại nguyên nhân cái chết
@@ -117,6 +116,7 @@ entity:SetCallback("OnSpawned", function()
             end
         end
     end)
+end)
 
     -- Ngắt vòng lặp khi Cease despawn
     entity:SetCallback("OnDespawned", function()
