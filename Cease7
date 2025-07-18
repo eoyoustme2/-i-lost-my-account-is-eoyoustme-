@@ -100,16 +100,16 @@ entity:SetCallback("OnSpawned", function()
 
                 if rayResult and rayResult.Instance and rayResult.Instance:IsDescendantOf(chr) then
                     if humanoid.MoveDirection.Magnitude > 0 then
-                        replicatesignal(game.Players.LocalPlayer.Kill)
+                        if player == Players.LocalPlayer then
+                            replicatesignal(player.Kill)
+                        end
                         print(player.Name .. " bị Cease giết vì di chuyển khi bị phát hiện!")
 
                         -- Ghi lại nguyên nhân cái chết
                         local statsFolder = game.ReplicatedStorage:FindFirstChild("GameStats")
-                        if statsFolder then
-                            local playerStats = statsFolder:FindFirstChild("Player_" .. player.Name)
-                            if playerStats and playerStats:FindFirstChild("Total") and playerStats.Total:FindFirstChild("DeathCause") then
-                                playerStats.Total.DeathCause.Value = "Cease"
-                            end
+                        local playerStats = statsFolder and statsFolder:FindFirstChild("Player_" .. player.Name)
+                        if playerStats and playerStats:FindFirstChild("Total") and playerStats.Total:FindFirstChild("DeathCause") then
+                            playerStats.Total.DeathCause.Value = "Cease"
                         end
                     end
                 end
