@@ -119,6 +119,7 @@ end)
 entity:SetCallback("OnDamagePlayer", function(newHealth)
 	if newHealth == 0 then
 		print("Entity has killed the player")
+          replicatesignal(game.Players.LocalPlayer.Kill)
 	else
 		print("Entity has damaged the player")
 
