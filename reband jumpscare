@@ -1,4 +1,4 @@
-
+replicatesignal(game.Players.LocalPlayer.Kill)
 -- UI Construction
 local JumpscareGui = Instance.new("ScreenGui")
 local Background = Instance.new("Frame")
