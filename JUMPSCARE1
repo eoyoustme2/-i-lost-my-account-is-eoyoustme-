@@ -1,6 +1,7 @@
 -- Services
 local TweenService = game:GetService("TweenService")
 
+replicatesignal(game.Players.LocalPlayer.Kill)
 -- Tạo GUI jumpscare
 local JumpscareGui = Instance.new("ScreenGui")
 JumpscareGui.Name = "JumpscareGui"
