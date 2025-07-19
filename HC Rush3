@@ -40,7 +40,7 @@ local entity = Spawner.createEntity({
     Jumpscare = {
        true, -- Enabled/Disabled
         {
-            Image1 = "rbxassetid://13367327756", -- Image1 url
+            Image1 = "rbxassetid://108323297313724", -- Image1 url
             Image2 = "rbxassetid://17300363884", -- Image2 url
             Shake = true,
             Sound1 = {
