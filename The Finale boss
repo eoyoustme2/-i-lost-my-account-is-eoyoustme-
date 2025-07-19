@@ -1,6 +1,6 @@
 game.ReplicatedStorage.GameData.LatestRoom.Changed:Connect(function()
 if game:GetService("ReplicatedStorage").GameData.Floor.Value == "Hotel" then
-if game.ReplicatedStorage.GameData.LatestRoom.Value == 4 then
+if game.ReplicatedStorage.GameData.LatestRoom.Value == 100 then
 
 ---====== Load spawner ======---
 
