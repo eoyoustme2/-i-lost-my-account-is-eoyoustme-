@@ -1,0 +1,78 @@
+local plr = game.Players.LocalPlayer
+local chr = plr.Character or plr.CharacterAdded:Wait()
+local cam = workspace.CurrentCamera
+local offsetgyat = 15
+local TweenService = game:GetService("TweenService")
+local hum = chr:FindFirstChild("Humanoid")
+local Move = true 
+
+local Figure = game:GetObjects("rbxassetid://86055776714285")[1]
+Figure.Parent = workspace
+local primary_part = Figure:FindFirstChildWhichIsA("BasePart") or Interruption:FindFirstChildWhichIsA("Part")
+Figure.PrimaryPart = primary_part
+Figure:SetPrimaryPartCFrame(chr.HumanoidRootPart.CFrame * CFrame.new(0, 0, 50))
+
+-- Change
+coroutine.wrap(function()
+
+for i, v in ipairs(game.Workspace:WaitForChild("Deer God"):GetDescendants()) do
+    if v.Name == "RushNew" then
+        v.Breathing:Destroy()
+        v.Footsteps:Destroy()
+    end
+end
+
+end)()
+
+game.Workspace:WaitForChild("Deer God").RushNew.Footsteps.Volume = 2.5
+game.Workspace:WaitForChild("Deer God").RushNew.Footsteps.PlaybackSpeed = 0.75
+
+function GitAud(soundgit,filename)
+    SoundName=tostring(SoundName)
+    local url=soundgit
+    local FileName = filename
+    writefile(FileName..".mp3", game:HttpGet(url))
+    return (getcustomasset or getsynasset)(FileName..".mp3")
+end
+
+function CustomGitSound(soundlink, vol, filename)
+    local S = Instance.new("Sound")
+    S.SoundId = GitAud(soundlink, filename)
+    S.Parent = game.Workspace:WaitForChild("Deer God")
+    S.Volume = 2
+    S:Play()
+end
+
+CustomGitSound("https://github.com/Tinkgy111/Bang/blob/main/followed.mp3?raw=true", 1, "DeerGod")
+wait(5)
+local function Moving(target, dur)
+    local tween_info = TweenInfo.new(dur, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local tween = TweenService:Create(Figure.PrimaryPart, tween_info, {CFrame = target})
+    tween:Play()
+    tween.Completed:Wait()
+end
+
+task.spawn(function()
+while Move == true do
+wait(0.01)
+Moving(chr.HumanoidRootPart.CFrame, 1.9)
+end
+end)
+
+task.spawn(function()
+while true do
+wait(math.random(10, 15))
+game.Workspace:WaitForChild("Deer God").Rushnew:SetPrimaryPartCFrame(chr.HumanoidRootPart.CFrame * CFrame.new(math.random(20, 45), 0, math.random(25, 40)))
+end
+end)
+
+game.Workspace:WaitForChild("Deer God").RushNew.Touched:Connect(function()
+	chr.Humanoid:TakeDamage(100)
+	game:GetService("ReplicatedStorage").GameStats["Player_".. game.Players.LocalPlayer.Name].Total.DeathCause.Value = "Deer God"
+end)
+
+wait(math.random(40, 60))
+Move = false
+Moving(game.Workspace:WaitForChild("Deer God").RushNew.CFrame * CFrame.new(0, -100, 0), 3)
+wait(3)
+game.Workspace:WaitForChild("Deer God"):Destroy()
