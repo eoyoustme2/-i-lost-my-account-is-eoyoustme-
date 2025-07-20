@@ -51,6 +51,19 @@ local entity = spawner.Create({
 	}
 })
 
+local part = workspace:WaitForChild("RipperMovings")
+local object = part:WaitForChild("Ripe") -- Replace "MyObjectName" with the name of your object
+local attachment = object:WaitForChild("ripe")  -- Get the Attachment attached to the object
+local e = attachment:WaitForChild("ParticleEmitter")
+
+object.CanCollide = false
+
+ -- Get the ParticleEmitter attached to the Attachment
+while true do
+    e.Lifetime = 0.3
+    wait(0)
+end
+
 -- Room Light Change
 local TweenService = game:GetService("TweenService")
 local Tweeninfo = TweenInfo.new(5, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
@@ -198,19 +211,6 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
                 camera.CameraType = Enum.CameraType.Custom
             end
         end)
-
-local part = workspace:WaitForChild("RipperMovings")
-local object = part:WaitForChild("Ripe") -- Replace "MyObjectName" with the name of your object
-local attachment = object:WaitForChild("ripe")  -- Get the Attachment attached to the object
-local e = attachment:WaitForChild("ParticleEmitter")
-
-object.CanCollide = false
-
- -- Get the ParticleEmitter attached to the Attachment
-while true do
-    e.Lifetime = 0.3
-    wait(0)
-end
 
         -- Tính toán vị trí dừng lại 4 stud trước người chơi
         local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * -8
