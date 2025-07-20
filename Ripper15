@@ -200,7 +200,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         end)
 
         -- Tính toán vị trí dừng lại 4 stud trước người chơi
-        local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * -8
+        local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * -10
 
         -- Di chuyển entity tới vị trí đó trong 2 giây
         local moveTweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Linear)
@@ -224,7 +224,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         local longTween = TweenService:Create(primaryPart, longTweenInfo, {CFrame = humanoidRootPart.CFrame})
         longTween:Play()
 
-        wait(0.7)
+        wait(1)
 
         -- Thay đổi TimeScale của tất cả ParticleEmitter thành 0
         SetAllParticlesTimeScale(entityModel, 0)
