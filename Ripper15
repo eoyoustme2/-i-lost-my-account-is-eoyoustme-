@@ -224,6 +224,8 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         local longTween = TweenService:Create(primaryPart, longTweenInfo, {CFrame = humanoidRootPart.CFrame})
         longTween:Play()
 
+        wait(1)
+
         -- Thay đổi TimeScale của tất cả ParticleEmitter thành 0
         SetAllParticlesTimeScale(entityModel, 0)
 
