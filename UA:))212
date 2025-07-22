@@ -206,7 +206,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         end)
 
         -- Tính toán vị trí dừng lại 4 stud trước người chơi
-        local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * -7
+        local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * -5
 
         -- Di chuyển entity tới vị trí đó trong 2 giây
         local moveTweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Linear)
@@ -230,7 +230,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         local longTween = TweenService:Create(primaryPart, longTweenInfo, {CFrame = humanoidRootPart.CFrame})
         longTween:Play()
 
-        wait(1)
+        wait(3)
 
         -- Thay đổi TimeScale của tất cả ParticleEmitter thành 0
         SetAllParticlesTimeScale(entityModel, 1)
@@ -279,7 +279,7 @@ function CustomGitSound(soundlink, vol, filename)
 end
 
 CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true", 1, " Music")
-       wait(0.3)
+       wait(0.2)
 
         -- UI Jumpscare nháy ảnh
         local screenGui = Instance.new("ScreenGui")
@@ -309,10 +309,10 @@ CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main
         task.spawn(function()
             while tick() - flashStartTime < flashDuration do
                 imageLabel.Image = jumpscareImage1
-                task.wait(0.05)
+                task.wait(0)
                 if tick() - flashStartTime >= flashDuration then break end
                 imageLabel.Image = jumpscareImage2
-                task.wait(0.05)
+                task.wait(0)
             end
             imageLabel.Visible = false
         end)
