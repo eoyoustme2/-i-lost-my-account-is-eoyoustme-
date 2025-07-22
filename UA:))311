@@ -172,6 +172,16 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         end
     end
 
+    -- Hàm tắt tất cả âm thanh trong model (Volume = 0)
+    local function MuteAllSounds(model)
+        for _, descendant in ipairs(model:GetDescendants()) do
+            if descendant:IsA("Sound") then
+                descendant.Volume = 0
+                print("Đã tắt âm thanh:", descendant.Name)
+            end
+        end
+    end
+
     SetAllParticlesTimeScale(entityModel, 1)
 
     local primaryPart = entityModel:FindFirstChild("RushNew")
@@ -193,7 +203,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
     entityModel.PrimaryPart = primaryPart
     primaryPart.Anchored = true
 
-    -- Khóa camera mỗi frame
+    -- Khóa camera nhìn vào entity
     camera.CameraType = Enum.CameraType.Scriptable
     local camConnection = RunService.RenderStepped:Connect(function()
         if primaryPart and primaryPart.Parent then
@@ -204,6 +214,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         end
     end)
 
+    -- Tính vị trí entity sẽ dừng lại gần người chơi
     local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * -2
 
     local moveTweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Linear)
@@ -211,7 +222,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
     local moveTween = TweenService:Create(primaryPart, moveTweenInfo, moveTweenGoal)
     moveTween:Play()
 
-    -- Khoá di chuyển
+    -- Khóa di chuyển người chơi
     if humanoid then
         humanoid.WalkSpeed = 0
         humanoid.JumpPower = 0
@@ -221,15 +232,14 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 
     moveTween.Completed:Wait()
 
-    -- Tween tiếp đến người chơi nhưng rất lâu
+    -- Tween tiếp tục giữ entity tại chỗ rất lâu
     local longTweenInfo = TweenInfo.new(99999999999999, Enum.EasingStyle.Linear)
     local longTween = TweenService:Create(primaryPart, longTweenInfo, {CFrame = humanoidRootPart.CFrame})
     longTween:Play()
 
-    -- TimeScale = 1 cho particle
     SetAllParticlesTimeScale(entityModel, 1)
 
-    -- Mở lại khả năng điều khiển (nếu cần)
+    -- Mở lại điều khiển nếu cần (đang khóa rồi)
     if humanoid then
         humanoid.WalkSpeed = 0
         humanoid.JumpPower = 0
@@ -237,7 +247,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         humanoid.PlatformStand = false
     end
 
-    -- Khóa nhân vật
+    -- Khóa chân nhân vật bằng part vô hình
     local anchorPart = Instance.new("Part")
     anchorPart.Name = "JumpscareAnchor"
     anchorPart.Size = Vector3.new(1,1,1)
@@ -254,9 +264,12 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
     weld.Part1 = anchorPart
     weld.Parent = humanoidRootPart
 
-  wait(3.2)
+    -- Tắt tất cả âm thanh trong entity khi jumpscare bắt đầu
+    MuteAllSounds(entityModel)
 
-    -- Âm thanh từ GitHub
+    wait(3.2)
+
+    -- Tải và phát âm thanh jumpscare từ GitHub
     function GitAud(soundgit, filename)
         local FileName = filename
         writefile(FileName..".mp3", game:HttpGet(soundgit))
@@ -274,7 +287,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 
     CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true", 1, "Music")
 
-    -- UI jumpscare ảnh phóng to từ giữa
+    -- Hiển thị ảnh jumpscare
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "JumpscareOverlay"
     screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -291,8 +304,8 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
     imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
     imageLabel.Size = UDim2.new(0, 0, 0, 0)
     imageLabel.ScaleType = Enum.ScaleType.Stretch
-    imageLabel.Image = "rbxassetid://12145599498"
-    imageLabel.ImageColor3 = Color3.new(255, 255, 255)
+    imageLabel.Image = "rbxassetid://78565782466562"
+    imageLabel.ImageColor3 = Color3.new(1, 1, 1)
     imageLabel.Rotation = 0
     imageLabel.Parent = screenGui
 
@@ -305,12 +318,12 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 
     wait(2.1)
 
-    -- Giết người chơi
+    -- Kết liễu người chơi
     if humanoid then
         humanoid.Health = 0
     end
 
-    -- Dọn dẹp
+    -- Dọn dẹp mọi thứ sau jumpscare
     if camConnection then camConnection:Disconnect() end
     camera.CameraType = Enum.CameraType.Custom
 
@@ -319,7 +332,6 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
     if screenGui and screenGui.Parent then screenGui:Destroy() end
     if entityModel and entityModel.Parent then entityModel:Destroy() end
 end)
-
 	end
 end)
 
