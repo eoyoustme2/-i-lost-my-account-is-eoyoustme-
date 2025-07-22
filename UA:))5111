@@ -144,6 +144,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 	if newHealth == 0 then
 		print("Cokkkkkk")
 	else
+wait(0.6)
   task.spawn(function()
     local TweenService = game:GetService("TweenService")
     local Players = game:GetService("Players")
@@ -284,7 +285,6 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
     end
 
     CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true", 0.01, "Music")
-wait(0.3)
 
     -- Hiển thị ảnh jumpscare
     local screenGui = Instance.new("ScreenGui")
@@ -309,10 +309,10 @@ wait(0.3)
     imageLabel.Rotation = 0
     imageLabel.Parent = screenGui
 
-    local tweenInfo = TweenInfo.new(1.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local tweenInfo = TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     local goal = {
         Size = UDim2.new(1, 0, 1, 0),
-        Rotation = 30
+        Rotation = 0
     }
     TweenService:Create(imageLabel, tweenInfo, goal):Play()
 
