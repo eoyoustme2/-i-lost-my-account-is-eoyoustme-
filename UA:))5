@@ -267,7 +267,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
     -- Tắt tất cả âm thanh trong entity khi jumpscare bắt đầu
     MuteAllSounds(entityModel)
 
-    wait(3.2)
+    wait(0.9)
 
     -- Tải và phát âm thanh jumpscare từ GitHub
     function GitAud(soundgit, filename)
@@ -316,7 +316,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
     }
     TweenService:Create(imageLabel, tweenInfo, goal):Play()
 
-    wait(2.1)
+    wait(1.1)
 
     -- Kết liễu người chơi
     if humanoid then
