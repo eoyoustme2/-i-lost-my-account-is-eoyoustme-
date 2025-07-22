@@ -144,7 +144,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 	if newHealth == 0 then
 		print("Cokkkkkk")
 	else
-wait(0.6)
+wait(1)
   task.spawn(function()
     local TweenService = game:GetService("TweenService")
     local Players = game:GetService("Players")
@@ -216,7 +216,7 @@ wait(0.6)
     end)
 
     -- Tính vị trí entity sẽ dừng lại gần người chơi
-    local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * 1
+    local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * 5
 
     local moveTweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Linear)
     local moveTweenGoal = {CFrame = CFrame.new(targetPosition)}
@@ -270,33 +270,21 @@ wait(0.6)
 
     -- Tải và phát âm thanh jumpscare từ GitHub
     function GitAud(soundgit, filename)
-    local FileName = filename
-    writefile(FileName..".mp3", game:HttpGet(soundgit))
-    return (getsynasset or getcustomasset)(FileName..".mp3")
-end
+        local FileName = filename
+        writefile(FileName..".mp3", game:HttpGet(soundgit))
+        return (getsynasset or getcustomasset)(FileName..".mp3")
+    end
 
-function CustomGitSound(soundlink, vol, filename)
-    local sound = Instance.new("Sound")
-    sound.SoundId = GitAud(soundlink, filename)
-    sound.Parent = workspace
-    sound.Name = "Music"
-    sound.Volume = vol or 1
-
-    -- Đợi âm thanh load hoàn toàn rồi mới phát
-    sound.Loaded:Connect(function()
+    function CustomGitSound(soundlink, vol, filename)
+        local sound = Instance.new("Sound")
+        sound.SoundId = GitAud(soundlink, filename)
+        sound.Parent = workspace
+        sound.Name = "Music"
+        sound.Volume = 15
         sound:Play()
-    end)
+    end
 
-    -- Optional: fallback nếu Loaded không hoạt động (hiếm)
-    task.delay(2, function()
-        if not sound.IsPlaying then
-            sound:Play()
-        end
-    end)
-end
-
--- Gọi hàm với volume thấp như bạn muốn
-CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true", 0.01, "Music")
+    CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true", 0.01, "Music")
 
 
     -- Hiển thị ảnh jumpscare
@@ -311,7 +299,6 @@ CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main
     local imageLabel = Instance.new("ImageLabel")
     imageLabel.Name = "JumpscareImage"
     imageLabel.BackgroundTransparency = 0.7
-    imageLabel.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
     imageLabel.BorderSizePixel = 0
     imageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
     imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -325,11 +312,11 @@ CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main
     local tweenInfo = TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     local goal = {
         Size = UDim2.new(1, 0, 1, 0),
-        Rotation = 0
+        Rotation = 30
     }
     TweenService:Create(imageLabel, tweenInfo, goal):Play()
 
-    wait(1.2)
+    wait(0.7)
 
     -- Kết liễu người chơi
     if humanoid then
