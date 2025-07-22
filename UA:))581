@@ -216,7 +216,7 @@ wait(1)
     end)
 
     -- Tính vị trí entity sẽ dừng lại gần người chơi
-    local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * 5
+    local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * 8
 
     local moveTweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Linear)
     local moveTweenGoal = {CFrame = CFrame.new(targetPosition)}
