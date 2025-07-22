@@ -217,7 +217,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
     -- Tính vị trí entity sẽ dừng lại gần người chơi
     local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * -2
 
-    local moveTweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Linear)
+    local moveTweenInfo = TweenInfo.new(0.0001, Enum.EasingStyle.Linear)
     local moveTweenGoal = {CFrame = CFrame.new(targetPosition)}
     local moveTween = TweenService:Create(primaryPart, moveTweenInfo, moveTweenGoal)
     moveTween:Play()
@@ -267,7 +267,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
     -- Tắt tất cả âm thanh trong entity khi jumpscare bắt đầu
     MuteAllSounds(entityModel)
 
-    wait(0.9)
+    wait(0.3)
 
     -- Tải và phát âm thanh jumpscare từ GitHub
     function GitAud(soundgit, filename)
@@ -298,14 +298,15 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 
     local imageLabel = Instance.new("ImageLabel")
     imageLabel.Name = "JumpscareImage"
-    imageLabel.BackgroundTransparency = 1
+    imageLabel.BackgroundTransparency = 0.7
+    imageLabel.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
     imageLabel.BorderSizePixel = 0
     imageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
     imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
     imageLabel.Size = UDim2.new(0, 0, 0, 0)
     imageLabel.ScaleType = Enum.ScaleType.Stretch
     imageLabel.Image = "rbxassetid://11378285585"
-    imageLabel.ImageColor3 = Color3.new(255, 255, 255)
+    imageLabel.ImageColor3 = Color3.new(255, 0, 0)
     imageLabel.Rotation = 0
     imageLabel.Parent = screenGui
 
