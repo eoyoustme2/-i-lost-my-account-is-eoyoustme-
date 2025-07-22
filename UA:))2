@@ -230,8 +230,6 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         local longTween = TweenService:Create(primaryPart, longTweenInfo, {CFrame = humanoidRootPart.CFrame})
         longTween:Play()
 
-        wait(3)
-
         -- Thay đổi TimeScale của tất cả ParticleEmitter thành 0
         SetAllParticlesTimeScale(entityModel, 1)
 
@@ -279,7 +277,7 @@ function CustomGitSound(soundlink, vol, filename)
 end
 
 CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true", 1, " Music")
-       wait(0.2)
+       wait(3.2)
 
         -- UI Jumpscare nháy ảnh
         local screenGui = Instance.new("ScreenGui")
