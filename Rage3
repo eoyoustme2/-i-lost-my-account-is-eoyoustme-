@@ -4,7 +4,7 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
 ReplicatedStorage.GameData.LatestRoom.Changed:Connect(function()
-    if ReplicatedStorage.GameData.Floor.Value == "Hotel" and ReplicatedStorage.GameData.LatestRoom.Value == 5 then
+    if ReplicatedStorage.GameData.Floor.Value == "Hotel" and ReplicatedStorage.GameData.LatestRoom.Value == 2 then
         -- Load entity spawner
         local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
 
