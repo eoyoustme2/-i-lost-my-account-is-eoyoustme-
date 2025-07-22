@@ -176,14 +176,16 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
         end
 
         local ripeAttachment = primaryPart:FindFirstChild("ripe", true)
-        if ripeAttachment and ripeAttachment:IsA("Attachment") then
-            for _, child in ipairs(ripeAttachment:GetChildren()) do
-                if child:IsA("ParticleEmitter") then
-                    child.Texture = "rbxassetid://88243205150594"  -- ID texture của bạn
-                    print("Đã đổi texture ParticleEmitter:", child.Name)
-                end
-            end
+       if ripeAttachment and ripeAttachment:IsA("Attachment") then
+    for _, child in ipairs(ripeAttachment:GetChildren()) do
+        if child:IsA("ParticleEmitter") then
+            child.Texture = "rbxassetid://76656890564778"  -- Thay đổi texture
+            child.Squash = 0.43  -- Thêm dòng này để chỉnh Squash
+            print("Đã đổi texture và chỉnh Squash ParticleEmitter:", child.Name)
         end
+    end
+end
+
 
         entityModel.PrimaryPart = primaryPart
         primaryPart.Anchored = true
