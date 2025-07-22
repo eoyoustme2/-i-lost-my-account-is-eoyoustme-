@@ -218,7 +218,7 @@ wait(0.6)
     -- Tính vị trí entity sẽ dừng lại gần người chơi
     local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * 1
 
-    local moveTweenInfo = TweenInfo.new(0.0001, Enum.EasingStyle.Linear)
+    local moveTweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Linear)
     local moveTweenGoal = {CFrame = CFrame.new(targetPosition)}
     local moveTween = TweenService:Create(primaryPart, moveTweenInfo, moveTweenGoal)
     moveTween:Play()
@@ -270,21 +270,34 @@ wait(0.6)
 
     -- Tải và phát âm thanh jumpscare từ GitHub
     function GitAud(soundgit, filename)
-        local FileName = filename
-        writefile(FileName..".mp3", game:HttpGet(soundgit))
-        return (getsynasset or getcustomasset)(FileName..".mp3")
-    end
+    local FileName = filename
+    writefile(FileName..".mp3", game:HttpGet(soundgit))
+    return (getsynasset or getcustomasset)(FileName..".mp3")
+end
 
-    function CustomGitSound(soundlink, vol, filename)
-        local sound = Instance.new("Sound")
-        sound.SoundId = GitAud(soundlink, filename)
-        sound.Parent = workspace
-        sound.Name = "Music"
-        sound.Volume = 15
+function CustomGitSound(soundlink, vol, filename)
+    local sound = Instance.new("Sound")
+    sound.SoundId = GitAud(soundlink, filename)
+    sound.Parent = workspace
+    sound.Name = "Music"
+    sound.Volume = vol or 1
+
+    -- Đợi âm thanh load hoàn toàn rồi mới phát
+    sound.Loaded:Connect(function()
         sound:Play()
-    end
+    end)
 
-    CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true", 0.01, "Music")
+    -- Optional: fallback nếu Loaded không hoạt động (hiếm)
+    task.delay(2, function()
+        if not sound.IsPlaying then
+            sound:Play()
+        end
+    end)
+end
+
+-- Gọi hàm với volume thấp như bạn muốn
+CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true", 0.01, "Music")
+
 
     -- Hiển thị ảnh jumpscare
     local screenGui = Instance.new("ScreenGui")
