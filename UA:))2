@@ -144,140 +144,198 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 	if newHealth == 0 then
 		print("Cokkkkkk")
 	else
-local to = true
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-local entity = workspace:WaitForChild("A60")
-local entityPrimaryPart = entity:FindFirstChild("RushNew")
+  task.spawn(function()
+        local TweenService = game:GetService("TweenService")
+        local Players = game:GetService("Players")
+        local Workspace = game:GetService("Workspace")
+        local RunService = game:GetService("RunService")
 
-local function Moving(target, dur)
-    local tween_info = TweenInfo.new(dur, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    local tween = TweenService:Create(entityPrimaryPart, tween_info, {CFrame = target})
-    tween:Play()
-    tween.Completed:Wait()
-end
+        local player = Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoid = character:WaitForChild("Humanoid", 5)
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+        local camera = Workspace.CurrentCamera
 
-task.spawn(function()
-while to == true do wait(0)
-Moving(humanoidRootPart.CFrame, 4)
-end
-end)
+        local entityModel = Workspace:FindFirstChild("A60")
+        if not entityModel then
+            warn("Không tìm thấy model 'RipperMovings' trong Workspace!")
+            return
+        end
 
-wait(0.8)
-to = false
-local function GetGitSound(GithubSnd, SoundName)
-                local url = GithubSnd
-                if not isfile(SoundName .. ".mp3") then
-                    writefile(SoundName .. ".mp3", game:HttpGet(url))
+        -- Hàm set TimeScale cho tất cả ParticleEmitter trong model
+        local function SetAllParticlesTimeScale(model, timescale)
+            for _, descendant in ipairs(model:GetDescendants()) do
+                if descendant:IsA("ParticleEmitter") then
+                    descendant.TimeScale = timescale
+                    print("Set TimeScale = "..timescale.." cho ParticleEmitter:", descendant.Name)
                 end
-                local sound = Instance.new("Sound")
-                sound.SoundId = (getcustomasset or getsynasset)(SoundName .. ".mp3")
-                return sound
+            end
+        end
+
+        -- Tắt tất cả particle trên entity lúc jumpscare bắt đầu
+        SetAllParticlesTimeScale(entityModel, 1)
+
+        local primaryPart = entityModel:FindFirstChild("RushNew")
+        if not primaryPart then
+            warn("Không tìm thấy 'RushNew' bên trong 'RipperMovings'!")
+            return
+        end
+
+        local ripeAttachment = primaryPart:FindFirstChild("ImageFace", true)
+        if ripeAttachment and ripeAttachment:IsA("Attachment") then
+            for _, child in ipairs(ripeAttachment:GetChildren()) do
+                if child:IsA("ParticleEmitter") then
+                    child.Texture = "rbxassetid://88243205150594"  -- ID texture của bạn
+                    print("Đã đổi texture ParticleEmitter:", child.Name)
+                end
+            end
+        end
+
+        entityModel.PrimaryPart = primaryPart
+        primaryPart.Anchored = true
+
+        -- Khóa camera nhìn entity mỗi frame (không tween để mượt)
+        camera.CameraType = Enum.CameraType.Scriptable
+        local camConnection = RunService.RenderStepped:Connect(function()
+            if primaryPart and primaryPart.Parent then
+                camera.CFrame = CFrame.lookAt(camera.CFrame.Position, primaryPart.Position)
+            else
+                camConnection:Disconnect()
+                camera.CameraType = Enum.CameraType.Custom
+            end
+        end)
+
+        -- Tính toán vị trí dừng lại 4 stud trước người chơi
+        local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * -10
+
+        -- Di chuyển entity tới vị trí đó trong 2 giây
+        local moveTweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Linear)
+        local moveTweenGoal = {CFrame = CFrame.new(targetPosition)}
+        local moveTween = TweenService:Create(primaryPart, moveTweenInfo, moveTweenGoal)
+        moveTween:Play()
+
+        -- Khóa khả năng di chuyển của người chơi trong suốt thời gian entity di chuyển
+        if humanoid then
+            humanoid.WalkSpeed = 0
+            humanoid.JumpPower = 0
+            humanoid.AutoRotate = false
+            humanoid.PlatformStand = true
+        end
+
+        -- Chờ đến khi tween di chuyển đến vị trí 4 stud trước người chơi kết thúc
+        moveTween.Completed:Wait()
+
+        -- Sau khi di chuyển xong, tiếp tục tween với thời gian rất dài và thay đổi TimeScale
+        local longTweenInfo = TweenInfo.new(99999999999999, Enum.EasingStyle.Linear)
+        local longTween = TweenService:Create(primaryPart, longTweenInfo, {CFrame = humanoidRootPart.CFrame})
+        longTween:Play()
+
+        wait(1)
+
+        -- Thay đổi TimeScale của tất cả ParticleEmitter thành 0
+        SetAllParticlesTimeScale(entityModel, 1)
+
+        -- Mở lại khả năng di chuyển của người chơi
+        if humanoid then
+            humanoid.WalkSpeed = 0  -- mặc định walk speed (hoặc giá trị bạn muốn)
+            humanoid.JumpPower = 0  -- mặc định jump power (hoặc giá trị bạn muốn)
+            humanoid.AutoRotate = true
+            humanoid.PlatformStand = false
+        end
+
+        -- Khóa người chơi
+        local anchorPart = Instance.new("Part")
+        anchorPart.Name = "JumpscareAnchor"
+        anchorPart.Size = Vector3.new(1,1,1)
+        anchorPart.Transparency = 1
+        anchorPart.Anchored = true
+        anchorPart.CanCollide = false
+        anchorPart.CanTouch = false
+        anchorPart.CanQuery = false
+        anchorPart.Position = humanoidRootPart.Position
+        anchorPart.Parent = Workspace
+
+        local weld = Instance.new("WeldConstraint")
+        weld.Part0 = humanoidRootPart
+        weld.Part1 = anchorPart
+        weld.Parent = humanoidRootPart
+
+        -- Hàm lấy âm thanh từ Github, tải nếu chưa có
+       function GitAud(soundgit,filename)
+    SoundName=tostring(SoundName)
+    local url=soundgit
+    local FileName = filename
+    writefile(FileName..".mp3", game:HttpGet(url))
+    return (getcustomasset or getsynasset)(FileName..".mp3")
 end
-local Jumpscare = GetGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3","A60")
-Jumpscare.Parent = workspace
-Jumpscare.Volume = 3
-Jumpscare.PlaybackSpeed = 0.9
-Jumpscare:Play()
 
-local JumpscareGui = game:GetService("RunService").RenderStepped:Connect(function()
-
-if not character:GetAttribute("Hiding") then
--- Get the player and their HumanoidRootPart
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-
--- Ensure this script runs as a LocalScript
-local player = game.Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
-local Background = Instance.new("Frame")
-
--- Create the ScreenGui
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "RandomImageGui"
-screenGui.Parent = playerGui
-
-screenGui.IgnoreGuiInset = true
-screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    
-Background.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-Background.BorderSizePixel = 0
-Background.Size = UDim2.new(1, 0, 1, 0)
-Background.ZIndex = 999
-Background.BackgroundTransparency = 1
-Background.Parent = screenGui
-	
-local TweenService = game:GetService("TweenService")
-
-local imageIds = {
-    "12145534911",
-    "12145554242",
-    "12145599498",
-    "12145599275",
-    "12155335619",
-    "12145598814",
-    "12146135062",
-    "11378285585",
-    "1972219024",
-    "1822114127",
-    "3413871766",
-    "3354536350",
-    "17865063",
-    "4749623118",
-    "1857893092",
-    "4508624823",
-    "6309704436",
-    "10458678325"
-}
-
--- Function to pick a random Image ID
-local function getRandomImageId()
-    return imageIds[math.random(1, #imageIds)]
+function CustomGitSound(soundlink, vol, filename)
+    local sound = Instance.new("Sound")
+    sound.SoundId = GitAud(soundlink, filename)
+    sound.Parent = workspace
+    sound.Name = "Music"
+    sound.Volume = 2
+   sound:Play()
 end
 
--- Create the ImageLabel for displaying the image
-local imageLabel = Instance.new("ImageLabel")
-imageLabel.Size = UDim2.new(0, 0, 0, 0)
-imageLabel.AnchorPoint = Vector2.new(0.5, 0.5)-- Adjust size (30% of screen width and height)
-imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
-imageLabel.BackgroundColor3 = Color3.new(1, 0, 0)
-imageLabel.BackgroundTransparency = 1 -- Make the background fully transparent
-imageLabel.Image = "rbxassetid://" .. getRandomImageId() -- Set the image using a random Image ID
-imageLabel.ImageTransparency = 1
-imageLabel.ImageColor3 = Color3.fromRGB(255, 0, 0)
-imageLabel.Parent = screenGui
+CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true", 1, " Music")
+       wait(0.3)
 
--- Animation script
--- Define tween info
-local GetTimeSpeed = TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+        -- UI Jumpscare nháy ảnh
+        local screenGui = Instance.new("ScreenGui")
+        screenGui.Name = "JumpscareOverlay"
+        screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        screenGui.ResetOnSpawn = false
+        screenGui.IgnoreGuiInset = true
+        screenGui.DisplayOrder = 999999
+        screenGui.Parent = player:WaitForChild("PlayerGui")
 
--- Create the animation
-local Anim = game.TweenService:Create(imageLabel, GetTimeSpeed, {Size = UDim2.new(0, 580, 0, 580), ImageTransparency = 0})
-local rot = game.TweenService:Create(imageLabel, GetTimeSpeed, {Rotation = math.random(10,18)})
-local tran = game.TweenService:Create(imageLabel, GetTimeSpeed, {ImageTransparency = 0})
+        local imageLabel = Instance.new("ImageLabel")
+        imageLabel.Name = "JumpscareImage"
+        imageLabel.BackgroundTransparency = 1
+        imageLabel.BorderSizePixel = 0
+        imageLabel.Position = UDim2.new(0, 0, 0, 0)
+        imageLabel.Size = UDim2.new(1, 0, 1, 0)
+        imageLabel.ScaleType = Enum.ScaleType.Stretch
+        imageLabel.Visible = true
+        imageLabel.Parent = screenGui
 
--- Play the animation
-Anim:Play()
-tran:Play()
-wait(0.2)
-rot:Play()
+        local jumpscareImage1 = "rbxassetid://15095904306"
+        local jumpscareImage2 = "rbxassetid://15095904306"
 
-game.Players.LocalPlayer.Character.Humanoid.Health -= 100
-game.ReplicatedStorage.GameStats["Player_".. game.Players.LocalPlayer.Name].Total.DeathCause.Value = "A-60"
+        local flashDuration = 1
+        local flashStartTime = tick()
 
-wait(0.8)
-game.TweenService:Create(Background, TweenInfo.new(2), {BackgroundTransparency = 1}):Play()
-TweenService:Create(imageLabel, TweenInfo.new(1.5), {ImageTransparency = 1}):Play()
-task.wait(3)
-screenGui:Destroy()
-end
-end)
+        task.spawn(function()
+            while tick() - flashStartTime < flashDuration do
+                imageLabel.Image = jumpscareImage1
+                task.wait(0.05)
+                if tick() - flashStartTime >= flashDuration then break end
+                imageLabel.Image = jumpscareImage2
+                task.wait(0.05)
+            end
+            imageLabel.Visible = false
+        end)
 
-wait(2.7)
-JumpscareGui:Disconnect()
-Jumpscare:Destroy()
+        task.wait(flashDuration + 0.5)
+
+        -- Giết người chơi ngay khi jumpscare kết thúc
+        if humanoid then
+            humanoid.Health = 0
+        end
+
+        -- Dọn dẹp
+        if camConnection then camConnection:Disconnect() end
+        camera.CameraType = Enum.CameraType.Custom
+
+        if weld and weld.Parent then weld:Destroy() end
+        if anchorPart and anchorPart.Parent then anchorPart:Destroy() end
+        if screenGui and screenGui.Parent then screenGui:Destroy() end
+
+        if entityModel and entityModel.Parent then
+            entityModel:Destroy()
+                   end
+              end)
 
 	end
 end)
