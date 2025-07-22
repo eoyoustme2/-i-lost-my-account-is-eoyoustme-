@@ -272,7 +272,7 @@ function CustomGitSound(soundlink, vol, filename)
    sound:Play()
 end
 
-CustomGitSound("https://github.com/eoyoustme/rebouna/raw/refs/heads/main/HesBehindYouRUN.mp3?raw=true", 1, " Music")
+CustomGitSound("https://github.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/blob/main/Kill_with_static.mp3.mpeg.wav?raw=true", 1, " Music")
        wait(1)
 
         -- UI Jumpscare nháy ảnh
