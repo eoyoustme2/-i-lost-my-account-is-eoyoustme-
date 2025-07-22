@@ -310,14 +310,14 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
     imageLabel.Rotation = 0
     imageLabel.Parent = screenGui
 
-    local tweenInfo = TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local tweenInfo = TweenInfo.new(1.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     local goal = {
         Size = UDim2.new(1, 0, 1, 0),
         Rotation = 30
     }
     TweenService:Create(imageLabel, tweenInfo, goal):Play()
 
-    wait(1.1)
+    wait(1.2)
 
     -- Kết liễu người chơi
     if humanoid then
