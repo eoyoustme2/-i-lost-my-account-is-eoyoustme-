@@ -300,8 +300,8 @@ CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main
         imageLabel.Visible = true
         imageLabel.Parent = screenGui
 
-        local jumpscareImage1 = "rbxassetid://15095904306"
-        local jumpscareImage2 = "rbxassetid://15095904306"
+        local jumpscareImage1 = "rbxassetid://122347391038526"
+        local jumpscareImage2 = "rbxassetid://133071901810248"
 
         local flashDuration = 1
         local flashStartTime = tick()
