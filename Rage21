@@ -1,0 +1,308 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+ReplicatedStorage.GameData.LatestRoom.Changed:Connect(function()
+    if ReplicatedStorage.GameData.Floor.Value == "Hotel" and ReplicatedStorage.GameData.LatestRoom.Value == 5 then
+        -- Load entity spawner
+        local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
+
+        -- Create entity
+        local entity = spawner.Create({
+            Entity = {
+                Name = "B-60",
+                Asset = "rbxassetid://84110007813568",
+                HeightOffset = 0
+            },
+            Lights = {
+                Flicker = {
+                    Enabled = true,
+                    Duration = 5
+                },
+                Shatter = false,
+                Repair = false
+            },
+            Earthquake = {
+                Enabled = false
+            },
+            CameraShake = {
+                Enabled = true,
+                Range = 100,
+                Values = {5, 70, 2, 5}
+            },
+            Movement = {
+                Speed = 1000,
+                Delay = 5,
+                Reversed = true
+            },
+            Rebounding = {
+                Enabled = true,
+                Type = "Ambush",
+                Min = 12,
+                Max = 12,
+                Delay = 0.001
+            },
+            Damage = {
+                Enabled = true,
+                Range = 20,
+                Amount = 0.01
+            },
+            Crucifixion = {
+                Enabled = true,
+                Range = 40,
+                Resist = false,
+                Break = true
+            },
+            Death = {
+                Type = "Guiding",
+                Hints = {"Death", "Hints", "Go", "Here"},
+                Cause = ""
+            }
+        })
+
+        -- On entity spawn
+        entity:SetCallback("OnSpawned", function()
+            print("Entity has spawned")
+
+            task.spawn(function()
+                local success, err = pcall(function()
+                    local part = workspace:WaitForChild("B-60")
+                    local object = part:WaitForChild("RushNew")
+                    local attachment = object:WaitForChild("Main")
+                    local face = attachment:WaitForChild("Face")
+
+                    object.CanCollide = false
+
+                    local textures = {
+                        "rbxassetid://16020415559",
+                        "rbxassetid://16020423090",
+                        "rbxassetid://16020425703",
+                        "rbxassetid://16020417711",
+                        "rbxassetid://16020432826",
+                        "rbxassetid://16020430685",
+                        "rbxassetid://16020435171",
+                        "rbxassetid://11378285585",
+                    }
+
+                    while part and part.Parent do
+                        for _, texture in ipairs(textures) do
+                            face.Texture = texture
+                            task.wait(0.03)
+                        end
+                    end
+                end)
+
+                if not success then
+                    warn("Error in OnSpawned texture animation:", err)
+                end
+            end)
+
+            -- Optional cleanup
+            if workspace:FindFirstChild("CommonSense") then
+                workspace.CommonSense:Destroy()
+            end
+        end)
+
+        -- On player damaged
+        entity:SetCallback("OnDamagePlayer", function(newHealth)
+            if newHealth == 0 then
+                print("Entity has killed the player")
+            else
+                print("Entity has damaged the player")
+
+                task.spawn(function()
+    local TweenService = game:GetService("TweenService")
+    local Players = game:GetService("Players")
+    local Workspace = game:GetService("Workspace")
+    local RunService = game:GetService("RunService")
+
+    local player = Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid", 5)
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    local camera = Workspace.CurrentCamera
+
+    local entityModel = Workspace:FindFirstChild("B-60")
+    if not entityModel then
+        warn("Không tìm thấy model 'A60' trong Workspace!")
+        return
+    end
+
+    -- Hàm set TimeScale cho tất cả ParticleEmitter
+    local function SetAllParticlesTimeScale(model, timescale)
+        for _, descendant in ipairs(model:GetDescendants()) do
+            if descendant:IsA("ParticleEmitter") then
+                descendant.TimeScale = timescale
+                print("Set TimeScale = "..timescale.." cho ParticleEmitter:", descendant.Name)
+            end
+        end
+    end
+
+    -- Hàm tắt tất cả âm thanh trong model (Volume = 0)
+    local function MuteAllSounds(model)
+        for _, descendant in ipairs(model:GetDescendants()) do
+            if descendant:IsA("Sound") then
+                descendant.Volume = 0
+                print("Đã tắt âm thanh:", descendant.Name)
+            end
+        end
+    end
+
+    SetAllParticlesTimeScale(entityModel, 1)
+
+    local primaryPart = entityModel:FindFirstChild("RushNew")
+    if not primaryPart then
+        warn("Không tìm thấy 'RushNew' trong A60!")
+        return
+    end
+
+    local ripeAttachment = primaryPart:FindFirstChild("Main", true)
+    if ripeAttachment and ripeAttachment:IsA("Attachment") then
+        for _, child in ipairs(ripeAttachment:GetChildren()) do
+            if child:IsA("ParticleEmitter") then
+                child.Texture = "rbxassetid://88243205150594"
+                print("Đã đổi texture ParticleEmitter:", child.Name)
+            end
+        end
+    end
+
+    entityModel.PrimaryPart = primaryPart
+    primaryPart.Anchored = true
+
+    -- Khóa camera nhìn vào entity
+    camera.CameraType = Enum.CameraType.Scriptable
+    local camConnection = RunService.RenderStepped:Connect(function()
+        if primaryPart and primaryPart.Parent then
+            camera.CFrame = CFrame.lookAt(camera.CFrame.Position, primaryPart.Position)
+        else
+            camConnection:Disconnect()
+            camera.CameraType = Enum.CameraType.Custom
+        end
+    end)
+
+    -- Tính vị trí entity sẽ dừng lại gần người chơi
+    local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * 8
+
+    local moveTweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Linear)
+    local moveTweenGoal = {CFrame = CFrame.new(targetPosition)}
+    local moveTween = TweenService:Create(primaryPart, moveTweenInfo, moveTweenGoal)
+    moveTween:Play()
+
+    -- Khóa di chuyển người chơi
+    if humanoid then
+        humanoid.WalkSpeed = 0
+        humanoid.JumpPower = 0
+        humanoid.AutoRotate = false
+        humanoid.PlatformStand = true
+    end
+
+    moveTween.Completed:Wait()
+
+    -- Tween tiếp tục giữ entity tại chỗ rất lâu
+    local longTweenInfo = TweenInfo.new(99999999999999, Enum.EasingStyle.Linear)
+    local longTween = TweenService:Create(primaryPart, longTweenInfo, {CFrame = humanoidRootPart.CFrame})
+    longTween:Play()
+
+    SetAllParticlesTimeScale(entityModel, 1)
+
+    -- Mở lại điều khiển nếu cần (đang khóa rồi)
+    if humanoid then
+        humanoid.WalkSpeed = 0
+        humanoid.JumpPower = 0
+        humanoid.AutoRotate = true
+        humanoid.PlatformStand = false
+    end
+
+    -- Khóa chân nhân vật bằng part vô hình
+    local anchorPart = Instance.new("Part")
+    anchorPart.Name = "JumpscareAnchor"
+    anchorPart.Size = Vector3.new(1,1,1)
+    anchorPart.Transparency = 1
+    anchorPart.Anchored = true
+    anchorPart.CanCollide = false
+    anchorPart.CanTouch = false
+    anchorPart.CanQuery = false
+    anchorPart.Position = humanoidRootPart.Position
+    anchorPart.Parent = Workspace
+
+    local weld = Instance.new("WeldConstraint")
+    weld.Part0 = humanoidRootPart
+    weld.Part1 = anchorPart
+    weld.Parent = humanoidRootPart
+
+    -- Tắt tất cả âm thanh trong entity khi jumpscare bắt đầu
+    MuteAllSounds(entityModel)
+
+    -- Tải và phát âm thanh jumpscare từ GitHub
+    function GitAud(soundgit, filename)
+        local FileName = filename
+        writefile(FileName..".mp3", game:HttpGet(soundgit))
+        return (getsynasset or getcustomasset)(FileName..".mp3")
+    end
+
+    function CustomGitSound(soundlink, vol, filename)
+        local sound = Instance.new("Sound")
+        sound.SoundId = GitAud(soundlink, filename)
+        sound.Parent = workspace
+        sound.Name = "Music"
+        sound.Volume = 15
+        sound.PlaybackSpeed = 0.9
+        sound:Play()
+    end
+
+    CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true", 0.01, "Music")
+
+
+    -- Hiển thị ảnh jumpscare
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "JumpscareOverlay"
+    screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    screenGui.ResetOnSpawn = false
+    screenGui.IgnoreGuiInset = true
+    screenGui.DisplayOrder = 999999
+    screenGui.Parent = player:WaitForChild("PlayerGui")
+
+    local imageLabel = Instance.new("ImageLabel")
+    imageLabel.Name = "JumpscareImage"
+    imageLabel.BackgroundTransparency = 1
+    imageLabel.BorderSizePixel = 0
+    imageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+    imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+    imageLabel.Size = UDim2.new(0, 0, 0, 0)
+    imageLabel.ScaleType = Enum.ScaleType.Stretch
+    imageLabel.Image = "rbxassetid://11378285585"
+    imageLabel.ImageColor3 = Color3.new(0, 0, 255)
+    imageLabel.Rotation = 0
+    imageLabel.Parent = screenGui
+
+    local tweenInfo = TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local goal = {
+        Size = UDim2.new(1, 0, 1, 0),
+        Rotation = 30
+    }
+    TweenService:Create(imageLabel, tweenInfo, goal):Play()
+
+    wait(0.7)
+
+    -- Kết liễu người chơi
+    if humanoid then
+        humanoid.Health = 0
+    end
+
+    -- Dọn dẹp mọi thứ sau jumpscare
+    if camConnection then camConnection:Disconnect() end
+    camera.CameraType = Enum.CameraType.Custom
+
+    if weld and weld.Parent then weld:Destroy() end
+    if anchorPart and anchorPart.Parent then anchorPart:Destroy() end
+    if screenGui and screenGui.Parent then screenGui:Destroy() end
+    if entityModel and entityModel.Parent then entityModel:Destroy() end
+end)
+            end
+        end)
+
+        -- Run entity
+        entity:Run()
+    end
+end)
