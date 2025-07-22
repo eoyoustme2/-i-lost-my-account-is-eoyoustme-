@@ -304,8 +304,8 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
     imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
     imageLabel.Size = UDim2.new(0, 0, 0, 0)
     imageLabel.ScaleType = Enum.ScaleType.Stretch
-    imageLabel.Image = "rbxassetid://78565782466562"
-    imageLabel.ImageColor3 = Color3.new(1, 1, 1)
+    imageLabel.Image = "rbxassetid://11378285585"
+    imageLabel.ImageColor3 = Color3.new(255, 255, 255)
     imageLabel.Rotation = 0
     imageLabel.Parent = screenGui
 
