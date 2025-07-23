@@ -142,7 +142,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 	if newHealth == 0 then
 		print("Cokkkkkk")
 	else
-wait(1)
+wait(0.2)
   task.spawn(function()
     local TweenService = game:GetService("TweenService")
     local Players = game:GetService("Players")
@@ -284,6 +284,7 @@ wait(1)
 
     CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true", 0.01, "Music")
 
+   wait(1)
 
     -- Hiển thị ảnh jumpscare
     local screenGui = Instance.new("ScreenGui")
