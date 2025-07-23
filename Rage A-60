@@ -1,0 +1,340 @@
+game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
+
+local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
+local entity = spawner.Create({
+	Entity = {
+		Name = "A60",
+		Asset = "rbxassetid://71698469073593",
+		HeightOffset = 0
+	},
+	Lights = {
+		Flicker = {
+			Enabled = false,
+			Duration = 1
+		},
+		Shatter = true,
+		Repair = false
+	},
+	Earthquake = {
+		Enabled = false
+	},
+	CameraShake = {
+		Enabled = true,
+		Range = 100,
+		Values = {9, 20, 0.1, 1} -- Magnitude, Roughness, FadeIn, FadeOut
+	},
+	Movement = {
+		Speed = 270,
+		Delay = 6,
+		Reversed = false
+	},
+	Rebounding = {
+		Enabled = true,
+		Type = "Ambush", -- "Blitz"
+		Min = 4,
+		Max = 8,
+		Delay = 0.5
+	},
+	Damage = {
+		Enabled = true,
+		Range = 100,
+		Amount = 0.01
+	},
+	Crucifixion = {
+		Enabled = true,
+		Range = 4000000000000,
+		Resist = false,
+		Break = true
+	},
+	Death = {
+		Type = "Guiding", -- "Curious"
+		Hints = {"Death", "Hints", "Go", "Here"},
+		Cause = ""
+	}
+})
+
+game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 0, 0)
+game.Lighting.MainColorCorrection.Contrast = 2
+local tween = game:GetService("TweenService")
+tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
+local TweenService = game:GetService("TweenService")
+local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(10),{TintColor = Color3.fromRGB(255, 255, 255)})
+TW:Play()
+
+local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
+local camara = game.Workspace.CurrentCamera
+local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(shakeCf)
+ camara.CFrame = camara.CFrame * shakeCf
+end)
+camShake:Start()
+camShake:ShakeOnce(50,35,0,4,2,8)
+
+local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
+local camara = game.Workspace.CurrentCamera
+
+local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(cf)
+	camara.CFrame = camara.CFrame * cf
+end)
+
+camShake:Start()
+camShake:Shake(CameraShaker.Presets.Earthquake)
+
+
+---====== Debug entity ======---
+
+entity:SetCallback("OnSpawned", function()
+-- Get a reference to the object and its Attachment in the Workspace
+local part = workspace:WaitForChild("A60")
+local object = part:WaitForChild("RushNew") -- Replace "MyObjectName" with the name of your object
+local attachment = object:WaitForChild("ImageFace")  -- Get the Attachment attached to the object
+local e = attachment:WaitForChild("Face")
+
+object.CanCollide = false
+
+ -- Get the ParticleEmitter attached to the Attachment
+while true do
+    e.Texture = "rbxassetid://12145534911"
+    wait(0)
+    e.Texture = "rbxassetid://12145554242"
+    wait(0)
+    e.Texture = "rbxassetid://12145599498"
+    wait(0)
+    e.Texture = "rbxassetid://12145599275"
+    wait(0)
+    e.Texture = "rbxassetid://12155335619"
+    wait(0)
+    e.Texture = "rbxassetid://12145598814"
+    wait(0)
+    e.Texture = "rbxassetid://12146135062"
+    wait(0)
+    e.Texture = "rbxassetid://11378285585"
+    wait(0)
+end
+
+end)
+
+entity:SetCallback("OnDespawning", function()
+wait(0.7)
+local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
+local camara = game.Workspace.CurrentCamera
+local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(shakeCf)
+ camara.CFrame = camara.CFrame * shakeCf
+end)
+camShake:Start()
+camShake:ShakeOnce(50,50,0,2,1,6)
+
+game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(60, 0, 0)
+local TweenService = game:GetService("TweenService")
+local a = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 0, 0)})
+local b = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(0, 255, 0)})
+local c = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(10),{TintColor = Color3.fromRGB(100, 0, 0)})
+local d = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(10),{TintColor = Color3.fromRGB(255, 255, 255)})
+
+a:Play()
+wait(5)
+b:Play()
+wait(5)
+c:Play()
+wait(5)
+d:Play()
+
+end)
+
+entity:SetCallback("OnDamagePlayer", function(newHealth)
+	if newHealth == 0 then
+		print("Cokkkkkk")
+	else
+wait(1)
+  task.spawn(function()
+    local TweenService = game:GetService("TweenService")
+    local Players = game:GetService("Players")
+    local Workspace = game:GetService("Workspace")
+    local RunService = game:GetService("RunService")
+
+    local player = Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid", 5)
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    local camera = Workspace.CurrentCamera
+
+    local entityModel = Workspace:FindFirstChild("A60")
+    if not entityModel then
+        warn("Không tìm thấy model 'A60' trong Workspace!")
+        return
+    end
+
+    -- Hàm set TimeScale cho tất cả ParticleEmitter
+    local function SetAllParticlesTimeScale(model, timescale)
+        for _, descendant in ipairs(model:GetDescendants()) do
+            if descendant:IsA("ParticleEmitter") then
+                descendant.TimeScale = timescale
+                print("Set TimeScale = "..timescale.." cho ParticleEmitter:", descendant.Name)
+            end
+        end
+    end
+
+    -- Hàm tắt tất cả âm thanh trong model (Volume = 0)
+    local function MuteAllSounds(model)
+        for _, descendant in ipairs(model:GetDescendants()) do
+            if descendant:IsA("Sound") then
+                descendant.Volume = 0
+                print("Đã tắt âm thanh:", descendant.Name)
+            end
+        end
+    end
+
+    SetAllParticlesTimeScale(entityModel, 1)
+
+    local primaryPart = entityModel:FindFirstChild("RushNew")
+    if not primaryPart then
+        warn("Không tìm thấy 'RushNew' trong A60!")
+        return
+    end
+
+    local ripeAttachment = primaryPart:FindFirstChild("ImageFace", true)
+    if ripeAttachment and ripeAttachment:IsA("Attachment") then
+        for _, child in ipairs(ripeAttachment:GetChildren()) do
+            if child:IsA("ParticleEmitter") then
+                child.Texture = "rbxassetid://88243205150594"
+                print("Đã đổi texture ParticleEmitter:", child.Name)
+            end
+        end
+    end
+
+    entityModel.PrimaryPart = primaryPart
+    primaryPart.Anchored = true
+
+    -- Khóa camera nhìn vào entity
+    camera.CameraType = Enum.CameraType.Scriptable
+    local camConnection = RunService.RenderStepped:Connect(function()
+        if primaryPart and primaryPart.Parent then
+            camera.CFrame = CFrame.lookAt(camera.CFrame.Position, primaryPart.Position)
+        else
+            camConnection:Disconnect()
+            camera.CameraType = Enum.CameraType.Custom
+        end
+    end)
+
+    -- Tính vị trí entity sẽ dừng lại gần người chơi
+    local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * 8
+
+    local moveTweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Linear)
+    local moveTweenGoal = {CFrame = CFrame.new(targetPosition)}
+    local moveTween = TweenService:Create(primaryPart, moveTweenInfo, moveTweenGoal)
+    moveTween:Play()
+
+    -- Khóa di chuyển người chơi
+    if humanoid then
+        humanoid.WalkSpeed = 0
+        humanoid.JumpPower = 0
+        humanoid.AutoRotate = false
+        humanoid.PlatformStand = true
+    end
+
+    moveTween.Completed:Wait()
+
+    -- Tween tiếp tục giữ entity tại chỗ rất lâu
+    local longTweenInfo = TweenInfo.new(99999999999999, Enum.EasingStyle.Linear)
+    local longTween = TweenService:Create(primaryPart, longTweenInfo, {CFrame = humanoidRootPart.CFrame})
+    longTween:Play()
+
+    SetAllParticlesTimeScale(entityModel, 1)
+
+    -- Mở lại điều khiển nếu cần (đang khóa rồi)
+    if humanoid then
+        humanoid.WalkSpeed = 0
+        humanoid.JumpPower = 0
+        humanoid.AutoRotate = true
+        humanoid.PlatformStand = false
+    end
+
+    -- Khóa chân nhân vật bằng part vô hình
+    local anchorPart = Instance.new("Part")
+    anchorPart.Name = "JumpscareAnchor"
+    anchorPart.Size = Vector3.new(1,1,1)
+    anchorPart.Transparency = 1
+    anchorPart.Anchored = true
+    anchorPart.CanCollide = false
+    anchorPart.CanTouch = false
+    anchorPart.CanQuery = false
+    anchorPart.Position = humanoidRootPart.Position
+    anchorPart.Parent = Workspace
+
+    local weld = Instance.new("WeldConstraint")
+    weld.Part0 = humanoidRootPart
+    weld.Part1 = anchorPart
+    weld.Parent = humanoidRootPart
+
+    -- Tắt tất cả âm thanh trong entity khi jumpscare bắt đầu
+    MuteAllSounds(entityModel)
+
+    -- Tải và phát âm thanh jumpscare từ GitHub
+    function GitAud(soundgit, filename)
+        local FileName = filename
+        writefile(FileName..".mp3", game:HttpGet(soundgit))
+        return (getsynasset or getcustomasset)(FileName..".mp3")
+    end
+
+    function CustomGitSound(soundlink, vol, filename)
+        local sound = Instance.new("Sound")
+        sound.SoundId = GitAud(soundlink, filename)
+        sound.Parent = workspace
+        sound.Name = "Music"
+        sound.Volume = 15
+        sound:Play()
+    end
+
+    CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true", 0.01, "Music")
+
+
+    -- Hiển thị ảnh jumpscare
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "JumpscareOverlay"
+    screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    screenGui.ResetOnSpawn = false
+    screenGui.IgnoreGuiInset = true
+    screenGui.DisplayOrder = 999999
+    screenGui.Parent = player:WaitForChild("PlayerGui")
+
+    local imageLabel = Instance.new("ImageLabel")
+    imageLabel.Name = "JumpscareImage"
+    imageLabel.BackgroundTransparency = 1
+    imageLabel.BorderSizePixel = 0
+    imageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+    imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+    imageLabel.Size = UDim2.new(0, 0, 0, 0)
+    imageLabel.ScaleType = Enum.ScaleType.Stretch
+    imageLabel.Image = "rbxassetid://11378285585"
+    imageLabel.ImageColor3 = Color3.new(255, 0, 0)
+    imageLabel.Rotation = 0
+    imageLabel.Parent = screenGui
+
+    local tweenInfo = TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local goal = {
+        Size = UDim2.new(1, 0, 1, 0),
+        Rotation = 30
+    }
+    TweenService:Create(imageLabel, tweenInfo, goal):Play()
+
+    wait(0.7)
+
+    -- Kết liễu người chơi
+    if humanoid then
+        humanoid.Health = 0
+    end
+
+    -- Dọn dẹp mọi thứ sau jumpscare
+    if camConnection then camConnection:Disconnect() end
+    camera.CameraType = Enum.CameraType.Custom
+
+    if weld and weld.Parent then weld:Destroy() end
+    if anchorPart and anchorPart.Parent then anchorPart:Destroy() end
+    if screenGui and screenGui.Parent then screenGui:Destroy() end
+    if entityModel and entityModel.Parent then entityModel:Destroy() end
+end)
+	end
+end)
+
+---====== Run entity ======---
+
+entity:Run()
