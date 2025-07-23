@@ -2,7 +2,7 @@ local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/Regul
 local entity = spawner.Create({
 	Entity = {
 		Name = "A60",
-		Asset = "rbxassetid://71698469073593",
+		Asset = "rbxassetid://83115631769066",
 		HeightOffset = 0
 	},
 	Lights = {
@@ -92,21 +92,21 @@ object.CanCollide = false
  -- Get the ParticleEmitter attached to the Attachment
 while true do
     e.Texture = "rbxassetid://12145534911"
-    wait(0)
+    wait(0.2)
     e.Texture = "rbxassetid://12145554242"
-    wait(0)
+    wait(0.2)
     e.Texture = "rbxassetid://12145599498"
-    wait(0)
+    wait(0.2)
     e.Texture = "rbxassetid://12145599275"
-    wait(0)
+    wait(0.2)
     e.Texture = "rbxassetid://12155335619"
-    wait(0)
+    wait(0.2)
     e.Texture = "rbxassetid://12145598814"
-    wait(0)
+    wait(0.2)
     e.Texture = "rbxassetid://12146135062"
-    wait(0)
+    wait(0.2)
     e.Texture = "rbxassetid://11378285585"
-    wait(0)
+    wait(0.2)
 end
 
 end)
