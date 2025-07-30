@@ -152,7 +152,6 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		return
 	end
 
-	-- Nếu player còn sống, thực hiện jumpscare
 	task.spawn(function()
 		local character = player.Character or player.CharacterAdded:Wait()
 		local humanoid = character:WaitForChild("Humanoid")
@@ -162,10 +161,12 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		local primaryPart = entityModel and entityModel:FindFirstChild("RushNew")
 		if not primaryPart then return end
 
-		-- Tắt toàn bộ âm thanh hiện tại trên entityModel
-		for _, descendant in pairs(entityModel:GetDescendants()) do
-			if descendant:IsA("Sound") then
-				descendant:Stop()
+		-- 🔇 Tắt tất cả âm thanh trong game tạm thời
+		local allSounds = {}
+		for _, obj in pairs(game:GetDescendants()) do
+			if obj:IsA("Sound") and obj.IsPlaying then
+				obj:Stop()
+				table.insert(allSounds, obj)
 			end
 		end
 
@@ -178,8 +179,8 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		-- Di chuyển entity đến gần người chơi
 		primaryPart.Anchored = true
 		entityModel.PrimaryPart = primaryPart
-		local targetPos = humanoidRootPart.Position + humanoidRootPart.CFrame.LookVector * 8
-		local moveTween = TweenService:Create(primaryPart, TweenInfo.new(0.1), {
+		local targetPos = humanoidRootPart.Position + humanoidRootPart.CFrame.LookVector * 12
+		local moveTween = TweenService:Create(primaryPart, TweenInfo.new(0.6), {
 			CFrame = CFrame.new(targetPos, camera.CFrame.Position)
 		})
 		moveTween:Play()
@@ -189,12 +190,20 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		humanoid.WalkSpeed = 0
 		humanoid.PlatformStand = true
 
-		-- Render jumpscare camera
+		-- Camera jumpscare
 		local camConn
 		camConn = RunService.RenderStepped:Connect(function()
 			if character:GetAttribute("Hiding") then
+				-- Khi trốn: dừng jumpscare, phát lại toàn bộ âm thanh
 				if camConn then camConn:Disconnect() end
 				camera.CameraType = Enum.CameraType.Custom
+
+				for _, s in pairs(allSounds) do
+					if s and s.Parent then
+						s:Play()
+					end
+				end
+
 				entityModel:Destroy()
 			else
 				local desiredPos = camera.CFrame.Position + camera.CFrame.LookVector * 4 + Vector3.new(0, 0, 0)
@@ -212,11 +221,19 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 			task.wait(0.04)
 		end
 
-		-- Cleanup camera
+		-- Nếu chưa kịp trốn, vẫn cleanup camera
 		if camConn then camConn:Disconnect() end
 		camera.CameraType = Enum.CameraType.Custom
+
+		-- Phát lại âm thanh nếu chưa trốn kịp
+		for _, s in pairs(allSounds) do
+			if s and s.Parent then
+				s:Play()
+			end
+		end
 	end)
 end)
+
 
 -- ================== CHẠY ENTITY ==================
 entity:Run()
