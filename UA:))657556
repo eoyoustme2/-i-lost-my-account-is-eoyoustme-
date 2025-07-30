@@ -144,6 +144,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 	if newHealth == 0 then
 		print("Cokkkkkk")
 	else
+
 task.spawn(function()
     local TweenService = game:GetService("TweenService")
     local Players = game:GetService("Players")
@@ -158,160 +159,106 @@ task.spawn(function()
 
     local entityModel = Workspace:FindFirstChild("A60")
     if not entityModel then
-        warn("Không tìm thấy model 'A60' trong Workspace!")
+        warn("Không tìm thấy model 'A-60' trong Workspace!")
         return
     end
-
-    -- Hàm set TimeScale cho tất cả ParticleEmitter
-    local function SetAllParticlesTimeScale(model, timescale)
-        for _, descendant in ipairs(model:GetDescendants()) do
-            if descendant:IsA("ParticleEmitter") then
-                descendant.TimeScale = timescale
-            end
-        end
-    end
-
-    -- Hàm tắt tất cả âm thanh trong model
-    local function MuteAllSounds(model)
-        for _, descendant in ipairs(model:GetDescendants()) do
-            if descendant:IsA("Sound") then
-                descendant.Volume = 0
-            end
-        end
-    end
-
-    SetAllParticlesTimeScale(entityModel, 1)
 
     local primaryPart = entityModel:FindFirstChild("RushNew")
     if not primaryPart then
-        warn("Không tìm thấy 'RushNew' trong A60!")
+        warn("Không tìm thấy 'A-60New' trong model!")
         return
     end
 
-    local ripeAttachment = primaryPart:FindFirstChild("ImageFace", true)
-    if ripeAttachment and ripeAttachment:IsA("Attachment") then
-        for _, child in ipairs(ripeAttachment:GetChildren()) do
-            if child:IsA("ParticleEmitter") then
-                child.Texture = "rbxassetid://88243205150594"
-            end
-        end
+    primaryPart.Anchored = true
+    entityModel.PrimaryPart = primaryPart
+
+local cue2 = Instance.new("Sound")
+cue2.Parent = game.Workspace
+cue2.Name = "Spawn"
+cue2.SoundId = "rbxassetid://6459610652"
+cue2.Volume = 3
+cue2:Play()
+
+    -- Tween ban đầu lao tới gần người chơi 0.7s
+    local targetPosition = humanoidRootPart.Position + humanoidRootPart.CFrame.LookVector * 4 + Vector3.new(0, 0, 0)
+    local moveTweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Linear)
+    local moveTweenGoal = {CFrame = CFrame.new(targetPosition, camera.CFrame.Position)}
+    local moveTween = TweenService:Create(primaryPart, moveTweenInfo, moveTweenGoal)
+    moveTween:Play()
+    moveTween.Completed:Wait()
+
+    if humanoid then
+        humanoid.WalkSpeed = 16
+        humanoid.JumpPower = 0
+        humanoid.AutoRotate = false
+        humanoid.PlatformStand = true
     end
 
-    entityModel.PrimaryPart = primaryPart
-    primaryPart.Anchored = true
-
-    -- Camera
-    camera.CameraType = Enum.CameraType.Scriptable
     local camConnection
     camConnection = RunService.RenderStepped:Connect(function()
         if primaryPart and primaryPart.Parent then
-            camera.CFrame = CFrame.lookAt(camera.CFrame.Position, primaryPart.Position)
+            if character:GetAttribute("Hiding") then
+                -- Người chơi đang ẩn, destroy entity và dừng âm thanh
+                if TweenSound then
+                    TweenSound:Stop()
+                    TweenSound:Destroy()
+                    TweenSound = nil
+                end
+                if camConnection then
+                    camConnection:Disconnect()
+                end
+                entityModel:Destroy()
+                camera.CameraType = Enum.CameraType.Custom
+                return
+            else
+                local camCFrame = camera.CFrame
+                local desiredPosition = camCFrame.Position + camCFrame.LookVector * 4 + Vector3.new(0, 2, 0)
+                primaryPart.CFrame = CFrame.new(desiredPosition, camCFrame.Position)
+                camera.CFrame = CFrame.lookAt(camera.CFrame.Position, primaryPart.Position)
+            end
         else
-            if camConnection then camConnection:Disconnect() end
+            -- Entity bị destroy hoặc mất, dừng âm thanh và reset camera
+            if TweenSound then
+                TweenSound:Stop()
+                TweenSound:Destroy()
+                TweenSound = nil
+            end
+            if camConnection then
+                camConnection:Disconnect()
+            end
             camera.CameraType = Enum.CameraType.Custom
         end
     end)
 
-    -- Di chuyển tới gần người chơi
-    local targetPosition = humanoidRootPart.Position + humanoidRootPart.CFrame.LookVector * 4
-    local moveTweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    local moveTween = TweenService:Create(primaryPart, moveTweenInfo, {CFrame = CFrame.new(targetPosition)})
-    moveTween:Play()
+    -- Gây damage liên tục trong 6 giây hoặc đến khi chết/ẩn
+    local damageDuration = 1.786
+    local damageStartTime = tick()
 
-    -- Hàm tải và convert GitHub MP3
-    function GitAud(url, filename)
-        local fileName = filename .. ".mp3"
-        writefile(fileName, game:HttpGet(url))
-        return (getcustomasset or getsynasset)(fileName)
+    while tick() - damageStartTime < damageDuration and humanoid and humanoid.Health > 0 do
+        if character:GetAttribute("Hiding") then
+            -- Nếu người chơi ẩn lúc đang damage thì thoát vòng loop luôn
+            break
+        else
+            humanoid.Health = humanoid.Health - 4
+        end
+        task.wait(0.04)
     end
 
-    -- Phát nhạc nền
-    function CustomGitSound(soundlink, vol, filename)
-        local sound = Instance.new("Sound")
-        sound.SoundId = GitAud(soundlink, filename)
-        sound.Parent = workspace
-        sound.Volume = vol
-        sound.Name = "Music"
-        sound:Play()
+    -- Kết thúc jumpscare, cleanup
+    if TweenSound then
+        TweenSound:Stop()
+        TweenSound:Destroy()
+        TweenSound = nil
     end
-
-    CustomGitSound("https://github.com/eoyoustme/rebouna/raw/refs/heads/main/HesBehindYouRUN.mp3?raw=true", 2, "Music")
-
-    -- Khóa di chuyển
-    humanoid.WalkSpeed = 0
-    humanoid.JumpPower = 0
-    humanoid.AutoRotate = false
-    humanoid.PlatformStand = true
-
-    moveTween.Completed:Wait()
-
-    -- Tween giữ vị trí lâu
-    local longTweenInfo = TweenInfo.new(999999999, Enum.EasingStyle.Linear)
-    local longTween = TweenService:Create(primaryPart, longTweenInfo, {CFrame = humanoidRootPart.CFrame})
-    longTween:Play()
-
-    -- Gắn chân
-    local anchorPart = Instance.new("Part")
-    anchorPart.Name = "JumpscareAnchor"
-    anchorPart.Size = Vector3.new(1,1,1)
-    anchorPart.Transparency = 1
-    anchorPart.Anchored = true
-    anchorPart.CanCollide = false
-    anchorPart.Position = humanoidRootPart.Position
-    anchorPart.Parent = Workspace
-
-    local weld = Instance.new("WeldConstraint")
-    weld.Part0 = humanoidRootPart
-    weld.Part1 = anchorPart
-    weld.Parent = humanoidRootPart
-
-    -- Tắt tiếng entity
-    MuteAllSounds(entityModel)
-
-    -- Phát jumpscare sound
-    local jumpSound = Instance.new("Sound")
-    jumpSound.SoundId = GitAud("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true", "jumpscare")
-    jumpSound.Volume = 0.5
-    jumpSound.Parent = workspace
-    jumpSound:Play()
-
-    -- Giao diện Jumpscare
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "JumpscareOverlay"
-    screenGui.IgnoreGuiInset = true
-    screenGui.ResetOnSpawn = false
-    screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    screenGui.DisplayOrder = 999999
-    screenGui.Parent = player:WaitForChild("PlayerGui")
-
-    local imageLabel = Instance.new("ImageLabel")
-    imageLabel.BackgroundTransparency = 1
-    imageLabel.BorderSizePixel = 0
-    imageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-    imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
-    imageLabel.Size = UDim2.new(0, 0, 0, 0)
-    imageLabel.Image = "rbxassetid://11378285585"
-    imageLabel.ImageColor3 = Color3.new(1, 0, 0)
-    imageLabel.Rotation = 0
-    imageLabel.Parent = screenGui
-
-    TweenService:Create(imageLabel, TweenInfo.new(0.7, Enum.EasingStyle.Quad), {
-        Size = UDim2.new(1, 0, 1, 0),
-        Rotation = 30
-    }):Play()
-
-    wait(0.1)
-
-    humanoid.Health = 0
-
-    -- Cleanup
-    if camConnection then camConnection:Disconnect() end
+    if camConnection then
+        camConnection:Disconnect()
+    end
     camera.CameraType = Enum.CameraType.Custom
 
-    weld:Destroy()
-    anchorPart:Destroy()
-    screenGui:Destroy()
-    entityModel:Destroy()
+    -- Nếu entity còn thì destroy
+    if entityModel and entityModel.Parent then
+        entityModel:Destroy()
+    end
 end)
 
 end)
