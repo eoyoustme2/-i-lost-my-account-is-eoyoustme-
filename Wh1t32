@@ -90,7 +90,7 @@ local cue2 = Instance.new("Sound")
     cue2:Play()
 
 game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
-game.Lighting.MainColorCorrection.Contrast = 100
+game.Lighting.MainColorCorrection.Contrast = 1000
 local tween = game:GetService("TweenService")
 tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
 local TweenService = game:GetService("TweenService")
@@ -103,11 +103,11 @@ entity.Debug.OnEntityDespawned = function()
     print("Entity has despawned:")
 wait(3)
 game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(250, 0, 0)
-game.Lighting.MainColorCorrection.Contrast = 10
+game.Lighting.MainColorCorrection.Contrast = 1000
 local tween = game:GetService("TweenService")
-tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
+tween:Create(game.Lighting.MainColorCorrection, TweenInfo.new(0.1), {Contrast = 0}):Play()
 local TweenService = game:GetService("TweenService")
-local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255)})
+local TW = TweenService:Create(game.Lighting.MainColorCorrection, TweenInfo.new(0.1),{TintColor = Color3.fromRGB(255, 255, 255)})
 TW:Play()
 
 ---====== Load achievement giver ======---
