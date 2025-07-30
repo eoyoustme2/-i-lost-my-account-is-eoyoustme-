@@ -31,7 +31,7 @@ local entity = spawner.Create({
 		Shatter = true,
 		Repair = false
 	},
-	Earthquake = {Enabled = true},
+	Earthquake = {Enabled = false},
 	CameraShake = {
 		Enabled = true,
 		Range = 100,
@@ -180,7 +180,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		primaryPart.Anchored = true
 		entityModel.PrimaryPart = primaryPart
 		local targetPos = humanoidRootPart.Position + humanoidRootPart.CFrame.LookVector * 12
-		local moveTween = TweenService:Create(primaryPart, TweenInfo.new(0.6), {
+		local moveTween = TweenService:Create(primaryPart, TweenInfo.new(0.3), {
 			CFrame = CFrame.new(targetPos, camera.CFrame.Position)
 		})
 		moveTween:Play()
