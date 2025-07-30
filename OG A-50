@@ -151,61 +151,70 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		warn("Player chết")
 	else
 		task.spawn(function()
-			local character = player.Character or player.CharacterAdded:Wait()
-			local humanoid = character:WaitForChild("Humanoid")
-			local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+	local character = player.Character or player.CharacterAdded:Wait()
+	local humanoid = character:WaitForChild("Humanoid")
+	local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
-			local entityModel = workspace:FindFirstChild("A60")
-			local primaryPart = entityModel and entityModel:FindFirstChild("RushNew")
-			if not primaryPart then return end
+	local entityModel = workspace:FindFirstChild("A60")
+	local primaryPart = entityModel and entityModel:FindFirstChild("RushNew")
+	if not primaryPart then return end
 
-			-- Phát âm thanh jumpscare
-			local sound = Instance.new("Sound", workspace)
-			sound.SoundId = "rbxassetid://6459610652"
-			sound.Volume = 3
-			sound:Play()
-
-			-- Di chuyển đến gần player
-			primaryPart.Anchored = true
-			entityModel.PrimaryPart = primaryPart
-			local targetPos = humanoidRootPart.Position + humanoidRootPart.CFrame.LookVector * 4
-			local moveTween = TweenService:Create(primaryPart, TweenInfo.new(0.1), {CFrame = CFrame.new(targetPos, camera.CFrame.Position)})
-			moveTween:Play()
-			moveTween.Completed:Wait()
-
-			-- Khoá điều khiển
-			humanoid.WalkSpeed = 0
-			humanoid.PlatformStand = true
-
-			-- Render camera
-			local camConn
-			camConn = RunService.RenderStepped:Connect(function()
-				if character:GetAttribute("Hiding") then
-					if camConn then camConn:Disconnect() end
-					camera.CameraType = Enum.CameraType.Custom
-					entityModel:Destroy()
-				else
-					local desiredPos = camera.CFrame.Position + camera.CFrame.LookVector * 4 + Vector3.new(0, 2, 0)
-					primaryPart.CFrame = CFrame.new(desiredPos, camera.CFrame.Position)
-					camera.CFrame = CFrame.lookAt(camera.CFrame.Position, primaryPart.Position)
-				end
-			end)
-
-			-- Gây damage trong thời gian giới hạn
-			local damageDuration = 1
-			local startTime = tick()
-
-			while tick() - startTime < damageDuration and humanoid.Health > 0 do
-				if character:GetAttribute("Hiding") then break end
-				humanoid.Health -= 8
-				task.wait(0.04)
+	-- Tắt toàn bộ âm thanh hiện tại trên entityModel
+	if entityModel then
+		for _, descendant in pairs(entityModel:GetDescendants()) do
+			if descendant:IsA("Sound") then
+				descendant:Stop()
 			end
+		end
+	end
 
-			-- Cleanup
+	-- Phát âm thanh jumpscare
+	local sound = Instance.new("Sound", workspace)
+	sound.SoundId = "rbxassetid://6459610652"
+	sound.Volume = 3
+	sound:Play()
+
+	-- Di chuyển đến gần player
+	primaryPart.Anchored = true
+	entityModel.PrimaryPart = primaryPart
+	local targetPos = humanoidRootPart.Position + humanoidRootPart.CFrame.LookVector * 4
+	local moveTween = TweenService:Create(primaryPart, TweenInfo.new(0.1), {CFrame = CFrame.new(targetPos, camera.CFrame.Position)})
+	moveTween:Play()
+	moveTween.Completed:Wait()
+
+	-- Khoá điều khiển
+	humanoid.WalkSpeed = 0
+	humanoid.PlatformStand = true
+
+	-- Render camera
+	local camConn
+	camConn = RunService.RenderStepped:Connect(function()
+		if character:GetAttribute("Hiding") then
 			if camConn then camConn:Disconnect() end
 			camera.CameraType = Enum.CameraType.Custom
-		end)
+			entityModel:Destroy()
+		else
+			local desiredPos = camera.CFrame.Position + camera.CFrame.LookVector * 4 + Vector3.new(0, 2, 0)
+			primaryPart.CFrame = CFrame.new(desiredPos, camera.CFrame.Position)
+			camera.CFrame = CFrame.lookAt(camera.CFrame.Position, primaryPart.Position)
+		end
+	end)
+
+	-- Gây damage trong thời gian giới hạn
+	local damageDuration = 1
+	local startTime = tick()
+
+	while tick() - startTime < damageDuration and humanoid.Health > 0 do
+		if character:GetAttribute("Hiding") then break end
+		humanoid.Health -= 8
+		task.wait(0.04)
 	end
+
+	-- Cleanup
+	if camConn then camConn:Disconnect() end
+	camera.CameraType = Enum.CameraType.Custom
+end)
+
 end)
 
 -- ================== CHẠY ENTITY ==================
