@@ -313,7 +313,6 @@ local move = GetGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-file
     if humanoid then
         humanoid.Health = 0
     end
-wait(0.7)
 
     -- Dọn dẹp mọi thứ sau jumpscare
     if camConnection then camConnection:Disconnect() end
