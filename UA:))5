@@ -269,22 +269,10 @@ wait(1)
     MuteAllSounds(entityModel)
 
     -- Tải và phát âm thanh jumpscare từ GitHub
-    function GitAud(soundgit, filename)
-        local FileName = filename
-        writefile(FileName..".mp3", game:HttpGet(soundgit))
-        return (getsynasset or getcustomasset)(FileName..".mp3")
-    end
-
-    function CustomGitSound(soundlink, vol, filename)
-        local sound = Instance.new("Sound")
-        sound.SoundId = GitAud(soundlink, filename)
-        sound.Parent = workspace
-        sound.Name = "Music"
-        sound.Volume = 15
-        sound:Play()
-    end
-
-    CustomGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true", 0.01, "Music")
+local move = GetGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true","jumpscare")
+    move.Parent = workspace
+    move.Name = "jumpscare"
+    move.Volume = 0
 
 
     -- Hiển thị ảnh jumpscare
