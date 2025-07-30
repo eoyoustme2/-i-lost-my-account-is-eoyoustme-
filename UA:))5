@@ -24,11 +24,11 @@ local entity = spawner.Create({
 		Shatter = true,
 		Repair = false
 	},
-	Earthquake = {Enabled = false},
+	Earthquake = {Enabled = true},
 	CameraShake = {
 		Enabled = true,
 		Range = 100,
-		Values = {9, 20, 0.1, 1}
+		Values = {40, 60, 0.1, 1}
 	},
 	Movement = {
 		Speed = 400,
@@ -174,7 +174,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 			end)
 
 			-- Gây damage trong thời gian giới hạn
-			local damageDuration = 1.786
+			local damageDuration = 2
 			local startTime = tick()
 
 			while tick() - startTime < damageDuration and humanoid.Health > 0 do
