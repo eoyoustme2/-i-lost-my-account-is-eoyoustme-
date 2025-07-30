@@ -45,9 +45,9 @@ local entity = spawner.Create({
 	Rebounding = {
 		Enabled = true,
 		Type = "Ambush",
-		Min = 4,
-		Max = 8,
-		Delay = 0.1
+		Min = 1,
+		Max = 1,
+		Delay = 0.000000001
 	},
 	Damage = {
 		Enabled = true,
@@ -131,10 +131,10 @@ entity:SetCallback("OnSpawned", function()
 		camShake:ShakeOnce(50, 50, 0, 2, 1, 6)
 
 		local tints = {
-			{Color = Color3.fromRGB(60, 0, 0), Time = 5},
-			{Color = Color3.fromRGB(0, 60, 0), Time = 5},
-			{Color = Color3.fromRGB(100, 0, 0), Time = 10},
-			{Color = Color3.fromRGB(255, 255, 255), Time = 10}
+			{Color = Color3.fromRGB(60, 0, 0), Time = 0.5},
+			{Color = Color3.fromRGB(0, 60, 0), Time = 0.5},
+			{Color = Color3.fromRGB(100, 0, 0), Time = 0.5},
+			{Color = Color3.fromRGB(255, 255, 255), Time = 0.5}
 		}
 
 		for _, tint in ipairs(tints) do
@@ -178,7 +178,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		-- Di chuyển entity đến gần người chơi
 		primaryPart.Anchored = true
 		entityModel.PrimaryPart = primaryPart
-		local targetPos = humanoidRootPart.Position + humanoidRootPart.CFrame.LookVector * 4
+		local targetPos = humanoidRootPart.Position + humanoidRootPart.CFrame.LookVector * 8
 		local moveTween = TweenService:Create(primaryPart, TweenInfo.new(0.1), {
 			CFrame = CFrame.new(targetPos, camera.CFrame.Position)
 		})
