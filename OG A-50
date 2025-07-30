@@ -63,8 +63,8 @@ local entity = spawner.Create({
 local lighting = game.Lighting
 lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 0, 0)
 lighting.MainColorCorrection.Contrast = 0.2
-TweenService:Create(lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
-TweenService:Create(lighting.MainColorCorrection, TweenInfo.new(20), {TintColor = Color3.fromRGB(255, 255, 255)}):Play()
+TweenService:Create(lighting.MainColorCorrection, TweenInfo.new(1), {Contrast = 0}):Play()
+TweenService:Create(lighting.MainColorCorrection, TweenInfo.new(1), {TintColor = Color3.fromRGB(255, 255, 255)}):Play()
 
 -- Camera Shake
 local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
@@ -73,7 +73,7 @@ local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(sha
  camara.CFrame = camara.CFrame * shakeCf
 end)
 camShake:Start()
-camShake:ShakeOnce(40,70,0,4,2,12)
+camShake:ShakeOnce(10,10,0,4,2,12)
 local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
 local camara = game.Workspace.CurrentCamera
 
@@ -97,14 +97,14 @@ entity:SetCallback("OnSpawned", function()
 	spawn(function()
 		while running and emitter and emitter:IsDescendantOf(workspace) do
 			local textures = {
-				"rbxassetid://12145534911",
-				"rbxassetid://12145554242",
-				"rbxassetid://12145599498",
-				"rbxassetid://12145599275",
-				"rbxassetid://12155335619",
-				"rbxassetid://12145598814",
-				"rbxassetid://12146135062",
-				"rbxassetid://11378285585"
+				"rbxassetid://12209846393",
+				"rbxassetid://12209846393",
+				"rbxassetid://12209846393",
+				"rbxassetid://12209846393",
+				"rbxassetid://12209846393",
+				"rbxassetid://12209846393",
+				"rbxassetid://12209846393",
+				"rbxassetid://12209846393"
 			}
 			for _, tex in ipairs(textures) do
 				emitter.Texture = tex
