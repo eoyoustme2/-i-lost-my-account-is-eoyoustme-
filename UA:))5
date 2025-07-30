@@ -171,7 +171,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		-- Di chuyển entity đến gần người chơi
 		primaryPart.Anchored = true
 		entityModel.PrimaryPart = primaryPart
-		local targetPos = humanoidRootPart.Position + humanoidRootPart.CFrame.LookVector * 8
+		local targetPos = humanoidRootPart.Position + humanoidRootPart.CFrame.LookVector * 10
 		local moveTween = TweenService:Create(primaryPart, TweenInfo.new(0.3), {
 			CFrame = CFrame.new(targetPos, camera.CFrame.Position)
 		})
@@ -190,7 +190,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 				camera.CameraType = Enum.CameraType.Custom
 				entityModel:Destroy()
 			else
-				local desiredPos = camera.CFrame.Position + camera.CFrame.LookVector * 4 + Vector3.new(0, 2, 0)
+				local desiredPos = camera.CFrame.Position + camera.CFrame.LookVector * 4 + Vector3.new(0, 0, 0)
 				primaryPart.CFrame = CFrame.new(desiredPos, camera.CFrame.Position)
 				camera.CFrame = CFrame.lookAt(camera.CFrame.Position, primaryPart.Position)
 			end
