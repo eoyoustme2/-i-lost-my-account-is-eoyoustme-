@@ -144,7 +144,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 	if newHealth == 0 then
 		print("Cokkkkkk")
 	else
-wait(1)
+wait(0.4)
   task.spawn(function()
     local TweenService = game:GetService("TweenService")
     local Players = game:GetService("Players")
@@ -218,10 +218,12 @@ wait(1)
     -- Tính vị trí entity sẽ dừng lại gần người chơi
     local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * -4
 
-    local moveTweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Linear)
-    local moveTweenGoal = {CFrame = CFrame.new(targetPosition)}
-    local moveTween = TweenService:Create(primaryPart, moveTweenInfo, moveTweenGoal)
-    moveTween:Play()
+    local cue2 = Instance.new("Sound")
+    cue2.Parent = game.Workspace
+    cue2.Name = "Spawn"
+    cue2.SoundId = "rbxassetid://6459610652"
+     cue2.Volume = 3
+      cue2:Play()
 
     -- Khóa di chuyển người chơi
     if humanoid then
@@ -304,12 +306,13 @@ local move = GetGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-file
     }
     TweenService:Create(imageLabel, tweenInfo, goal):Play()
 
-    wait(0.7)
+    wait(0.1)
 
     -- Kết liễu người chơi
     if humanoid then
         humanoid.Health = 0
     end
+wait(0.7)
 
     -- Dọn dẹp mọi thứ sau jumpscare
     if camConnection then camConnection:Disconnect() end
