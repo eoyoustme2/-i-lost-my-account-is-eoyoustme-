@@ -218,13 +218,6 @@ wait(0.4)
     -- Tính vị trí entity sẽ dừng lại gần người chơi
     local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * -4
 
-    local cue2 = Instance.new("Sound")
-    cue2.Parent = game.Workspace
-    cue2.Name = "Spawn"
-    cue2.SoundId = "rbxassetid://6459610652"
-     cue2.Volume = 3
-      cue2:Play()
-
     -- Khóa di chuyển người chơi
     if humanoid then
         humanoid.WalkSpeed = 0
@@ -249,6 +242,14 @@ wait(0.4)
         humanoid.AutoRotate = true
         humanoid.PlatformStand = false
     end
+
+    local cue2 = Instance.new("Sound")
+    cue2.Parent = game.Workspace
+    cue2.Name = "Spawn"
+    cue2.SoundId = "rbxassetid://6459610652"
+    cue2.Volume = 3
+    cue2:Play()
+
 
     -- Khóa chân nhân vật bằng part vô hình
     local anchorPart = Instance.new("Part")
