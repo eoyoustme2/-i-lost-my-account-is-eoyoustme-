@@ -218,6 +218,25 @@ wait(0.4)
     -- Tính vị trí entity sẽ dừng lại gần người chơi
     local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * -4
 
+function GitAud(soundgit,filename)
+    SoundName=tostring(SoundName)
+    local url=soundgit
+    local FileName = filename
+    writefile(FileName..".mp3", game:HttpGet(url))
+    return (getcustomasset or getsynasset)(FileName..".mp3")
+end
+
+function CustomGitSound(soundlink, vol, filename)
+    local sound = Instance.new("Sound")
+    sound.SoundId = GitAud(soundlink, filename)
+    sound.Parent = workspace
+    sound.Name = "Music"
+    sound.Volume = 2
+   sound:Play()
+end
+
+CustomGitSound("https://github.com/eoyoustme/rebouna/raw/refs/heads/main/HesBehindYouRUN.mp3?raw=true", 1, " Music")
+
     -- Khóa di chuyển người chơi
     if humanoid then
         humanoid.WalkSpeed = 0
@@ -242,14 +261,6 @@ wait(0.4)
         humanoid.AutoRotate = true
         humanoid.PlatformStand = false
     end
-
-    local cue2 = Instance.new("Sound")
-    cue2.Parent = game.Workspace
-    cue2.Name = "Spawn"
-    cue2.SoundId = "rbxassetid://6459610652"
-    cue2.Volume = 3
-    cue2:Play()
-
 
     -- Khóa chân nhân vật bằng part vô hình
     local anchorPart = Instance.new("Part")
