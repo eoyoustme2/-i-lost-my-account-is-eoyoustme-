@@ -1,3 +1,5 @@
+
+
 -- Import spawner
 local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
 local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
@@ -37,7 +39,7 @@ local entity = spawner.Create({
 		Type = "Ambush",
 		Min = 4,
 		Max = 8,
-		Delay = 0.5
+		Delay = 0.1
 	},
 	Damage = {
 		Enabled = true,
@@ -59,7 +61,7 @@ local entity = spawner.Create({
 
 -- Hiệu ứng ánh sáng
 local lighting = game.Lighting
-lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
+lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 0, 0)
 lighting.MainColorCorrection.Contrast = 0.2
 TweenService:Create(lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast = 0}):Play()
 TweenService:Create(lighting.MainColorCorrection, TweenInfo.new(20), {TintColor = Color3.fromRGB(255, 255, 255)}):Play()
@@ -71,7 +73,7 @@ local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(sha
  camara.CFrame = camara.CFrame * shakeCf
 end)
 camShake:Start()
-camShake:ShakeOnce(10,10,0,4,2,12)
+camShake:ShakeOnce(40,70,0,4,2,12)
 local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
 local camara = game.Workspace.CurrentCamera
 
@@ -83,6 +85,34 @@ camShake:Start()
 camShake:Shake(CameraShaker.Presets.Earthquake)
 
 -- ================== ON SPAWN ==================
+entity:SetCallback("OnSpawned", function()
+	local part = workspace:WaitForChild("A60")
+	local object = part:WaitForChild("RushNew")
+	local attachment = object:WaitForChild("Main")
+	local emitter = attachment:FindFirstChildWhichIsA("ParticleEmitter")
+
+	object.CanCollide = false
+
+	local running = true
+	spawn(function()
+		while running and emitter and emitter:IsDescendantOf(workspace) do
+			local textures = {
+				"rbxassetid://12145534911",
+				"rbxassetid://12145554242",
+				"rbxassetid://12145599498",
+				"rbxassetid://12145599275",
+				"rbxassetid://12155335619",
+				"rbxassetid://12145598814",
+				"rbxassetid://12146135062",
+				"rbxassetid://11378285585"
+			}
+			for _, tex in ipairs(textures) do
+				emitter.Texture = tex
+				task.wait()
+			end
+		end
+	end)
+
 	entity:SetCallback("OnDespawning", function()
 		running = false
 
@@ -93,9 +123,9 @@ camShake:Shake(CameraShaker.Presets.Earthquake)
 		camShake:ShakeOnce(50, 50, 0, 2, 1, 6)
 
 		local tints = {
-			{Color = Color3.fromRGB(60, 0, 0), Time = 0.1},
-			{Color = Color3.fromRGB(0, 60, 0), Time = 0.1},
-			{Color = Color3.fromRGB(100, 0, 0), Time = 0.1},
+			{Color = Color3.fromRGB(60, 0, 0), Time = 5},
+			{Color = Color3.fromRGB(0, 60, 0), Time = 5},
+			{Color = Color3.fromRGB(100, 0, 0), Time = 10},
 			{Color = Color3.fromRGB(255, 255, 255), Time = 10}
 		}
 
