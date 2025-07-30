@@ -71,7 +71,7 @@ local entity = spawner.Create({
     Crucifixion = { Enabled = true, Range = 40, Resist = false, Break = true },
     Death = {
         Type = "Guiding",
-        Hints = {"ME GO PLAY SKIBIDI TOILET", "GOODBYE", "STUPID YOU DIE BY A WEAK ENTITY", "HERE IS NOT FOR NOOB"},
+        Hints = {"Uhmmmmm", "why you here", "you die  by deer god?", "HE is crazy"},
         Cause = ""
     }
 })
