@@ -68,9 +68,20 @@ TweenService:Create(lighting.MainColorCorrection, TweenInfo.new(2.5), {Contrast 
 TweenService:Create(lighting.MainColorCorrection, TweenInfo.new(20), {TintColor = Color3.fromRGB(255, 255, 255)}):Play()
 
 -- Camera Shake
+local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
+local camara = game.Workspace.CurrentCamera
 local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(shakeCf)
-	camera.CFrame = camera.CFrame * shakeCf
+ camara.CFrame = camara.CFrame * shakeCf
 end)
+camShake:Start()
+camShake:ShakeOnce(40,70,0,4,2,12)
+local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
+local camara = game.Workspace.CurrentCamera
+
+local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(cf)
+	camara.CFrame = camara.CFrame * cf
+end)
+
 camShake:Start()
 camShake:Shake(CameraShaker.Presets.Earthquake)
 
