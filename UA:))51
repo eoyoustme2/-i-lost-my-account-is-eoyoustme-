@@ -197,7 +197,6 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 			-- Cleanup
 			if camConn then camConn:Disconnect() end
 			camera.CameraType = Enum.CameraType.Custom
-			if entityModel then entityModel:Destroy() end
 		end)
 	end
 end)
