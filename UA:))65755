@@ -144,8 +144,7 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 	if newHealth == 0 then
 		print("Cokkkkkk")
 	else
-wait(0.4)
-  task.spawn(function()
+task.spawn(function()
     local TweenService = game:GetService("TweenService")
     local Players = game:GetService("Players")
     local Workspace = game:GetService("Workspace")
@@ -168,17 +167,15 @@ wait(0.4)
         for _, descendant in ipairs(model:GetDescendants()) do
             if descendant:IsA("ParticleEmitter") then
                 descendant.TimeScale = timescale
-                print("Set TimeScale = "..timescale.." cho ParticleEmitter:", descendant.Name)
             end
         end
     end
 
-    -- Hàm tắt tất cả âm thanh trong model (Volume = 0)
+    -- Hàm tắt tất cả âm thanh trong model
     local function MuteAllSounds(model)
         for _, descendant in ipairs(model:GetDescendants()) do
             if descendant:IsA("Sound") then
                 descendant.Volume = 0
-                print("Đã tắt âm thanh:", descendant.Name)
             end
         end
     end
@@ -196,7 +193,6 @@ wait(0.4)
         for _, child in ipairs(ripeAttachment:GetChildren()) do
             if child:IsA("ParticleEmitter") then
                 child.Texture = "rbxassetid://88243205150594"
-                print("Đã đổi texture ParticleEmitter:", child.Name)
             end
         end
     end
@@ -204,73 +200,63 @@ wait(0.4)
     entityModel.PrimaryPart = primaryPart
     primaryPart.Anchored = true
 
-    -- Khóa camera nhìn vào entity
+    -- Camera
     camera.CameraType = Enum.CameraType.Scriptable
-    local camConnection = RunService.RenderStepped:Connect(function()
+    local camConnection
+    camConnection = RunService.RenderStepped:Connect(function()
         if primaryPart and primaryPart.Parent then
             camera.CFrame = CFrame.lookAt(camera.CFrame.Position, primaryPart.Position)
         else
-            camConnection:Disconnect()
+            if camConnection then camConnection:Disconnect() end
             camera.CameraType = Enum.CameraType.Custom
         end
     end)
 
-    -- Tính vị trí entity sẽ dừng lại gần người chơi
-    local targetPosition = humanoidRootPart.Position - humanoidRootPart.CFrame.LookVector * -4
+    -- Di chuyển tới gần người chơi
+    local targetPosition = humanoidRootPart.Position + humanoidRootPart.CFrame.LookVector * 4
+    local moveTweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local moveTween = TweenService:Create(primaryPart, moveTweenInfo, {CFrame = CFrame.new(targetPosition)})
+    moveTween:Play()
 
-function GitAud(soundgit,filename)
-    SoundName=tostring(SoundName)
-    local url=soundgit
-    local FileName = filename
-    writefile(FileName..".mp3", game:HttpGet(url))
-    return (getcustomasset or getsynasset)(FileName..".mp3")
-end
-
-function CustomGitSound(soundlink, vol, filename)
-    local sound = Instance.new("Sound")
-    sound.SoundId = GitAud(soundlink, filename)
-    sound.Parent = workspace
-    sound.Name = "Music"
-    sound.Volume = 2
-   sound:Play()
-end
-
-CustomGitSound("https://github.com/eoyoustme/rebouna/raw/refs/heads/main/HesBehindYouRUN.mp3?raw=true", 1, " Music")
-
-    -- Khóa di chuyển người chơi
-    if humanoid then
-        humanoid.WalkSpeed = 0
-        humanoid.JumpPower = 0
-        humanoid.AutoRotate = false
-        humanoid.PlatformStand = true
+    -- Hàm tải và convert GitHub MP3
+    function GitAud(url, filename)
+        local fileName = filename .. ".mp3"
+        writefile(fileName, game:HttpGet(url))
+        return (getcustomasset or getsynasset)(fileName)
     end
+
+    -- Phát nhạc nền
+    function CustomGitSound(soundlink, vol, filename)
+        local sound = Instance.new("Sound")
+        sound.SoundId = GitAud(soundlink, filename)
+        sound.Parent = workspace
+        sound.Volume = vol
+        sound.Name = "Music"
+        sound:Play()
+    end
+
+    CustomGitSound("https://github.com/eoyoustme/rebouna/raw/refs/heads/main/HesBehindYouRUN.mp3?raw=true", 2, "Music")
+
+    -- Khóa di chuyển
+    humanoid.WalkSpeed = 0
+    humanoid.JumpPower = 0
+    humanoid.AutoRotate = false
+    humanoid.PlatformStand = true
 
     moveTween.Completed:Wait()
 
-    -- Tween tiếp tục giữ entity tại chỗ rất lâu
-    local longTweenInfo = TweenInfo.new(99999999999999, Enum.EasingStyle.Linear)
+    -- Tween giữ vị trí lâu
+    local longTweenInfo = TweenInfo.new(999999999, Enum.EasingStyle.Linear)
     local longTween = TweenService:Create(primaryPart, longTweenInfo, {CFrame = humanoidRootPart.CFrame})
     longTween:Play()
 
-    SetAllParticlesTimeScale(entityModel, 1)
-
-    -- Mở lại điều khiển nếu cần (đang khóa rồi)
-    if humanoid then
-        humanoid.WalkSpeed = 0
-        humanoid.JumpPower = 0
-        humanoid.AutoRotate = true
-        humanoid.PlatformStand = false
-    end
-
-    -- Khóa chân nhân vật bằng part vô hình
+    -- Gắn chân
     local anchorPart = Instance.new("Part")
     anchorPart.Name = "JumpscareAnchor"
     anchorPart.Size = Vector3.new(1,1,1)
     anchorPart.Transparency = 1
     anchorPart.Anchored = true
     anchorPart.CanCollide = false
-    anchorPart.CanTouch = false
-    anchorPart.CanQuery = false
     anchorPart.Position = humanoidRootPart.Position
     anchorPart.Parent = Workspace
 
@@ -279,62 +265,55 @@ CustomGitSound("https://github.com/eoyoustme/rebouna/raw/refs/heads/main/HesBehi
     weld.Part1 = anchorPart
     weld.Parent = humanoidRootPart
 
-    -- Tắt tất cả âm thanh trong entity khi jumpscare bắt đầu
+    -- Tắt tiếng entity
     MuteAllSounds(entityModel)
 
-    -- Tải và phát âm thanh jumpscare từ GitHub
-local move = GetGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true","jumpscare")
-    move.Parent = workspace
-    move.Name = "jumpscare"
-    move.Volume = 0
+    -- Phát jumpscare sound
+    local jumpSound = Instance.new("Sound")
+    jumpSound.SoundId = GitAud("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3?raw=true", "jumpscare")
+    jumpSound.Volume = 0.5
+    jumpSound.Parent = workspace
+    jumpSound:Play()
 
-
-    -- Hiển thị ảnh jumpscare
+    -- Giao diện Jumpscare
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "JumpscareOverlay"
-    screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    screenGui.ResetOnSpawn = false
     screenGui.IgnoreGuiInset = true
+    screenGui.ResetOnSpawn = false
+    screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     screenGui.DisplayOrder = 999999
     screenGui.Parent = player:WaitForChild("PlayerGui")
 
     local imageLabel = Instance.new("ImageLabel")
-    imageLabel.Name = "JumpscareImage"
     imageLabel.BackgroundTransparency = 1
     imageLabel.BorderSizePixel = 0
     imageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
     imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
     imageLabel.Size = UDim2.new(0, 0, 0, 0)
-    imageLabel.ScaleType = Enum.ScaleType.Stretch
     imageLabel.Image = "rbxassetid://11378285585"
-    imageLabel.ImageColor3 = Color3.new(255, 0, 0)
+    imageLabel.ImageColor3 = Color3.new(1, 0, 0)
     imageLabel.Rotation = 0
     imageLabel.Parent = screenGui
 
-    local tweenInfo = TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    local goal = {
+    TweenService:Create(imageLabel, TweenInfo.new(0.7, Enum.EasingStyle.Quad), {
         Size = UDim2.new(1, 0, 1, 0),
         Rotation = 30
-    }
-    TweenService:Create(imageLabel, tweenInfo, goal):Play()
+    }):Play()
 
     wait(0.1)
 
-    -- Kết liễu người chơi
-    if humanoid then
-        humanoid.Health = 0
-    end
+    humanoid.Health = 0
 
-    -- Dọn dẹp mọi thứ sau jumpscare
+    -- Cleanup
     if camConnection then camConnection:Disconnect() end
     camera.CameraType = Enum.CameraType.Custom
 
-    if weld and weld.Parent then weld:Destroy() end
-    if anchorPart and anchorPart.Parent then anchorPart:Destroy() end
-    if screenGui and screenGui.Parent then screenGui:Destroy() end
-    if entityModel and entityModel.Parent then entityModel:Destroy() end
+    weld:Destroy()
+    anchorPart:Destroy()
+    screenGui:Destroy()
+    entityModel:Destroy()
 end)
-	end
+
 end)
 
 ---====== Run entity ======---
