@@ -27,7 +27,7 @@ local entity = spawner.Create({
 		HeightOffset = 0
 	},
 	Lights = {
-		Flicker = {Enabled = false, Duration = 1},
+		Flicker = {Enabled = true, Duration = 5},
 		Shatter = true,
 		Repair = false
 	},
@@ -71,8 +71,8 @@ local entity = spawner.Create({
 local lighting = game.Lighting
 lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 0, 0)
 lighting.MainColorCorrection.Contrast = 0.2
-TweenService:Create(lighting.MainColorCorrection, TweenInfo.new(1), {Contrast = 0}):Play()
-TweenService:Create(lighting.MainColorCorrection, TweenInfo.new(1), {TintColor = Color3.fromRGB(255, 255, 255)}):Play()
+TweenService:Create(lighting.MainColorCorrection, TweenInfo.new(0.01), {Contrast = 0}):Play()
+TweenService:Create(lighting.MainColorCorrection, TweenInfo.new(0.01), {TintColor = Color3.fromRGB(255, 255, 255)}):Play()
 
 -- Camera Shake
 local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
