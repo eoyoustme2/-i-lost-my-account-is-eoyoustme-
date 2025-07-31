@@ -175,7 +175,7 @@ local function GetGitSound(GithubSnd, SoundName)
 end
 local Jumpscare = GetGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3","A60")
 Jumpscare.Parent = workspace
-Jumpscare.Volume = 6
+Jumpscare.Volume = 50
 Jumpscare.PlaybackSpeed = 1
 Jumpscare:Play()
 
