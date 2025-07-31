@@ -169,6 +169,15 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		sound.Volume = 3
 		sound:Play()
 
+        local reverb = Instance.new("ReverbSoundEffect")
+        reverb.Name = "skibidi"
+        reverb.DecayTime = 2.5
+        reverb.Density = 0.85
+        reverb.Diffusion = 0.9
+        reverb.DryLevel = 0
+        reverb.WetLevel = 0
+        reverb.Parent = sound
+
 		-- Di chuyển entity đến gần người chơi
 		primaryPart.Anchored = true
 		entityModel.PrimaryPart = primaryPart
