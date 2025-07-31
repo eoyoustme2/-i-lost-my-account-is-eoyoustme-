@@ -78,8 +78,8 @@ local colorEffect = Instance.new("ColorCorrectionEffect", game.Lighting)
 
 tweenservice:Create(colorEffect, TweenInfo.new(5), {
     TintColor = Color3.fromRGB(255, 255, 255),
-    Saturation = -0.7,
-    Contrast = 0.2
+    Saturation = -0,
+    Contrast = 0
 }):Play()
 
 -- Entity Despawn Callback
