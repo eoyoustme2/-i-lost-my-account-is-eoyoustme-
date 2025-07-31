@@ -441,6 +441,17 @@ entity.Debug.OnEntityDespawned = function(entityModel)
     cue1:Destroy()
     cue2:Destroy()
     part:Destroy()
+
+ ---====== Load achievement giver ======---
+    local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
+
+    ---====== Display achievement ======---
+    achievementGiver({
+        Title = "Out of many Rebound",
+        Desc = "Rebound is end",
+        Reason = "Encounter Rebound",
+        Image = "rbxassetid://13589345849"
+    })
 end
 
 entity.Debug.OnEntityStartMoving = function(entityModel)
