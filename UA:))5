@@ -215,11 +215,11 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		end)
 
 		-- Gây damage trong 1 giây
-		local damageDuration = 1
+		local damageDuration = 2.5
 		local startTime = tick()
 		while tick() - startTime < damageDuration and humanoid.Health > 0 do
 			if character:GetAttribute("Hiding") then break end
-			humanoid.Health -= 8
+			humanoid.Health -= 4
 			task.wait(0.04)
 		end
 
