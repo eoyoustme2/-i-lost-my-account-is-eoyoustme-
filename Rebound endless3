@@ -58,7 +58,7 @@ entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned")
 local TweenService = game:GetService("TweenService")
 local Tweeninfo = TweenInfo.new(10, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
-local color = {Color = Color3.new(0, 0, 0.2)}
+local color = {Color = Color3.new(0, 0, 0.6)}
 
 for _, v in pairs(workspace.CurrentRooms[game.ReplicatedStorage.GameData.LatestRoom.Value]:GetDescendants()) do
     if v:IsA("Light") then
@@ -71,7 +71,7 @@ end
 local Reboundcolor = Instance.new("ColorCorrectionEffect",game.Lighting) game.Debris:AddItem(Reboundcolor,24) 
     Reboundcolor.Name = "Warn" 
     Reboundcolor.TintColor = Color3.fromRGB(61, 171, 98) Reboundcolor.Saturation = -0.7 Reboundcolor.Contrast = 0.2 
-    game.TweenService:Create(Reboundcolor,TweenInfo.new(30),{TintColor = Color3.fromRGB(255, 255, 255),Saturation = 0, Contrast = 0}):Play()
+    game.TweenService:Create(Reboundcolor,TweenInfo.new(10),{TintColor = Color3.fromRGB(255, 255, 255),Saturation = 0, Contrast = 0}):Play()
 
 local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
 local camara = game.Workspace.CurrentCamera
@@ -122,6 +122,7 @@ end
 
 entity.Debug.OnDeath = function()
     print("Player has died")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/dm123/refs/heads/main/Jumpscare"))()
 end
 
 --[[
