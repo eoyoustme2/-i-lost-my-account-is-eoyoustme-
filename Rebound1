@@ -450,7 +450,7 @@ entity.Debug.OnEntityDespawned = function(entityModel)
         Title = "Out of many Rebound",
         Desc = "Rebound is end",
         Reason = "Encounter Rebound",
-        Image = "rbxassetid://13589345849"
+        Image = "rbxassetid://13856279697"
     })
 end
 
