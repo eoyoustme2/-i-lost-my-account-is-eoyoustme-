@@ -1,7 +1,7 @@
---====== Load spawner ======--
+-- Load Spawner
 local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
 
---====== Hàm Git Sound từ link GitHub ======--
+-- Hàm tải và phát âm thanh từ GitHub
 local function GitAud(soundgit, filename)
 	writefile(filename..".mp3", game:HttpGet(soundgit))
 	return (getcustomasset or getsynasset)(filename..".mp3")
@@ -14,9 +14,15 @@ local function CustomGitSound(soundlink, vol, filename)
 	sound:Play()
 end
 
---====== Tạo và chạy entity nhiều lần ======--
-for i = 1, 3 do
-	-- Tạo entity mới mỗi lần
+-- Chạy Rebound mỗi khi người chơi qua phòng, tối đa 3 lần
+local spawnCount = 0
+local maxSpawns = 3
+
+game.ReplicatedStorage.GameData.LatestRoom.Changed:Connect(function()
+	if spawnCount >= maxSpawns then return end
+	spawnCount += 1
+
+	-- Tạo entity Rebound
 	local entity = spawner.Create({
 		Entity = {
 			Name = "Rebound",
@@ -64,11 +70,10 @@ for i = 1, 3 do
 		}
 	})
 
-	--====== Các callback debug & hiệu ứng ======--
+	-- Callbacks
 	entity:SetCallback("OnSpawned", function()
 		print("Entity has spawned")
 
-		-- Màu cảnh báo
 		local effect = Instance.new("ColorCorrectionEffect", game.Lighting)
 		effect.Name = "Warn"
 		effect.TintColor = Color3.fromRGB(61, 171, 98)
@@ -82,7 +87,6 @@ for i = 1, 3 do
 			Contrast = 0
 		}):Play()
 
-		-- Camera shake
 		local success, CameraShaker = pcall(function()
 			return require(game.ReplicatedStorage:WaitForChild("CameraShaker"))
 		end)
@@ -96,7 +100,6 @@ for i = 1, 3 do
 			shake:ShakeOnce(10, 3, 0.1, 6, 2, 0.5)
 		end
 
-		-- Âm thanh khi bắt đầu
 		wait(0.5)
 		CustomGitSound(
 			"https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/Y2meta.app%20-%20DOORS%20HARDCORE_REBOUND%20MOVING%20START%20(320%20kbps).mp3",
@@ -109,21 +112,6 @@ for i = 1, 3 do
 		print("Entity has despawned")
 	end)
 
-	entity:SetCallback("OnDamagePlayer", function(newHealth)
-		if newHealth == 0 then
-			print("Entity has killed the player")
-		else
-			print("Entity has damaged the player")
-		end
-	end)
-
-	--====== Chạy entity ======--
+	-- Chạy entity
 	entity:Run()
-
-	--====== Đợi despawn xong mới tiếp tục ======--
-	repeat
-		task.wait()
-	until game.ReplicatedStorage.GameData.EntityMoving.Value == false
-
-	wait(2) -- thời gian nghỉ giữa các lượt spawn
-end
+end)
