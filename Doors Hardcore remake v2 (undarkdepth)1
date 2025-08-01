@@ -1,10 +1,10 @@
-require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("open doors to load script", true)
+require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("Mode make by OG HUNGER , open doors to load script", true)
 
 game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
 
-require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("Hardcore Remake v2 has active ", true)
+require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("Hardcore Remake v2 has active", true)
 wait(2)
-require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("Big credit to HUGERRRORED ( man make the mode is me ), Nhankg (thank test mode), Quangcat and helloranhg (sprint script)", true)
+require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("Big credit to Nhankg (thank test mode), Quangcat and helloranhg (sprint script)", true)
 
 pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/stamina"))()
@@ -20,7 +20,7 @@ end)
 local entityList = {
     {url = "https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Cease6", delay = 175},
     {url = "https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Ripper15512", delay = 150},
-    {url = "https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Rebound1", delay = 180},
+    {url = "https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Rebound1", delay = 210},
     {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Sinturaly", delay = 1000},
     {url = "https://raw.githubusercontent.com/eoyoustme/rebouna/refs/heads/main/Shocker", delay = 35},
     {url = "https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Silence", delay = 300},
