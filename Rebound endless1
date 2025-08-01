@@ -35,10 +35,10 @@ local entity = spawner.Create({
 	CameraShake = {
 		Enabled = true,
 		Range = 100,
-		Values = {1.5, 20, 0.1, 1}
+		Values = {5, 20, 0.1, 1}
 	},
 	Movement = {
-		Speed = 230,
+		Speed = 350,
 		Delay = 4.945,
 		Reversed = true
 	},
@@ -46,7 +46,7 @@ local entity = spawner.Create({
 		Enabled = true,
 		Type = "Ambush",
 		Min = 0.2,
-		Max = 0.2,
+		Max = 1,
 		Delay = 0.01
 	},
 	Damage = {
