@@ -161,13 +161,10 @@ end)
 --====== Run entity ======--
 entity:Run()
 wait(0.001)
-game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Rebound%20clone"))()
 
 wait(0.001)
-game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Rebound%20clone"))()
 
 wait(0.001)
-game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Rebound%20clone"))()
