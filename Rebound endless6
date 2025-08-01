@@ -39,7 +39,7 @@ local entity = spawner.Create({
 	},
 	Movement = {
 		Speed = 230,
-		Delay = 2.8,
+		Delay = 4.945,
 		Reversed = true
 	},
 	Rebounding = {
@@ -114,7 +114,7 @@ entity:SetCallback("OnSpawned", function()
 	end
 
 	-- Custom sound
-	wait(4.945)
+	wait(0.1)
 	CustomGitSound(
 		"https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/Y2meta.app%20-%20DOORS%20HARDCORE_REBOUND%20MOVING%20START%20(320%20kbps).mp3",
 		2,
