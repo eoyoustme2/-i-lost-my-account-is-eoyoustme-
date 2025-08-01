@@ -20,7 +20,7 @@ local entity = spawner.Create({
 		Values = {1.5, 20, 0.1, 1}
 	},
 	Movement = {
-		Speed = 230,
+		Speed = 350,
 		Delay = 2.8,
 		Reversed = true
 	},
@@ -28,7 +28,7 @@ local entity = spawner.Create({
 		Enabled = true,
 		Type = "Ambush",
 		Min = 0.2,
-		Max = 0.2,
+		Max = 1,
 		Delay = 0.01
 	},
 	Damage = {
