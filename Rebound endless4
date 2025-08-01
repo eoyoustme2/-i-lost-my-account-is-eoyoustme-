@@ -1,131 +1,143 @@
---====== Load Spawner ======--
+--====== Load spawner ======--
 local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
 
---====== Hàm hiệu ứng spawn ======--
-local function spawnEffects()
-	-- Xoá hiệu ứng cũ nếu có
-	if game.Lighting:FindFirstChild("Warn") then
-		game.Lighting.Warn:Destroy()
-	end
+--====== Create entity ======--
+local entity = spawner.Create({
+	Entity = {
+		Name = "Rebound",
+		Asset = "rbxassetid://13499570750",
+		HeightOffset = 0
+	},
+	Lights = {
+		Flicker = { Enabled = true, Duration = 1 },
+		Shatter = true,
+		Repair = false
+	},
+	Earthquake = { Enabled = true },
+	CameraShake = {
+		Enabled = true,
+		Range = 100,
+		Values = {1.5, 20, 0.1, 1}
+	},
+	Movement = {
+		Speed = 230,
+		Delay = 2,
+		Reversed = true
+	},
+	Rebounding = {
+		Enabled = true,
+		Type = "Ambush",
+		Min = 1,
+		Max = 1,
+		Delay = 0.01
+	},
+	Damage = {
+		Enabled = true,
+		Range = 40,
+		Amount = 125
+	},
+	Crucifixion = {
+		Enabled = true,
+		Range = 40,
+		Resist = false,
+		Break = true
+	},
+	Death = {
+		Type = "Guiding",
+		Hints = {"Death", "Hints", "Go", "Here"},
+		Cause = ""
+	}
+})
 
-	-- Tạo lại hiệu ứng màu
-	local colorFx = Instance.new("ColorCorrectionEffect")
-	colorFx.Name = "Warn"
-	colorFx.TintColor = Color3.fromRGB(61, 171, 98)
-	colorFx.Saturation = -0.7
-	colorFx.Contrast = 0.2
-	colorFx.Parent = game.Lighting
-	game.Debris:AddItem(colorFx, 24)
+--====== Callback setup ======--
+local function GitAud(soundgit, filename)
+	local url = soundgit
+	local FileName = filename
+	writefile(FileName..".mp3", game:HttpGet(url))
+	return (getcustomasset or getsynasset)(FileName..".mp3")
+end
 
-	game.TweenService:Create(colorFx, TweenInfo.new(15), {
+local function CustomGitSound(soundlink, vol, filename)
+	local sound = Instance.new("Sound", workspace)
+	sound.SoundId = GitAud(soundlink, filename)
+	sound.Volume = vol or 1
+	sound:Play()
+end
+
+entity:SetCallback("OnSpawned", function()
+	print("Entity has spawned")
+
+	-- ColorCorrectionEffect
+	local effect = Instance.new("ColorCorrectionEffect", game.Lighting)
+	effect.Name = "Warn"
+	effect.TintColor = Color3.fromRGB(61, 171, 98)
+	effect.Saturation = -0.7
+	effect.Contrast = 0.2
+	game.Debris:AddItem(effect, 24)
+
+	game.TweenService:Create(effect, TweenInfo.new(15), {
 		TintColor = Color3.fromRGB(255, 255, 255),
 		Saturation = 0,
 		Contrast = 0
 	}):Play()
 
-	-- Camera shake (khởi động lại)
+	-- Camera shake
 	local success, CameraShaker = pcall(function()
 		return require(game.ReplicatedStorage:WaitForChild("CameraShaker"))
 	end)
 
-	if success then
+	if success and CameraShaker then
 		local cam = workspace.CurrentCamera
-		local shaker = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(shakeCf)
+		local shake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(shakeCf)
 			cam.CFrame = cam.CFrame * shakeCf
 		end)
-		shaker:Start()
-		shaker:ShakeOnce(10, 3, 0.1, 6, 2, 0.5)
+		shake:Start()
+		shake:ShakeOnce(10, 3, 0.1, 6, 2, 0.5)
 	end
 
-	-- Nhạc spawn
-	local function GitAud(soundgit, filename)
-		writefile(filename..".mp3", game:HttpGet(soundgit))
-		return (getcustomasset or getsynasset)(filename..".mp3")
-	end
-
-	local function CustomGitSound(soundlink, vol, filename)
-		local sound = Instance.new("Sound", workspace)
-		sound.SoundId = GitAud(soundlink, filename)
-		sound.Volume = vol or 1
-		sound.PlayOnRemove = false
-		sound:Play()
-		game.Debris:AddItem(sound, 10)
-	end
-
+	-- Custom sound
+	wait(0.5)
 	CustomGitSound(
 		"https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/Y2meta.app%20-%20DOORS%20HARDCORE_REBOUND%20MOVING%20START%20(320%20kbps).mp3",
 		2,
 		"ReboundMoving"
 	)
-end
+end)
 
---====== Hàm tạo và chạy Rebound ======--
-local function createRebound()
-	local entity = spawner.Create({
-		Entity = {
-			Name = "Rebound",
-			Asset = "rbxassetid://13499570750",
-			HeightOffset = 0
-		},
-		Lights = {
-			Flicker = { Enabled = true, Duration = 1 },
-			Shatter = true,
-			Repair = false
-		},
-		Earthquake = { Enabled = true },
-		CameraShake = {
-			Enabled = true,
-			Range = 100,
-			Values = {1.5, 20, 0.1, 1}
-		},
-		Movement = {
-			Speed = 230,
-			Delay = 2,
-			Reversed = true
-		},
-		Rebounding = {
-			Enabled = true,
-			Type = "Ambush",
-			Min = 1,
-			Max = 1,
-			Delay = 0.01
-		},
-		Damage = {
-			Enabled = true,
-			Range = 40,
-			Amount = 125
-		},
-		Crucifixion = {
-			Enabled = true,
-			Range = 40,
-			Resist = false,
-			Break = true
-		},
-		Death = {
-			Type = "Guiding",
-			Hints = {"Death", "Hints", "Go", "Here"},
-			Cause = ""
-		}
-	})
+entity:SetCallback("OnStartMoving", function()
+	print("Entity has started moving")
+end)
 
-	entity:SetCallback("OnSpawned", function()
-		print("Rebound đã spawn!")
-		spawnEffects() -- gọi hiệu ứng mỗi lần spawn
-	end)
+entity:SetCallback("OnEnterRoom", function(room, firstTime)
+	print("Entity has entered room: "..room.Name..(firstTime and " for the first time" or " again"))
+end)
 
-	return entity
-end
+entity:SetCallback("OnLookAt", function(lineOfSight)
+	print(lineOfSight and "Player is looking at entity" or "Player view is obstructed")
+end)
 
---====== Rebound 1 ======--
-local e1 = createRebound()
-e1:Run()
+entity:SetCallback("OnRebounding", function(start)
+	print(start and "Entity has started rebounding" or "Entity has finished rebounding")
+end)
 
---====== Rebound 2 sau chuyển phòng ======--
-game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
-local e2 = createRebound()
-e2:Run()
+entity:SetCallback("OnDespawning", function()
+	print("Entity is despawning")
+end)
 
---====== Rebound 3 sau chuyển phòng ======--
-game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
-local e3 = createRebound()
-e3:Run()
+entity:SetCallback("OnDespawned", function()
+	print("Entity has despawned")
+end)
+
+entity:SetCallback("OnDamagePlayer", function(newHealth)
+	print(newHealth == 0 and "Entity has killed the player" or "Entity has damaged the player")
+end)
+
+-- To override Crucifix effect:
+--[[
+entity:SetCallback("CrucifixionOverwrite", function()
+	print("Custom crucifixion callback")
+end)
+]]
+
+--====== Run entity ======--
+entity:Run()
