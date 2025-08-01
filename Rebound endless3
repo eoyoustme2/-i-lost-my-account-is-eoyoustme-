@@ -31,7 +31,7 @@ local entity = Spawner.createEntity({
     CanKill = true,
     KillRange = 40,
     SpawnInFront = true,
-    ShatterLights = true,
+    ShatterLights = false,
     FlickerLights = {
         Enabled = true,
         Duration = 1
@@ -57,8 +57,8 @@ local entity = Spawner.createEntity({
 entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned")
 local TweenService = game:GetService("TweenService")
-local Tweeninfo = TweenInfo.new(5, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
-local color = {Color = Color3.new(0, 0, 1)}
+local Tweeninfo = TweenInfo.new(10, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+local color = {Color = Color3.new(0, 0, 0.2)}
 
 for _, v in pairs(workspace.CurrentRooms[game.ReplicatedStorage.GameData.LatestRoom.Value]:GetDescendants()) do
     if v:IsA("Light") then
