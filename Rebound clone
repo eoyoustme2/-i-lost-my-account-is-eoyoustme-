@@ -6,7 +6,7 @@ local entity = spawner.Create({
 	Entity = {
 		Name = "Rebound",
 		Asset = "rbxassetid://13499570750",
-		HeightOffset = 0
+		HeightOffset = 2
 	},
 	Lights = {
 		Flicker = { Enabled = true, Duration = 1 },
