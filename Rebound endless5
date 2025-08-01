@@ -38,7 +38,7 @@ local entity = spawner.Create({
 		Values = {5, 20, 0.1, 1}
 	},
 	Movement = {
-		Speed = 350,
+		Speed = 750,
 		Delay = 4.945,
 		Reversed = true
 	},
@@ -164,12 +164,3 @@ game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Rebound%20clone"))()
 game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Rebound%20clone"))()
-game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Rebound%20clone"))()
-game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Rebound%20clone"))()
-game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Rebound%20clone"))()
-game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Rebound%20clone"))()
-
