@@ -27,8 +27,8 @@ local entity = spawner.Create({
 	Rebounding = {
 		Enabled = true,
 		Type = "Ambush",
-		Min = 1,
-		Max = 1,
+		Min = 0.2,
+		Max = 0.2,
 		Delay = 0.01
 	},
 	Damage = {
@@ -44,7 +44,7 @@ local entity = spawner.Create({
 	},
 	Death = {
 		Type = "Guiding",
-		Hints = {"Death", "Hints", "Go", "Here"},
+	        Hints = {"he colone", "Hints", "Go", "Here"},
 		Cause = ""
 	}
 })
