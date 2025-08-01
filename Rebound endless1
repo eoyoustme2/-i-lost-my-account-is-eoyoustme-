@@ -1,0 +1,129 @@
+--====== Load spawner ======--
+local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
+
+--====== Hàm Git Sound từ link GitHub ======--
+local function GitAud(soundgit, filename)
+	writefile(filename..".mp3", game:HttpGet(soundgit))
+	return (getcustomasset or getsynasset)(filename..".mp3")
+end
+
+local function CustomGitSound(soundlink, vol, filename)
+	local sound = Instance.new("Sound", workspace)
+	sound.SoundId = GitAud(soundlink, filename)
+	sound.Volume = vol or 1
+	sound:Play()
+end
+
+--====== Tạo và chạy entity nhiều lần ======--
+for i = 1, 3 do
+	-- Tạo entity mới mỗi lần
+	local entity = spawner.Create({
+		Entity = {
+			Name = "Rebound",
+			Asset = "rbxassetid://13499570750",
+			HeightOffset = 0
+		},
+		Lights = {
+			Flicker = { Enabled = true, Duration = 1 },
+			Shatter = true,
+			Repair = false
+		},
+		Earthquake = { Enabled = true },
+		CameraShake = {
+			Enabled = true,
+			Range = 100,
+			Values = {1.5, 20, 0.1, 1}
+		},
+		Movement = {
+			Speed = 230,
+			Delay = 2,
+			Reversed = true
+		},
+		Rebounding = {
+			Enabled = true,
+			Type = "Ambush",
+			Min = 1,
+			Max = 1,
+			Delay = 0.01
+		},
+		Damage = {
+			Enabled = true,
+			Range = 40,
+			Amount = 125
+		},
+		Crucifixion = {
+			Enabled = true,
+			Range = 40,
+			Resist = false,
+			Break = true
+		},
+		Death = {
+			Type = "Guiding",
+			Hints = {"Death", "Hints", "Go", "Here"},
+			Cause = ""
+		}
+	})
+
+	--====== Các callback debug & hiệu ứng ======--
+	entity:SetCallback("OnSpawned", function()
+		print("Entity has spawned")
+
+		-- Màu cảnh báo
+		local effect = Instance.new("ColorCorrectionEffect", game.Lighting)
+		effect.Name = "Warn"
+		effect.TintColor = Color3.fromRGB(61, 171, 98)
+		effect.Saturation = -0.7
+		effect.Contrast = 0.2
+		game.Debris:AddItem(effect, 24)
+
+		game.TweenService:Create(effect, TweenInfo.new(15), {
+			TintColor = Color3.fromRGB(255, 255, 255),
+			Saturation = 0,
+			Contrast = 0
+		}):Play()
+
+		-- Camera shake
+		local success, CameraShaker = pcall(function()
+			return require(game.ReplicatedStorage:WaitForChild("CameraShaker"))
+		end)
+
+		if success then
+			local cam = workspace.CurrentCamera
+			local shake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(shakeCf)
+				cam.CFrame = cam.CFrame * shakeCf
+			end)
+			shake:Start()
+			shake:ShakeOnce(10, 3, 0.1, 6, 2, 0.5)
+		end
+
+		-- Âm thanh khi bắt đầu
+		wait(0.5)
+		CustomGitSound(
+			"https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/Y2meta.app%20-%20DOORS%20HARDCORE_REBOUND%20MOVING%20START%20(320%20kbps).mp3",
+			2,
+			"ReboundMoving"
+		)
+	end)
+
+	entity:SetCallback("OnDespawned", function()
+		print("Entity has despawned")
+	end)
+
+	entity:SetCallback("OnDamagePlayer", function(newHealth)
+		if newHealth == 0 then
+			print("Entity has killed the player")
+		else
+			print("Entity has damaged the player")
+		end
+	end)
+
+	--====== Chạy entity ======--
+	entity:Run()
+
+	--====== Đợi despawn xong mới tiếp tục ======--
+	repeat
+		task.wait()
+	until game.ReplicatedStorage.GameData.EntityMoving.Value == false
+
+	wait(2) -- thời gian nghỉ giữa các lượt spawn
+end
