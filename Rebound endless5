@@ -1,3 +1,21 @@
+function GitAud(soundgit,filename)
+    SoundName=tostring(SoundName)
+    local url=soundgit
+    local FileName = filename
+    writefile(FileName..".mp3", game:HttpGet(url))
+    return (getcustomasset or getsynasset)(FileName..".mp3")
+end
+
+function CustomGitSound(soundlink, vol, filename)
+    local Sound = Instance.new("Sound")
+    Sound.SoundId = GitAud(soundlink, filename)
+    Sound.Parent = workspace
+    Sound.Volume = 3
+    Sound:Play()
+end
+
+CustomGitSound("https://github.com/Isth4t/ReboundMain/raw/main/ReboundWarning.mp3", 1, "ReboundWarning")
+
 --====== Load spawner ======--
 local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
 
@@ -96,7 +114,7 @@ entity:SetCallback("OnSpawned", function()
 	end
 
 	-- Custom sound
-	wait(0.5)
+	wait(4.945)
 	CustomGitSound(
 		"https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/Y2meta.app%20-%20DOORS%20HARDCORE_REBOUND%20MOVING%20START%20(320%20kbps).mp3",
 		2,
