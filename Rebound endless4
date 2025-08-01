@@ -122,6 +122,7 @@ end)
 
 entity:SetCallback("OnDespawning", function()
 	print("Entity is despawning")
+
 end)
 
 entity:SetCallback("OnDespawned", function()
@@ -141,3 +142,8 @@ end)
 
 --====== Run entity ======--
 entity:Run()
+game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Rebound%20clone"))()
+wait(0.1)
+game.ReplicatedStorage.GameData.LatestRoom.Changed:Wait()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/-i-lost-my-account-is-eoyoustme-/refs/heads/main/Rebound%20clone"))()
