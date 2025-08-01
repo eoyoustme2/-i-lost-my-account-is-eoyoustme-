@@ -38,6 +38,18 @@ local entity = Spawner.createEntity({
 
 entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned")
+local TweenService = game:GetService("TweenService")
+local Tweeninfo = TweenInfo.new(5, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+local color = {Color = Color3.new(0, 0, 1)}
+
+for _, v in pairs(workspace.CurrentRooms[game.ReplicatedStorage.GameData.LatestRoom.Value]:GetDescendants()) do
+    if v:IsA("Light") then
+        TweenService:Create(v, Tweeninfo, color):Play()
+    elseif v.Parent.Name == "LightFixture" then
+        TweenService:Create(v.Parent, Tweeninfo, color):Play()
+    end
+end
+
 function GitAud(soundgit,filename)
     SoundName=tostring(SoundName)
     local url=soundgit
