@@ -8,7 +8,7 @@ local entity = Spawner.createEntity({
     CustomName = "Rebound",
     Model = "rbxassetid://13499570750", -- Your entity's model url here ("rbxassetid://1234567890" or GitHub raw url)
     Speed = 350,
-    MoveDelay = 2,
+    MoveDelay = 2.8,
     HeightOffset = 0,
     CanKill = true,
     KillRange = 40,
@@ -19,13 +19,13 @@ local entity = Spawner.createEntity({
         Duration = 1
     },
     Cycles = {
-        Min = 1,
-        Max = 1,
+        Min = 1.5,
+        Max = 1.5,
         Delay = 0,0001
     },
     CamShake = {
         Enabled = true,
-        Values = {1.5, 20, 0.1, 1},
+        Values = {5, 20, 0.1, 1},
         Range = 100
     },
     ResistCrucifix = false,
