@@ -40,7 +40,7 @@ entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned")
 local TweenService = game:GetService("TweenService")
 local Tweeninfo = TweenInfo.new(7, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
-local color = {Color = Color3.new(0, 0, 0.5)}
+local color = {Color = Color3.new(65, 138, 255)}
 
 for _, v in pairs(workspace.CurrentRooms[game.ReplicatedStorage.GameData.LatestRoom.Value]:GetDescendants()) do
     if v:IsA("Light") then
