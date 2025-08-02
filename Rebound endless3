@@ -57,7 +57,7 @@ local entity = Spawner.createEntity({
 entity.Debug.OnEntitySpawned = function()
     print("Entity has spawned")
 local TweenService = game:GetService("TweenService")
-local Tweeninfo = TweenInfo.new(10, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+local Tweeninfo = TweenInfo.new(3, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
 local color = {Color = Color3.new(65, 138, 255)}
 
 for _, v in pairs(workspace.CurrentRooms[game.ReplicatedStorage.GameData.LatestRoom.Value]:GetDescendants()) do
