@@ -16,7 +16,7 @@ local camera = Workspace.CurrentCamera
 local entity = spawner.Create({
 	Entity = {
 		Name = "A60",
-		Asset = "rbxassetid://71698469073593",
+		Asset = "rbxassetid://111131901675628",
 		HeightOffset = 0
 	},
 	Lights = {
