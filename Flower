@@ -211,8 +211,8 @@ eq.LowGain = 3.7
 eq.Parent = scare
 
 local overlayImages = {
-    "rbxassetid://184251462",
-    "rbxassetid://11158773538"
+    "rbxassetid://184251463",
+    "rbxassetid://236542975"
 }
 
 task.spawn(function()
