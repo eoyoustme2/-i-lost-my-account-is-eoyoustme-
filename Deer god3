@@ -47,7 +47,7 @@ end
 local entity = spawner.Create({
     Entity = {
         Name = "Deer god",
-        Asset = "rbxassetid://75877292391257",
+        Asset = "rbxassetid://111923221994257",
         HeightOffset = 0
     },
     Lights = {
