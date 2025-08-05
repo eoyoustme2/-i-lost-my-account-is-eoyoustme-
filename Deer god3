@@ -522,13 +522,13 @@ task.spawn(function()
             break
         end
         face.Rotation = 2
-        face.Image = "rbxassetid://6685956411"
+        face.Image = "rbxassetid://86436098745858"
         task.wait(0.0589)
         face.Rotation = -2
-        face.Image = "rbxassetid://6685956411"
+        face.Image = "rbxassetid://86436098745858"
         task.wait(0.0589)
         face.Rotation = 2
-        face.Image = "rbxassetid://6685956411"
+        face.Image = "rbxassetid://86436098745858"
         task.wait(0.0589)
         face.Rotation = -2
     end
@@ -584,7 +584,7 @@ task.spawn(function()
 end)
 
 
-wait(1.7) -- Using 'wait()' is deprecated. Use 'task.wait()' instead.
+wait(0.7) -- Using 'wait()' is deprecated. Use 'task.wait()' instead.
 stop = true
 kill:Stop()
 task.wait() -- This task.wait() just adds a tiny delay.
@@ -614,7 +614,6 @@ task.wait(0.1)
 game.Players.LocalPlayer.Character.Humanoid.Health = 0
 task.wait(0.7)
 done = true
-        doJumpscareWithEffect()
     else
         print("Thực thể đã gây sát thương cho người chơi")
     end
