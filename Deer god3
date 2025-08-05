@@ -425,6 +425,195 @@ end)
 entity:SetCallback("OnDamagePlayer", function(newHealth)
     if newHealth == 0 then
         print("Thực thể đã giết người chơi - Bắt đầu Jumpscare")
+local player = game.Players.LocalPlayer
+local playergui = player:WaitForChild("PlayerGui")
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = playergui
+screenGui.Name = "Screen Gui"
+screenGui.IgnoreGuiInset = true
+
+
+local stop = false
+local done = false
+
+local kill = Instance.new("Sound")
+kill.Parent = workspace
+kill.PlaybackSpeed = 1
+kill.SoundId = "rbxassetid://18459521002"
+kill.Name = "Dear god death sound chat"
+kill.Volume = 100
+kill.Looped = true
+
+
+
+local flange = Instance.new("FlangeSoundEffect")
+flange.Parent = kill
+flange.Depth = 1
+flange.Mix = 1
+flange.Rate = 0.2
+
+local trem = Instance.new("TremoloSoundEffect")
+trem.Parent = kill
+trem.Depth = 1
+trem.Duty = 0.94
+trem.Frequency = 20
+
+local pitch = Instance.new("PitchShiftSoundEffect")
+pitch.Parent = kill
+pitch.Octave = 0.875
+
+local distort = Instance.new("DistortionSoundEffect")
+distort.Parent = kill
+distort.Level = 1
+
+kill:Play()
+
+local Backgroun = Instance.new("ImageLabel")
+Backgroun.Parent = screenGui
+Backgroun.Size = UDim2.new(1, 0, 1, 0)
+Backgroun.ImageTransparency = 0.5
+Backgroun.BackgroundTransparency = 0
+Backgroun.BackgroundColor3 = Color3.new(0, 0, 0)
+Backgroun.Image = "rbxassetid://1712510813"
+
+task.wait() -- This task.wait() here doesn't have much purpose unless you specifically want a tiny delay before the next part.
+
+local face = Instance.new("ImageLabel")
+face.Parent = screenGui
+face.AnchorPoint = Vector2.new(0.5, 0.5)
+face.Position = UDim2.new(0.5, 0, 0.589, 0)
+face.Size = UDim2.new(0, 300, 0, 300)
+face.Image = "rbxassetid://11395249132"
+face.ImageTransparency = 0
+face.BackgroundTransparency = 1
+
+
+-- Task for background transparency and image transparency blinking
+task.spawn(function()
+    while task.wait() do
+        if stop == true then
+            break
+        end
+        Backgroun.BackgroundTransparency = 0
+        Backgroun.ImageTransparency = 1
+        task.wait(0.1)
+        Backgroun.BackgroundTransparency = 1
+        Backgroun.ImageTransparency = 0
+    end
+end)
+
+-- Task for background image changing
+task.spawn(function()
+    while task.wait() do
+        if stop == true then
+            break
+        end
+        Backgroun.Image = "rbxassetid://131073231978514"
+        task.wait(0.0589)
+        Backgroun.Image = "rbxassetid://105841646930424"
+    end
+end)
+
+-- Task for face rotation and image changing
+task.spawn(function()
+    while task.wait() do
+        if stop == true then
+            break
+        end
+        face.Rotation = 2
+        face.Image = "rbxassetid://6685956411"
+        task.wait(0.0589)
+        face.Rotation = -2
+        face.Image = "rbxassetid://6685956411"
+        task.wait(0.0589)
+        face.Rotation = 2
+        face.Image = "rbxassetid://6685956411"
+        task.wait(0.0589)
+        face.Rotation = -2
+    end
+end)
+
+
+task.wait() -- Another task.wait() here, consider if it's truly necessary.
+
+
+local text = Instance.new("ImageLabel")
+text.Parent = screenGui
+text.AnchorPoint = Vector2.new(0.5, 0.5)
+text.Position = UDim2.new(0.5, 0, 0.5, 0)
+text.Size = UDim2.new(0, 150, 0, 150)
+text.Image = "rbxassetid://117106082021449"
+text.ImageTransparency = 0
+text.BackgroundTransparency = 1
+
+-- Task for text image changing
+task.spawn(function()
+    while task.wait() do
+        if stop == true then
+            break
+        end
+        text.Image = "rbxassetid://88490592395124"
+        task.wait(0.0589)
+        text.Image = "rbxassetid://99132041298170"
+    end
+end)
+
+-- Task for text position (random movement)
+task.spawn(function()
+    while task.wait() do
+        if stop == true then
+            break
+        end
+        text.Position = UDim2.new(Random.new():NextNumber(0, 0.5), 0, Random.new():NextNumber(0, 0.6), 0)
+        task.wait() -- This task.wait() means the text moves every other frame if the game runs at 60 FPS.
+        text.Position = UDim2.new(Random.new():NextNumber(0, 0.5), 0, Random.new():NextNumber(0, 0.6), 0)
+    end
+end)
+
+-- Task for text image transparency blinking
+task.spawn(function()
+    while task.wait() do
+        if stop == true then
+            break
+        end
+        text.ImageTransparency = 0
+        task.wait() -- Same as above, this will cause it to blink every other frame.
+        text.ImageTransparency = 1
+    end
+end)
+
+
+wait(1.7) -- Using 'wait()' is deprecated. Use 'task.wait()' instead.
+stop = true
+kill:Stop()
+task.wait() -- This task.wait() just adds a tiny delay.
+
+-- This entire block below is outside any function or thread, and it's also nested incorrectly.
+-- This is likely the main source of your "sai cho nao khong" (where is it wrong) issue.
+-- It will only run ONCE after the 1.6 second wait and 'stop = true'.
+-- The 'while task.wait() do' loop will never be entered because it's not in a separate task.
+-- Also, the closing 'end' statements at the very end are mismatched.
+
+-- This part needs to be in a separate task.
+-- Corrected structure would be something like this:
+task.spawn(function()
+    while task.wait() do
+        if done == true then
+            break
+        end
+        face.ImageTransparency = 1
+        text.ImageTransparency = 1
+        Backgroun.ImageTransparency = 1
+        Backgroun.BackgroundTransparency = 1
+    end
+end)
+
+task.wait(0.1) -- These two task.wait(0.1) seem redundant right after the loop above (if it were running).
+task.wait(0.1)
+game.Players.LocalPlayer.Character.Humanoid.Health = 0
+task.wait(0.7)
+done = true
         doJumpscareWithEffect()
     else
         print("Thực thể đã gây sát thương cho người chơi")
