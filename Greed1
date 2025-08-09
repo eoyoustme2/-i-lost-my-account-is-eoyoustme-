@@ -46,14 +46,12 @@ coroutine.wrap(function()
         local currentPos = HRP.Position
         if (currentPos - lastPos).Magnitude > 0.5 then
             require(LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game).caption("", true)
-
             if Humanoid then
                 Humanoid.Health -= damageAmount
-            end)
-
                 if Humanoid.Health <= 0 then
-                    -- Death hint
+                    -- Tạo thông báo khi chết (death hint)
                     local func, setupval, getinfo, typeof, getgc, next = nil, debug.setupvalue or setupvalue, debug.getinfo or getinfo, typeof, getgc, next
+
                     for i, v in next, getgc(false) do
                         if typeof(v) == "function" then
                             local info = getinfo(v)
@@ -72,19 +70,18 @@ coroutine.wrap(function()
                     end
 
                     DeathHint({
-                        "You died to Greed.",
+                        "You died to Twiter.",
                         "It punishes movement.",
                         "When you hear the warning, freeze.",
                         "Standing still might save your life."
                     }, "Blue")
                 end
             end
-
             lastPos = currentPos
         end
-
         elapsedTime += damageInterval
     end
+
 
     Kill = false
     depthsTer:Destroy()
