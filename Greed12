@@ -70,7 +70,7 @@ coroutine.wrap(function()
                     end
 
                     DeathHint({
-                        "You died to Twiter.",
+                        "You died to Greed.",
                         "It punishes movement.",
                         "When you hear the warning, freeze.",
                         "Standing still might save your life."
@@ -95,5 +95,5 @@ coroutine.wrap(function()
         Image = "rbxassetid://11498874173"
     })
 end)()
-
+wait(5)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/eoyoustme2/Endless/refs/heads/main/Greed%20moving"))()
