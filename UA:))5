@@ -164,20 +164,10 @@ entity:SetCallback("OnDamagePlayer", function(newHealth)
 		end
 
 		-- Phát âm thanh jumpscare
-local function GetGitSound(GithubSnd, SoundName)
-                local url = GithubSnd
-                if not isfile(SoundName .. ".mp3") then
-                    writefile(SoundName .. ".mp3", game:HttpGet(url))
-                end
-                local sound = Instance.new("Sound")
-                sound.SoundId = (getcustomasset or getsynasset)(SoundName .. ".mp3")
-                return sound
-end
-local Jumpscare = GetGitSound("https://github.com/Kotyara19k-Doorsspawner/Random-files/raw/main/A60JumpscareOld.mp3","A60")
-Jumpscare.Parent = workspace
-Jumpscare.Volume = 50
-Jumpscare.PlaybackSpeed = 1
-Jumpscare:Play()
+        local sound = Instance.new("Sound", workspace)
+		sound.SoundId = "rbxassetid://103879029437685"
+		sound.Volume = 10
+		sound:Play()
 
 		-- Di chuyển entity đến gần người chơi
 		primaryPart.Anchored = true
